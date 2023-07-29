@@ -12,7 +12,7 @@ use Raspberry\Common\Values\Slug\SlugInterface;
 class Clothes implements ClothesInterface
 {
     public function __construct(
-        protected ?IdInterface $id,
+        protected IdInterface $id,
         protected NameInterface $name,
         protected SlugInterface $slug,
         protected PhotoInterface $photo
@@ -20,15 +20,15 @@ class Clothes implements ClothesInterface
     }
 
     /**
-     * @return IdInterface|null
+     * @inheritDoc
      */
-    public function getId(): ?IdInterface
+    public function getId(): IdInterface
     {
         return $this->id;
     }
 
     /**
-     * @return NameInterface
+     * @inheritDoc
      */
     public function getName(): NameInterface
     {
@@ -36,7 +36,7 @@ class Clothes implements ClothesInterface
     }
 
     /**
-     * @return SlugInterface
+     * @inheritDoc
      */
     public function getSlug(): SlugInterface
     {
@@ -44,7 +44,7 @@ class Clothes implements ClothesInterface
     }
 
     /**
-     * @return PhotoInterface
+     * @inheritDoc
      */
     public function getPhoto(): PhotoInterface
     {

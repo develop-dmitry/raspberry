@@ -12,9 +12,9 @@ use Raspberry\Common\Values\Slug\SlugInterface;
 interface ClothesInterface
 {
     /**
-     * @return IdInterface|null
+     * @return IdInterface
      */
-    public function getId(): ?IdInterface;
+    public function getId(): IdInterface;
 
     /**
      * @return NameInterface
