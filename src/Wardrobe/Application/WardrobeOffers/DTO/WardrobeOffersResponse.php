@@ -7,7 +7,7 @@ namespace Raspberry\Wardrobe\Application\WardrobeOffers\DTO;
 class WardrobeOffersResponse
 {
     /**
-     * @param array $offers
+     * @param WardrobeOffer[] $offers
      * @param int $page
      * @param int $total
      * @param int $count
@@ -21,7 +21,7 @@ class WardrobeOffersResponse
     }
 
     /**
-     * @return array
+     * @return WardrobeOffer[]
      */
     public function getOffers(): array
     {
