@@ -6,6 +6,6 @@ namespace Raspberry\Wardrobe\Domain\Wardrobe\Exceptions;
 
 use Exception;
 
-class WardrobeNotFoundException extends Exception
+class ClothesAlreadyExistsException extends Exception
 {
 }

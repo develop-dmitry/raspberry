@@ -13,7 +13,6 @@ use Raspberry\Common\Values\Photo\Photo;
 use Raspberry\Common\Values\Slug\Slug;
 use Raspberry\Wardrobe\Domain\Clothes\Clothes;
 use Raspberry\Wardrobe\Domain\Wardrobe\Exceptions\UserDoesNotExistsException;
-use Raspberry\Wardrobe\Domain\Wardrobe\Exceptions\WardrobeNotFoundException;
 use Raspberry\Wardrobe\Domain\Wardrobe\Wardrobe;
 use Raspberry\Wardrobe\Domain\Wardrobe\WardrobeInterface;
 use Raspberry\Wardrobe\Domain\Wardrobe\WardrobeRepositoryInterface;
@@ -57,12 +56,24 @@ class WardrobeRepository implements WardrobeRepositoryInterface
         try {
             return new Wardrobe(new Id($userId), $clothes);
         } catch (InvalidValueException $exception) {
-            $this->logger->error('Invalid user id', [
-                'exception' => $exception->getMessage(),
-                'user_id' => $userId
-            ]);
-
-            throw new WardrobeNotFoundException();
+            throw new UserDoesNotExistsException();
         }
+    }
+
+    public function saveWardrobe(WardrobeInterface $wardrobe): void
+    {
+        $user = User::find($wardrobe->getUserId()->getValue());
+
+        if (!$user) {
+            throw new UserDoesNotExistsException();
+        }
+
+        $clothes = [];
+
+        foreach ($wardrobe->getClothes() as $item) {
+            $clothes[] = $item->getId()->getValue();
+        }
+
+        $user->clothes()->sync($clothes);
     }
 }

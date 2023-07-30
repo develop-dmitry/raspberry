@@ -9,4 +9,12 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+
+    protected function makeDefaultResponse(bool $success, string $message): array
+    {
+        return [
+            'success' => $success,
+            'message' => $message
+        ];
+    }
 }
