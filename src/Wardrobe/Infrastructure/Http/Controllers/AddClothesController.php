@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Raspberry\Wardrobe\Infrastructure\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Raspberry\Wardrobe\Application\AddClothes\AddClothesInterface;
 use Raspberry\Wardrobe\Application\AddClothes\DTO\AddClothesRequest;
@@ -13,20 +12,20 @@ use Raspberry\Wardrobe\Domain\Wardrobe\Exceptions\ClothesAlreadyExistsException;
 use Raspberry\Wardrobe\Domain\Wardrobe\Exceptions\UserDoesNotExistsException;
 use Raspberry\Wardrobe\Infrastructure\Http\Requests\AddClothesPostRequest;
 
-class AddClothesController extends Controller
+class AddClothesController extends AbstractController
 {
     public function __construct(
         protected AddClothesInterface $addClothes
     ) {
     }
 
-    public function __invoke(AddClothesPostRequest $request, int $user_id): JsonResponse
+    public function __invoke(AddClothesPostRequest $request, int $userId): JsonResponse
     {
         $request->validated();
 
         $clothesId = (int) $request->get('clothes_id');
 
-        $addClothesRequest = new AddClothesRequest($user_id, $clothesId);
+        $addClothesRequest = new AddClothesRequest($userId, $clothesId);
 
         try {
             $this->addClothes->execute($addClothesRequest);
@@ -40,26 +39,5 @@ class AddClothesController extends Controller
         } catch (UserDoesNotExistsException) {
             return $this->userDoesNotExists();
         }
-    }
-
-    protected function clothesNotFound(): JsonResponse
-    {
-        $response = $this->makeDefaultResponse(false, 'Одежда не найдена');
-
-        return response()->json($response);
-    }
-
-    protected function clothesAlreadyExists(): JsonResponse
-    {
-        $response = $this->makeDefaultResponse(false, 'Одежда уже есть в гардеробе');
-
-        return response()->json($response);
-    }
-
-    protected function userDoesNotExists(): JsonResponse
-    {
-        $response = $this->makeDefaultResponse(false, 'Не узнаем вас');
-
-        return response()->json($response);
     }
 }

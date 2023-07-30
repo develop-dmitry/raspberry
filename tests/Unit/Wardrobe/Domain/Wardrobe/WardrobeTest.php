@@ -59,4 +59,28 @@ class WardrobeTest extends TestCase
         $this->expectException(ClothesAlreadyExistsException::class);
         $wardrobe->addClothes($jeans);
     }
+
+    public function testRemoveClothes(): void
+    {
+        $jeans = new Clothes(
+            new Id(1),
+            new Name('Jeans'),
+            new Slug('jeans'),
+            new Photo('/storage/jeans.png')
+        );
+        $shirt = new Clothes(
+            new Id(2),
+            new Name('Shirt'),
+            new Slug('shirt'),
+            new Photo('/storage/shirt.png')
+        );
+
+        $wardrobe = new Wardrobe(new Id(1), []);
+        $wardrobe->addClothes($jeans);
+        $wardrobe->addClothes($shirt);
+
+        $wardrobe->removeClothes($jeans);
+
+        $this->assertCount(1, $wardrobe->getClothes());
+    }
 }

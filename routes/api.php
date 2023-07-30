@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Raspberry\Wardrobe\Infrastructure\Http\Controllers\AddClothesController;
+use Raspberry\Wardrobe\Infrastructure\Http\Controllers\RemoveClothesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,5 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('v1')->group(function () {
     Route::prefix('wardrobe')->group(function () {
         Route::post('{user_id}/add', AddClothesController::class);
+        Route::post('{user_id}/remove', RemoveClothesController::class);
     });
 });

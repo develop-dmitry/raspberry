@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Raspberry\Wardrobe\Application\AddClothes\AddClothesInterface;
 use Raspberry\Wardrobe\Application\AddClothes\AddClothesUseCase;
+use Raspberry\Wardrobe\Application\RemoveClothes\RemoveClothesInterface;
+use Raspberry\Wardrobe\Application\RemoveClothes\RemoveClothesUseCase;
 use Raspberry\Wardrobe\Domain\Clothes\ClothesRepositoryInterface;
 use Raspberry\Wardrobe\Domain\Wardrobe\WardrobeRepositoryInterface;
 use Raspberry\Wardrobe\Infrastructure\Repositories\ClothesRepository;
@@ -20,6 +22,7 @@ class WardrobeServiceProvider extends ServiceProvider
         $this->app->bind(WardrobeRepositoryInterface::class, WardrobeRepository::class);
         $this->app->bind(ClothesRepositoryInterface::class, ClothesRepository::class);
         $this->app->bind(AddClothesInterface::class, AddClothesUseCase::class);
+        $this->app->bind(RemoveClothesInterface::class, RemoveClothesUseCase::class);
     }
 
     /**
