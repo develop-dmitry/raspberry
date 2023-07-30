@@ -36,6 +36,16 @@ class Wardrobe implements WardrobeInterface
         return $this->clothes;
     }
 
+    public function removeClothes(ClothesInterface $clothes): void
+    {
+        foreach ($this->clothes as $key => $item) {
+            if ($item->getId()->getValue() === $clothes->getId()->getValue()) {
+                unset($this->clothes[$key]);
+                break;
+            }
+        }
+    }
+
     /**
      * @inheritDoc
      */

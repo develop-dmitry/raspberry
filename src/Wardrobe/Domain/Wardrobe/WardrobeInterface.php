@@ -26,4 +26,10 @@ interface WardrobeInterface
      * @throws ClothesAlreadyExistsException
      */
     public function addClothes(ClothesInterface $clothes): void;
+
+    /**
+     * @param ClothesInterface $clothes
+     * @return void
+     */
+    public function removeClothes(ClothesInterface $clothes): void;
 }
