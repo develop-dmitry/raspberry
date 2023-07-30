@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Raspberry\Wardrobe\Infrastructure\Repositories;
 
 use App\Models\User;
+use App\Models\Clothes as ClothesModel;
 use Psr\Log\LoggerInterface;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Common\Values\Id\Id;
@@ -13,6 +14,8 @@ use Raspberry\Common\Values\Photo\Photo;
 use Raspberry\Common\Values\Slug\Slug;
 use Raspberry\Wardrobe\Domain\Clothes\Clothes;
 use Raspberry\Wardrobe\Domain\Wardrobe\Exceptions\UserDoesNotExistsException;
+use Raspberry\Wardrobe\Domain\Wardrobe\Services\WardrobeOffers\WardrobeOffersContainer\WardrobeOffersContainer;
+use Raspberry\Wardrobe\Domain\Wardrobe\Services\WardrobeOffers\WardrobeOffersContainer\WardrobeOffersContainerInterface;
 use Raspberry\Wardrobe\Domain\Wardrobe\Wardrobe;
 use Raspberry\Wardrobe\Domain\Wardrobe\WardrobeInterface;
 use Raspberry\Wardrobe\Domain\Wardrobe\WardrobeRepositoryInterface;
@@ -75,5 +78,45 @@ class WardrobeRepository implements WardrobeRepositoryInterface
         }
 
         $user->clothes()->sync($clothes);
+    }
+
+    public function getWardrobeOffers(
+        WardrobeInterface $wardrobe,
+        int $page,
+        int $count
+    ): WardrobeOffersContainerInterface {
+        $wardrobeClothes = [];
+
+        foreach ($wardrobe->getClothes() as $clothes) {
+            $wardrobeClothes[] = $clothes->getId()->getValue();
+        }
+
+        $clothesPaginate = ClothesModel::whereNotIn('id', $wardrobeClothes)
+            ->paginate($count, page: $page);
+
+        $clothes = [];
+
+        foreach ($clothesPaginate->items() as $item) {
+            try {
+                $clothes[] = new Clothes(
+                    new Id($item->id),
+                    new Name($item->name),
+                    new Slug($item->slug),
+                    new Photo($item->photo)
+                );
+            } catch (InvalidValueException $exception) {
+                $this->logger->error('Invalid clothes in database', [
+                    'clothes' => $item->toArray(),
+                    'exception' => $exception->getMessage()
+                ]);
+            }
+        }
+
+        return new WardrobeOffersContainer(
+            $clothes,
+            $clothesPaginate->currentPage(),
+            $count,
+            $clothesPaginate->total()
+        );
     }
 }

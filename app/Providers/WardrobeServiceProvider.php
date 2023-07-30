@@ -8,6 +8,8 @@ use Raspberry\Wardrobe\Application\AddClothes\AddClothesUseCase;
 use Raspberry\Wardrobe\Application\RemoveClothes\RemoveClothesInterface;
 use Raspberry\Wardrobe\Application\RemoveClothes\RemoveClothesUseCase;
 use Raspberry\Wardrobe\Domain\Clothes\ClothesRepositoryInterface;
+use Raspberry\Wardrobe\Domain\Wardrobe\Services\WardrobeOffers\WardrobeOffers;
+use Raspberry\Wardrobe\Domain\Wardrobe\Services\WardrobeOffers\WardrobeOffersInterface;
 use Raspberry\Wardrobe\Domain\Wardrobe\WardrobeRepositoryInterface;
 use Raspberry\Wardrobe\Infrastructure\Repositories\ClothesRepository;
 use Raspberry\Wardrobe\Infrastructure\Repositories\WardrobeRepository;
@@ -23,6 +25,7 @@ class WardrobeServiceProvider extends ServiceProvider
         $this->app->bind(ClothesRepositoryInterface::class, ClothesRepository::class);
         $this->app->bind(AddClothesInterface::class, AddClothesUseCase::class);
         $this->app->bind(RemoveClothesInterface::class, RemoveClothesUseCase::class);
+        $this->app->bind(WardrobeOffersInterface::class, WardrobeOffers::class);
     }
 
     /**
