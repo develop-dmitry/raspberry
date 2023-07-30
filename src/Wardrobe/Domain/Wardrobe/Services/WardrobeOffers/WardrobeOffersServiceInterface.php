@@ -7,7 +7,7 @@ namespace Raspberry\Wardrobe\Domain\Wardrobe\Services\WardrobeOffers;
 use Raspberry\Wardrobe\Domain\Wardrobe\Services\WardrobeOffers\WardrobeOffersContainer\WardrobeOffersContainerInterface;
 use Raspberry\Wardrobe\Domain\Wardrobe\WardrobeInterface;
 
-interface WardrobeOffersInterface
+interface WardrobeOffersServiceInterface
 {
     /**
      * @param WardrobeInterface $wardrobe

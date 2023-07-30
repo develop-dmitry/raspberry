@@ -8,7 +8,7 @@ use Raspberry\Wardrobe\Domain\Wardrobe\Services\WardrobeOffers\WardrobeOffersCon
 use Raspberry\Wardrobe\Domain\Wardrobe\WardrobeInterface;
 use Raspberry\Wardrobe\Domain\Wardrobe\WardrobeRepositoryInterface;
 
-class WardrobeOffers implements WardrobeOffersInterface
+class WardrobeOffersService implements WardrobeOffersServiceInterface
 {
     public function __construct(
         protected WardrobeRepositoryInterface $wardrobeRepository
