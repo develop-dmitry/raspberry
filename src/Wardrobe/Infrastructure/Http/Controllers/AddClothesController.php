@@ -21,9 +21,7 @@ class AddClothesController extends AbstractController
 
     public function __invoke(AddClothesPostRequest $request, int $userId): JsonResponse
     {
-        $request->validated();
-
-        $clothesId = (int) $request->get('clothes_id');
+        $clothesId = (int) $request->validated('clothes_id');
 
         $addClothesRequest = new AddClothesRequest($userId, $clothesId);
 

@@ -16,7 +16,6 @@ class RemoveClothesTest extends TestCase
 
     protected string $uri = '/api/v1/wardrobe/{user_id}/remove';
 
-
     public function testSuccessRemoveClothes(): void
     {
         $user = User::factory(1)->create()->first();
