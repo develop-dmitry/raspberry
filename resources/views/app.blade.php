@@ -6,9 +6,13 @@
 
     <title>{{ config('app.name') }}</title>
 
+    <link href="https://fonts.cdnfonts.com/css/open-sans" rel="stylesheet">
+
     @vite(['resources/css/app.scss', 'resources/js/app.ts'])
 </head>
 <body>
-<div id="app"></div>
+<div id="app">
+    <router-view :user-id="1"></router-view>
+</div>
 </body>
 </html>
