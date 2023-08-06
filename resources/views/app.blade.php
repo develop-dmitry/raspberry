@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="app">
-    <router-view :user-id="1"></router-view>
+    <router-view :user="{id: 1}"></router-view>
 </div>
 </body>
 </html>
