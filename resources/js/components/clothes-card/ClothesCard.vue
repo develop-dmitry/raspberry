@@ -1,14 +1,23 @@
 <template lang="pug">
 .clothes-card
-    img.image.clothes-card__photo(:src="photo" :alt="name")
+    image.clothes-card__photo(
+        is="vue:image"
+        :src="photo"
+        :alt="name"
+    )
     slot
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
+import Image from "../ui/image/Image.vue";
 
 export default defineComponent({
-   name: 'ClothesCard',
+    name: 'ClothesCard',
+
+    components: {
+        Image
+    },
 
     props: {
         name: {
@@ -23,12 +32,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-@import "../../../../css/global/vars";
-@import "../../../../css/global/mixins";
-
+<style scoped lang="scss">
 .clothes-card {
-    position: relative;
     height: 400px;
     border-radius: 10px;
     overflow: hidden;

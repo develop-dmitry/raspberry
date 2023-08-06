@@ -1,11 +1,7 @@
-export interface WardrobeOffer {
-    id: number,
-    name: string,
-    photo: string
-}
+import {Clothes} from "./enitities.ts";
 
 export interface WardrobeOffersResponse {
-    offers: Array<WardrobeOffer>,
+    offers: Array<Clothes>,
     success: boolean,
     count: number,
     page: number,
@@ -20,4 +16,9 @@ export interface AddClothesResponse {
 export interface RemoveClothesResponse {
     success: boolean,
     message: string
+}
+
+export interface WardrobeResponse {
+    success: boolean,
+    items: Clothes[]
 }
