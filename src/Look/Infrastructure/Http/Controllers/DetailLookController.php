@@ -51,4 +51,11 @@ class DetailLookController extends AbstractController
             ]
         ]);
     }
+
+    protected function lookNotFound(): JsonResponse
+    {
+        $response = $this->makeDefaultResponse(false, 'Образ не найден');
+
+        return response()->json($response);
+    }
 }
