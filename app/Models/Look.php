@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Clothes extends Model
+class Look extends Model
 {
     use HasFactory;
 
@@ -16,13 +16,8 @@ class Clothes extends Model
         'photo'
     ];
 
-    public function users(): BelongsToMany
+    public function clothes(): BelongsToMany
     {
-        return $this->belongsToMany(User::class);
-    }
-
-    public function looks(): BelongsToMany
-    {
-        return $this->belongsToMany(Look::class);
+        return $this->belongsToMany(Clothes::class);
     }
 }
