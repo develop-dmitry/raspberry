@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
-import {WardrobeOffersResponse} from "../../types/responses.ts";
+import {WardrobeOffersResponse} from "./types/responses.ts";
 import axios, {AxiosResponse} from "axios";
-import {Clothes, User} from "../../types/enitities.ts";
+import {Clothes, User} from "./types/enitities.ts";
 
 export const useOffersStore = defineStore('offers-store', {
     state() {

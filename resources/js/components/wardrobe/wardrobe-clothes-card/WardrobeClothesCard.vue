@@ -26,7 +26,7 @@ import {defineComponent, PropType} from "vue";
 import ClothesCard from "../../clothes-card/ClothesCard.vue";
 import {mapActions, mapState} from "pinia";
 import {useWardrobeStore} from "../../../stores/wardrobe/WardrobeStore.ts";
-import {Clothes} from "../../../types/enitities.ts";
+import {Clothes} from "../../../stores/wardrobe/types/enitities.ts";
 import Button from "../../ui/button/Button.vue";
 
 export default defineComponent({
