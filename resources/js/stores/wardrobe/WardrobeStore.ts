@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
-import {AddClothesResponse, RemoveClothesResponse, WardrobeResponse} from "../../types/responses.ts";
+import {AddClothesResponse, RemoveClothesResponse, WardrobeResponse} from "./types/responses.ts";
 import axios, {AxiosResponse} from "axios";
-import {Clothes, User} from "../../types/enitities.ts";
+import {Clothes, User} from "./types/enitities.ts";
 
 export const useWardrobeStore = defineStore('wardrobe', {
     state: () => {

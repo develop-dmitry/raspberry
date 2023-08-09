@@ -36,7 +36,9 @@ class DetailLookController extends AbstractController
 
         foreach ($response->getClothes() as $item) {
             $clothes[] = [
-                'photo' => $item->getPhoto()
+                'id' => $item->getId(),
+                'photo' => $item->getPhoto(),
+                'name' => $item->getName()
             ];
         }
 

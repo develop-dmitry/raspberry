@@ -85,6 +85,10 @@ class LookRepository implements LookRepositoryInterface
      */
     protected function makeClothes(ClothesModel $clothes): ClothesInterface
     {
-        return new Clothes(new Photo($clothes->photo));
+        return new Clothes(
+            new Id($clothes->id),
+            new Photo($clothes->photo),
+            new Name($clothes->name)
+        );
     }
 }

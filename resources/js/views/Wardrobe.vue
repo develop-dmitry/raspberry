@@ -16,7 +16,7 @@ import {useWardrobeStore} from "../stores/wardrobe/WardrobeStore.ts";
 import Page from "../components/page/Page.vue";
 import PageTitle from "../components/page/page-title/PageTitle.vue";
 import WardrobeClothesCard from "../components/wardrobe/wardrobe-clothes-card/WardrobeClothesCard.vue";
-import {User} from "../types/enitities.ts";
+import {User} from "../stores/wardrobe/types/enitities.ts";
 
 export default defineComponent({
     name: 'Wardrobe',

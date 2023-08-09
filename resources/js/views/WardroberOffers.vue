@@ -17,7 +17,7 @@ import {mapActions, mapState} from "pinia";
 import {useOffersStore} from "../stores/wardrobe/OffersStore.ts";
 import WardrobeClothesCard from "../components/wardrobe/wardrobe-clothes-card/WardrobeClothesCard.vue";
 import {useWardrobeStore} from "../stores/wardrobe/WardrobeStore.ts";
-import {User} from "../types/enitities.ts";
+import {User} from "../stores/wardrobe/types/enitities.ts";
 
 export default defineComponent({
     name: 'WardrobeOffers',

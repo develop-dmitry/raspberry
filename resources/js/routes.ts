@@ -1,6 +1,7 @@
 import HelloWorld from "./views/HelloWorld.vue";
 import Wardrobe from "./views/Wardrobe.vue";
 import WardrobeOffers from "./views/WardroberOffers.vue";
+import DetailLook from "./views/DetailLook.vue";
 
 export default [
     {
@@ -14,5 +15,9 @@ export default [
     {
         path: '/wardrobe/offers',
         component: WardrobeOffers
+    },
+    {
+        path: '/look/:id',
+        component: DetailLook
     }
 ]
