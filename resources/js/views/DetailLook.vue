@@ -52,12 +52,15 @@ export default defineComponent({
 
     computed: {
         ...mapState(useLookStore, {
-            findLook: 'findLook',
-            hasLook: 'hasLook'
+            findLook: 'findLook'
         }),
 
         id(): number {
-            return Number.parseInt(this.$route.params.id, 10);
+            if (typeof this.$route.params.id === 'string') {
+                return Number.parseInt(this.$route.params.id, 10);
+            }
+
+            return 0;
         },
 
         look(): Look|null {
@@ -76,11 +79,10 @@ export default defineComponent({
     },
 
     mounted() {
-        if (!this.hasLook((this.id))) {
+        if (!this.look) {
             this.fetchDetailLook(this.id)
                 .then(() => {
-                    console.log(this.look)
-                    this.isExists = this.hasLook(this.id);
+                    this.isExists = this.look !== null;
                 });
         }
     }

@@ -19,7 +19,7 @@ export default defineComponent({
 
     computed: {
         classes(): string[] {
-            const classes: string = [];
+            const classes: string[] = [];
 
             switch (this.level) {
                 case HeadingLevel.H1:

@@ -6,7 +6,7 @@ import {DetailLookResponse} from "./types/responses.ts";
 export const useLookStore = defineStore('look', {
     state: () => {
         return {
-            looks: [] as Look
+            looks: [] as Look[]
         };
     },
 
@@ -21,12 +21,8 @@ export const useLookStore = defineStore('look', {
             }
         },
 
-        hasLook: (state) => {
-            return (id: number): boolean => state.findLook(id) !== null;
-        },
-
-        detailRequestUrl(): string {
-            return (id: number): boolean => {
+        detailRequestUrl: () => {
+            return (id: number): string => {
                 return `/api/v1/look/${id}`;
             }
         }
