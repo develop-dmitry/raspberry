@@ -52,7 +52,11 @@ class DetailLookUseCase implements DetailLookInterface
         $clothes = [];
 
         foreach ($items as $item) {
-            $clothes[] = new ClothesItem($item->getPhoto()->getValue());
+            $clothes[] = new ClothesItem(
+                $item->getId()->getValue(),
+                $item->getPhoto()->getValue(),
+                $item->getName()->getValue()
+            );
         }
 
         return $clothes;

@@ -1,13 +1,25 @@
 <template lang="pug">
-h1.page-title {{ title }}
+heading.page-title(:level="level") {{ title }}
     span.page-title__count(v-if="total") {{ total }}
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
+import Heading from "../../ui/heading/Heading.vue";
+import {HeadingLevel} from "../../ui/heading/HeadingLevel.ts";
 
 export default defineComponent({
     name: 'PageTitle',
+
+    components: {
+        Heading
+    },
+
+    data() {
+        return {
+            level: HeadingLevel.H1
+        }
+    },
 
     props: {
         title: {
@@ -25,18 +37,6 @@ export default defineComponent({
 
 
 .page-title {
-    line-height: 1.2;
-    margin: 0;
-    display: block;
-    font-size: 45px;
-
-    @include media-min($desktop) {
-        font-size: 45px;
-    }
-
-    @include media-max($mobile) {
-        font-size: 30px;
-    }
 
     &__count {
         font-size: 50%;

@@ -31,7 +31,9 @@ class DetailLookTest extends TestCase
                 'photo',
                 'clothes' => [
                     '*' => [
-                        'photo'
+                        'id',
+                        'photo',
+                        'name'
                     ]
                 ]
             ],

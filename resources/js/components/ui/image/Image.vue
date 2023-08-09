@@ -23,5 +23,6 @@ export default defineComponent({
 .image {
     max-width: 100%;
     height: auto;
+    border-radius: 10px;
 }
 </style>
