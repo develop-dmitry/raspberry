@@ -169,7 +169,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         \App\Providers\WardrobeServiceProvider::class,
-        \App\Providers\LookServiceProvider::class
+        \App\Providers\LookServiceProvider::class,
+        \App\Providers\MessengerServiceProvider::class
     ])->toArray(),
 
     /*
@@ -184,7 +185,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'Example' => App\Facades\Example::class,
+        'Redis' => \Illuminate\Support\Facades\Redis::class
     ])->toArray(),
 
 ];
