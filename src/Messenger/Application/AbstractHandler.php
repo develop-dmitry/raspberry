@@ -7,14 +7,14 @@ namespace Raspberry\Messenger\Application;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Context\Request\RequestInterface;
 use Raspberry\Messenger\Domain\Context\User\UserInterface;
-use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\Factory\InlineButtonFactoryInterface;
-use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\Factory\ReplyButtonFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\InlineButtonFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\InlineButtonOptionFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\InlineKeyboardFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\ReplyButtonFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\ReplyButtonOptionFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\ReplyKeyboardFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\ReplyKeyboardOptionFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;
-use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\Factory\InlineKeyboardFactoryInterface;
-use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\Factory\ReplyKeyboardFactoryInterface;
-use Raspberry\Messenger\Domain\Gui\Options\InlineButton\Factory\InlineButtonOptionFactoryInterface;
-use Raspberry\Messenger\Domain\Gui\Options\ReplyButton\Factory\ReplyButtonOptionFactoryInterface;
-use Raspberry\Messenger\Domain\Gui\Options\ReplyKeyboard\Factory\ReplyKeyboardOptionFactoryInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
 
 abstract class AbstractHandler implements HandlerInterface
@@ -23,16 +23,19 @@ abstract class AbstractHandler implements HandlerInterface
 
     protected RequestInterface $contextRequest;
 
-    public function __construct(
-        protected InlineButtonFactoryInterface $inlineButtonFactory,
-        protected ReplyButtonFactoryInterface $replyButtonFactory,
-        protected InlineKeyboardFactoryInterface $inlineKeyboardFactory,
-        protected ReplyKeyboardFactoryInterface $replyKeyboardFactory,
-        protected InlineButtonOptionFactoryInterface $inlineButtonOptionFactory,
-        protected ReplyKeyboardOptionFactoryInterface $replyKeyboardOptionFactory,
-        protected ReplyButtonOptionFactoryInterface $replyButtonOptionFactory
-    ) {
-    }
+    protected InlineButtonFactoryInterface $inlineButtonFactory;
+
+    protected ReplyButtonFactoryInterface $replyButtonFactory;
+
+    protected InlineKeyboardFactoryInterface $inlineKeyboardFactory;
+
+    protected ReplyKeyboardFactoryInterface $replyKeyboardFactory;
+
+    protected InlineButtonOptionFactoryInterface $inlineButtonOptionFactory;
+
+    protected ReplyKeyboardOptionFactoryInterface $replyKeyboardOptionFactory;
+
+    protected ReplyButtonOptionFactoryInterface $replyButtonOptionFactory;
 
     /**
      * @inheritDoc
@@ -41,5 +44,15 @@ abstract class AbstractHandler implements HandlerInterface
     {
         $this->contextRequest = $context->getRequest();
         $this->contextUser = $context->getUser();
+
+        $guiFactory = $gui->getGuiFactory();
+
+        $this->inlineButtonFactory = $guiFactory->makeInlineButtonFactory();
+        $this->replyButtonFactory = $guiFactory->makeReplyButtonFactory();
+        $this->inlineKeyboardFactory = $guiFactory->makeInlineKeyboardFactory();
+        $this->replyKeyboardFactory = $guiFactory->makeReplyKeyboardFactory();
+        $this->inlineButtonOptionFactory = $guiFactory->makeInlineButtonOptionFactory();
+        $this->replyKeyboardOptionFactory = $guiFactory->makeReplyKeyboardOptionFactory();
+        $this->replyButtonOptionFactory = $guiFactory->makeReplyButtonOptionFactory();
     }
 }

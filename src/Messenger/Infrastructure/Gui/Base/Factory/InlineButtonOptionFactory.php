@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Domain\Gui\Options\InlineButton\Factory;
+namespace Raspberry\Messenger\Infrastructure\Gui\Base\Factory;
 
+use Raspberry\Messenger\Domain\Gui\Factory\InlineButtonOptionFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Options\InlineButton\CallbackDataOption;
 use Raspberry\Messenger\Domain\Gui\Options\OptionInterface;
 

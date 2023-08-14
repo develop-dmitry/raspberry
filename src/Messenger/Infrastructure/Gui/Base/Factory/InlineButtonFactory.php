@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\Factory;
+namespace Raspberry\Messenger\Infrastructure\Gui\Base\Factory;
 
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButton;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\InlineButtonFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Options\NullOption;
 use Raspberry\Messenger\Domain\Gui\Options\OptionInterface;
 

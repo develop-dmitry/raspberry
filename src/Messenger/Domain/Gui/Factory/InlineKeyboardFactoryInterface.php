@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\Factory;
+namespace Raspberry\Messenger\Domain\Gui\Factory;
 
 use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\InlineKeyboardInterface;
 

@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Infrastructure\Gui;
+namespace Raspberry\Messenger\Infrastructure\Gui\Telegram;
 
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButtonInterface;
+use Raspberry\Messenger\Infrastructure\Gui\Base\AbstractGui;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardButton;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardMarkup;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\KeyboardButton;
@@ -13,6 +14,7 @@ use SergiX44\Nutgram\Telegram\Types\Keyboard\ReplyKeyboardMarkup;
 
 class TelegramGui extends AbstractGui
 {
+
     public function getMessage(): string
     {
         return $this->message;

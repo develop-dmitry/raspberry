@@ -11,6 +11,7 @@ use Raspberry\Messenger\Application\LookBot\HelloWorldHandler;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainerInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
+use Raspberry\Messenger\Infrastructure\Gateway\Exceptions\MessengerException;
 use Raspberry\Messenger\Infrastructure\Gateway\TelegramMessengerGateway;
 
 class TelegramLookBotController extends Controller
@@ -26,7 +27,14 @@ class TelegramLookBotController extends Controller
 
         $telegram = app()->makeWith(TelegramMessengerGateway::class, ['handlers' => $this->getHandlers()]);
 
-        $telegram->handleRequest();
+        try {
+            $telegram->handleRequest();
+        } catch (MessengerException $exception) {
+            $this->logger->emergency(
+                'Error while performing telegram request',
+                ['exception' => $exception->getMessage()]
+            );
+        }
     }
 
     protected function getHandlers(): HandlerContainerInterface

@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Infrastructure\Gui;
+namespace Raspberry\Messenger\Infrastructure\Gui\Base;
 
+use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\InlineKeyboardInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboardInterface;
+use Raspberry\Messenger\Infrastructure\Gui\Base\Factory\GuiFactory;
 
 class AbstractGui implements GuiInterface
 {
@@ -17,6 +19,13 @@ class AbstractGui implements GuiInterface
     protected ?ReplyKeyboardInterface $replyKeyboard = null;
 
     protected ?InlineKeyboardInterface $inlineKeyboard = null;
+
+    protected GuiFactoryInterface $guiFactory;
+
+    public function __construct()
+    {
+        $this->guiFactory = new GuiFactory();
+    }
 
     /**
      * @inheritDoc
@@ -52,5 +61,10 @@ class AbstractGui implements GuiInterface
     {
         $this->inlineKeyboard = $keyboard;
         return $this;
+    }
+
+    public function getGuiFactory(): GuiFactoryInterface
+    {
+        return $this->guiFactory;
     }
 }

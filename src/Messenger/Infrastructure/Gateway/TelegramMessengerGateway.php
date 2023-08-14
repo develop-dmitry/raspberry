@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Infrastructure\Gateway;
 
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 use Raspberry\Common\Exceptions\RepositoryException;
 use Raspberry\Messenger\Domain\Context\Request\CallbackData\CallbackData;
@@ -15,7 +17,8 @@ use Raspberry\Messenger\Domain\Context\User\UserRepositoryInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
 use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
-use Raspberry\Messenger\Infrastructure\Gui\TelegramGui;
+use Raspberry\Messenger\Infrastructure\Gateway\Exceptions\MessengerException;
+use Raspberry\Messenger\Infrastructure\Gui\Telegram\TelegramGui;
 use SergiX44\Nutgram\Nutgram;
 use SergiX44\Nutgram\RunningMode\Webhook;
 use SergiX44\Nutgram\Telegram\Types\Message\Message;
@@ -63,7 +66,11 @@ class TelegramMessengerGateway extends AbstractMessengerGateway
 
         $this->bot->onMessage(fn() => $this->execute([$this, 'executeMessageHandler']));
 
-        $this->bot->run();
+        try {
+            $this->bot->run();
+        } catch (NotFoundExceptionInterface|ContainerExceptionInterface $exception) {
+            throw new MessengerException($exception->getMessage());
+        }
     }
 
     /**

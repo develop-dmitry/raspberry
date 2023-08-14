@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Domain\Gui;
 
+use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\InlineKeyboardInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboardInterface;
 
@@ -31,4 +32,9 @@ interface GuiInterface
      * @return self
      */
     public function sendInlineKeyboard(InlineKeyboardInterface $keyboard): self;
+
+    /**
+     * @return GuiFactoryInterface
+     */
+    public function getGuiFactory(): GuiFactoryInterface;
 }

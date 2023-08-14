@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Domain\Gui\Options\ReplyKeyboard\Factory;
+namespace Raspberry\Messenger\Infrastructure\Gui\Base\Factory;
 
+use Raspberry\Messenger\Domain\Gui\Factory\ReplyKeyboardOptionFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Options\OptionInterface;
 use Raspberry\Messenger\Domain\Gui\Options\ReplyKeyboard\ResizeOption;
 

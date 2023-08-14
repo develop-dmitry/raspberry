@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Messenger\Domain\Gui;
 
-use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\Factory\InlineButtonFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
-use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\Factory\ReplyButtonFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButtonInterface;
-use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\Factory\InlineKeyboardFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\InlineButtonFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\InlineKeyboardFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\ReplyButtonFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\ReplyKeyboardFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\InlineKeyboardInterface;
-use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\Factory\ReplyKeyboardFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboardInterface;
-use Raspberry\Messenger\Infrastructure\Gui\TelegramGui;
+use Raspberry\Messenger\Infrastructure\Gui\Telegram\TelegramGui;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardMarkup;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\ReplyKeyboardMarkup;
 use Tests\TestCase;
