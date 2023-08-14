@@ -3,23 +3,23 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Raspberry\Messenger\Domain\Base\Context\User\UserRepositoryInterface;
-use Raspberry\Messenger\Domain\Base\Gui\Buttons\InlineButton\Factory\InlineButtonFactory;
-use Raspberry\Messenger\Domain\Base\Gui\Buttons\InlineButton\Factory\InlineButtonFactoryInterface;
-use Raspberry\Messenger\Domain\Base\Gui\Buttons\ReplyButton\Factory\ReplyButtonFactory;
-use Raspberry\Messenger\Domain\Base\Gui\Buttons\ReplyButton\Factory\ReplyButtonFactoryInterface;
-use Raspberry\Messenger\Domain\Base\Gui\Keyboards\InlineKeyboard\Factory\InlineKeyboardFactory;
-use Raspberry\Messenger\Domain\Base\Gui\Keyboards\InlineKeyboard\Factory\InlineKeyboardFactoryInterface;
-use Raspberry\Messenger\Domain\Base\Gui\Keyboards\ReplyKeyboard\Factory\ReplyKeyboardFactory;
-use Raspberry\Messenger\Domain\Base\Gui\Keyboards\ReplyKeyboard\Factory\ReplyKeyboardFactoryInterface;
-use Raspberry\Messenger\Domain\Base\Gui\Options\InlineButton\Factory\InlineButtonOptionFactory;
-use Raspberry\Messenger\Domain\Base\Gui\Options\InlineButton\Factory\InlineButtonOptionFactoryInterface;
-use Raspberry\Messenger\Domain\Base\Gui\Options\ReplyButton\Factory\ReplyButtonOptionFactory;
-use Raspberry\Messenger\Domain\Base\Gui\Options\ReplyButton\Factory\ReplyButtonOptionFactoryInterface;
-use Raspberry\Messenger\Domain\Base\Gui\Options\ReplyKeyboard\Factory\ReplyKeyboardOptionFactory;
-use Raspberry\Messenger\Domain\Base\Gui\Options\ReplyKeyboard\Factory\ReplyKeyboardOptionFactoryInterface;
+use Raspberry\Messenger\Domain\Context\User\UserRepositoryInterface;
+use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\Factory\InlineButtonFactory;
+use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\Factory\InlineButtonFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\Factory\ReplyButtonFactory;
+use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\Factory\ReplyButtonFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\Factory\InlineKeyboardFactory;
+use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\Factory\InlineKeyboardFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\Factory\ReplyKeyboardFactory;
+use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\Factory\ReplyKeyboardFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Options\InlineButton\Factory\InlineButtonOptionFactory;
+use Raspberry\Messenger\Domain\Gui\Options\InlineButton\Factory\InlineButtonOptionFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Options\ReplyButton\Factory\ReplyButtonOptionFactory;
+use Raspberry\Messenger\Domain\Gui\Options\ReplyButton\Factory\ReplyButtonOptionFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Options\ReplyKeyboard\Factory\ReplyKeyboardOptionFactory;
+use Raspberry\Messenger\Domain\Gui\Options\ReplyKeyboard\Factory\ReplyKeyboardOptionFactoryInterface;
 use Raspberry\Messenger\Infrastructure\Gateway\TelegramMessengerGateway;
-use Raspberry\Messenger\Infrastructure\Repositories\RedisTelegramUserRepository;
+use Raspberry\Messenger\Infrastructure\Repositories\TelegramUserRepository;
 use SergiX44\Nutgram\Nutgram;
 
 class MessengerServiceProvider extends ServiceProvider
@@ -41,7 +41,7 @@ class MessengerServiceProvider extends ServiceProvider
         $this->app
             ->when(TelegramMessengerGateway::class)
             ->needs(UserRepositoryInterface::class)
-            ->give(RedisTelegramUserRepository::class);
+            ->give(TelegramUserRepository::class);
 
         $this->app
             ->when(TelegramMessengerGateway::class)

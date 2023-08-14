@@ -8,9 +8,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Psr\Log\LoggerInterface;
 use Raspberry\Messenger\Application\LookBot\HelloWorldHandler;
-use Raspberry\Messenger\Domain\Base\Handlers\Container\HandlerContainer;
-use Raspberry\Messenger\Domain\Base\Handlers\Container\HandlerContainerInterface;
-use Raspberry\Messenger\Domain\Base\Handlers\HandlerTypeEnum;
+use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
+use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainerInterface;
+use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
 use Raspberry\Messenger\Infrastructure\Gateway\TelegramMessengerGateway;
 
 class TelegramLookBotController extends Controller

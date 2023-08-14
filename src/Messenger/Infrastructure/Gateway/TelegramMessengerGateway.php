@@ -6,17 +6,16 @@ namespace Raspberry\Messenger\Infrastructure\Gateway;
 
 use Psr\Log\LoggerInterface;
 use Raspberry\Common\Exceptions\RepositoryException;
-use Raspberry\Messenger\Domain\Base\Context\ContextInterface;
-use Raspberry\Messenger\Domain\Base\Context\Request\CallbackData\CallbackData;
-use Raspberry\Messenger\Domain\Base\Context\Request\CallbackData\NullCallbackData;
-use Raspberry\Messenger\Domain\Base\Context\Request\Request;
-use Raspberry\Messenger\Domain\Base\Context\Request\RequestInterface;
-use Raspberry\Messenger\Domain\Base\Context\User\UserInterface;
-use Raspberry\Messenger\Domain\Base\Context\User\UserRepositoryInterface;
-use Raspberry\Messenger\Domain\Base\Gui\GuiInterface;
-use Raspberry\Messenger\Domain\Base\Handlers\Container\HandlerContainer;
-use Raspberry\Messenger\Domain\Base\Handlers\HandlerTypeEnum;
-use Raspberry\Messenger\Domain\Telegram\Gui\TelegramGui;
+use Raspberry\Messenger\Domain\Context\Request\CallbackData\CallbackData;
+use Raspberry\Messenger\Domain\Context\Request\CallbackData\NullCallbackData;
+use Raspberry\Messenger\Domain\Context\Request\Request;
+use Raspberry\Messenger\Domain\Context\Request\RequestInterface;
+use Raspberry\Messenger\Domain\Context\User\UserInterface;
+use Raspberry\Messenger\Domain\Context\User\UserRepositoryInterface;
+use Raspberry\Messenger\Domain\Gui\GuiInterface;
+use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
+use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
+use Raspberry\Messenger\Infrastructure\Gui\TelegramGui;
 use SergiX44\Nutgram\Nutgram;
 use SergiX44\Nutgram\RunningMode\Webhook;
 use SergiX44\Nutgram\Telegram\Types\Message\Message;
@@ -25,8 +24,6 @@ class TelegramMessengerGateway extends AbstractMessengerGateway
 {
 
     protected TelegramGui $gui;
-
-    protected ContextInterface $context;
 
     /**
      * @param Nutgram $bot

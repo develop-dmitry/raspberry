@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Messenger\Domain\Handlers\Container;
 
-use Raspberry\Messenger\Domain\Base\Handlers\Container\Exceptions\HandlerNotFoundException;
-use Raspberry\Messenger\Domain\Base\Handlers\Container\HandlerContainer;
-use Raspberry\Messenger\Domain\Base\Handlers\HandlerInterface;
-use Raspberry\Messenger\Domain\Base\Handlers\HandlerTypeEnum;
+use Raspberry\Messenger\Domain\Handlers\Container\Exceptions\HandlerNotFoundException;
+use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
+use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
+use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
 use Tests\TestCase;
 
 class HandlerContainerTest extends TestCase

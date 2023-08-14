@@ -6,18 +6,17 @@ namespace Raspberry\Messenger\Infrastructure\Gateway;
 
 use Psr\Log\LoggerInterface;
 use Raspberry\Common\Exceptions\RepositoryException;
-use Raspberry\Messenger\Domain\Base\Context\Context;
-use Raspberry\Messenger\Domain\Base\Context\ContextInterface;
-use Raspberry\Messenger\Domain\Base\Context\Request\RequestInterface;
-use Raspberry\Messenger\Domain\Base\Context\User\UserInterface;
-use Raspberry\Messenger\Domain\Base\Context\User\UserRepositoryInterface;
-use Raspberry\Messenger\Domain\Base\Gui\GuiInterface;
-use Raspberry\Messenger\Domain\Base\Handlers\Container\Exceptions\HandlerNotFoundException;
-use Raspberry\Messenger\Domain\Base\Handlers\Container\HandlerContainer;
-use Raspberry\Messenger\Domain\Base\Handlers\Exceptions\FailedAuthorizeException;
-use Raspberry\Messenger\Domain\Base\Handlers\HandlerInterface;
-use Raspberry\Messenger\Domain\Base\Handlers\HandlerTypeEnum;
-use Raspberry\Messenger\Domain\Base\Messenger\MessengerGatewayInterface;
+use Raspberry\Messenger\Domain\Context\Context;
+use Raspberry\Messenger\Domain\Context\ContextInterface;
+use Raspberry\Messenger\Domain\Context\Request\RequestInterface;
+use Raspberry\Messenger\Domain\Context\User\UserInterface;
+use Raspberry\Messenger\Domain\Context\User\UserRepositoryInterface;
+use Raspberry\Messenger\Domain\Gui\GuiInterface;
+use Raspberry\Messenger\Domain\Handlers\Container\Exceptions\HandlerNotFoundException;
+use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
+use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
+use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
+use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
 use Throwable;
 
 abstract class AbstractMessengerGateway implements MessengerGatewayInterface
@@ -103,8 +102,6 @@ abstract class AbstractMessengerGateway implements MessengerGatewayInterface
 
     protected function initContext(): void
     {
-        $this->logger->debug('request', [$this->getRequest()]);
-        $this->logger->debug('user', [$this->getUser()]);
         $this->context = new Context($this->getRequest(), $this->getUser());
     }
 

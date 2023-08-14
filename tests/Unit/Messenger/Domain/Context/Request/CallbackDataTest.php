@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Messenger\Domain\Context\Request;
 
 use Illuminate\Database\Eloquent\Casts\Json;
-use Raspberry\Messenger\Domain\Base\Context\Request\CallbackData\CallbackData;
+use Raspberry\Messenger\Domain\Context\Request\CallbackData\CallbackData;
 use Tests\TestCase;
 
 class CallbackDataTest extends TestCase

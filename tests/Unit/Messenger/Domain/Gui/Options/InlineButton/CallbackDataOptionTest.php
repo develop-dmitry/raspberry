@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Messenger\Domain\Gui\Options\InlineButton;
 
 use Illuminate\Database\Eloquent\Casts\Json;
-use Raspberry\Messenger\Domain\Base\Gui\Options\InlineButton\CallbackDataOption;
+use Raspberry\Messenger\Domain\Gui\Options\InlineButton\CallbackDataOption;
 use Tests\TestCase;
 
 class CallbackDataOptionTest extends TestCase
