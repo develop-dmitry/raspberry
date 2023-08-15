@@ -51,6 +51,31 @@ class LookRepository implements LookRepositoryInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function findByTemperature(int $minTemperature, int $maxTemperature): array
+    {
+        $lookModels = LookModel::where('min_temperature', '>=', $minTemperature)
+            ->where('max_temperature', '<=', $maxTemperature)
+            ->get();
+
+        $looks = [];
+
+        foreach ($lookModels as $lookModel) {
+            try {
+                $looks[] = $this->makeLook($lookModel);
+            } catch (InvalidValueException $exception) {
+                $this->logger->error('Invalid look in database', [
+                    'exception' => $exception->getMessage(),
+                    'look' => $lookModel->toArray()
+                ]);
+            }
+        }
+
+        return $looks;
+    }
+
+    /**
      * @param LookModel $look
      * @return LookInterface
      * @throws InvalidValueException
