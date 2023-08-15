@@ -4,6 +4,8 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Raspberry\Authorization\Domain\User\UserRepositoryInterface;
+use Raspberry\Authorization\Infrastructure\Repositories\UserRepository;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -15,6 +17,14 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         //
     ];
+
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+    }
 
     /**
      * Register any authentication / authorization services.
