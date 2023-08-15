@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Look\Domain\Look\Services\LookSelection;
+namespace Raspberry\Look\Domain\Look\Services\SelectionLook;
 
 use Raspberry\Look\Domain\Look\LookInterface;
 
-interface LookSelectionServiceInterface
+interface SelectionLookServiceInterface
 {
 
     /**
