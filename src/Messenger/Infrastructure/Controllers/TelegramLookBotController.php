@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Psr\Log\LoggerInterface;
 use Raspberry\Authorization\Application\MessengerAuthorization\TelegramMessengerAuthorizationUseCase;
+use Raspberry\Authorization\Application\MessengerRegister\TelegramMessengerRegisterUseCase;
 use Raspberry\Messenger\Application\LookBot\HelloWorldHandler;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainerInterface;
@@ -19,7 +20,8 @@ class TelegramLookBotController extends Controller
 {
     public function __construct(
         protected LoggerInterface $logger,
-        protected TelegramMessengerAuthorizationUseCase $messengerAuthorization
+        protected TelegramMessengerAuthorizationUseCase $messengerAuthorization,
+        protected TelegramMessengerRegisterUseCase $messengerRegister
     ) {
     }
 
@@ -55,7 +57,14 @@ class TelegramLookBotController extends Controller
 
     protected function makeAuthHandler(string $class): mixed
     {
-        return app()->makeWith($class, ['messengerAuthorization' => $this->messengerAuthorization]);
+        return app()
+            ->makeWith(
+                $class,
+                [
+                    'messengerAuthorization' => $this->messengerAuthorization,
+                    'messengerRegister' => $this->messengerRegister
+                ]
+            );
     }
 
     protected function makeHandler(string $class): mixed

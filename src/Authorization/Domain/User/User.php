@@ -10,13 +10,23 @@ class User implements UserInterface
 {
 
     /**
-     * @param IdInterface $id
+     * @param IdInterface|null $id
      * @param IdInterface|null $telegramId
      */
-    public function __construct(
-        protected IdInterface $id,
+    protected function __construct(
+        protected ?IdInterface $id,
         protected ?IdInterface $telegramId
     ) {
+    }
+
+    public static function make(IdInterface $id, ?IdInterface $telegramId): self
+    {
+        return new User($id, $telegramId);
+    }
+
+    public static function register(?IdInterface $telegramId): self
+    {
+        return new User(null, $telegramId);
     }
 
     /**

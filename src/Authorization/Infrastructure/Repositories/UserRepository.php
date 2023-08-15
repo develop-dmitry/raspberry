@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Raspberry\Authorization\Infrastructure\Repositories;
 
 use App\Models\User as UserModel;
-use Psr\Log\LoggerInterface;
+use Raspberry\Authorization\Domain\User\Exceptions\FailedSaveUserException;
 use Raspberry\Authorization\Domain\User\Exceptions\UserNotFoundException;
 use Raspberry\Authorization\Domain\User\User;
 use Raspberry\Authorization\Domain\User\UserInterface;
@@ -15,14 +15,6 @@ use Raspberry\Common\Values\Id\Id;
 
 class UserRepository implements UserRepositoryInterface
 {
-
-    /**
-     * @param LoggerInterface $logger
-     */
-    public function __construct(
-        protected LoggerInterface $logger
-    ) {
-    }
 
     /**
      * @inheritDoc
@@ -35,13 +27,21 @@ class UserRepository implements UserRepositoryInterface
             throw new UserNotFoundException();
         }
 
-        try {
-            return $this->makeUser($user);
-        } catch (InvalidValueException $exception) {
-            $this->logger->error('Invalid data in database', ['exception' => $exception->getMessage()]);
+        return $this->makeUser($user);
+    }
 
-            throw new UserNotFoundException($exception->getMessage());
+    /**
+     * @inheritDoc
+     */
+    public function createUser(UserInterface $user): UserInterface
+    {
+        $userModel = UserModel::create(['telegram_id' => $user->getTelegramId()?->getValue()]);
+
+        if (!$userModel->exists()) {
+            throw new FailedSaveUserException();
         }
+
+        return $this->makeUser($userModel);
     }
 
     /**
@@ -51,7 +51,7 @@ class UserRepository implements UserRepositoryInterface
      */
     protected function makeUser(UserModel $user): UserInterface
     {
-        return new User(
+        return User::make(
             new Id($user->id),
             ($user->telegram_id) ? new Id($user->telegram_id) : null
         );
