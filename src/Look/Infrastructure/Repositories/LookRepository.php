@@ -12,6 +12,7 @@ use Raspberry\Common\Values\Id\Id;
 use Raspberry\Common\Values\Name\Name;
 use Raspberry\Common\Values\Photo\Photo;
 use Raspberry\Common\Values\Slug\Slug;
+use Raspberry\Common\Values\Temperature\Temperature;
 use Raspberry\Look\Domain\Clothes\Clothes;
 use Raspberry\Look\Domain\Clothes\ClothesInterface;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;
@@ -50,6 +51,31 @@ class LookRepository implements LookRepositoryInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function findByTemperature(int $minTemperature, int $maxTemperature): array
+    {
+        $lookModels = LookModel::where('min_temperature', '>=', $minTemperature)
+            ->where('max_temperature', '<=', $maxTemperature)
+            ->get();
+
+        $looks = [];
+
+        foreach ($lookModels as $lookModel) {
+            try {
+                $looks[] = $this->makeLook($lookModel);
+            } catch (InvalidValueException $exception) {
+                $this->logger->error('Invalid look in database', [
+                    'exception' => $exception->getMessage(),
+                    'look' => $lookModel->toArray()
+                ]);
+            }
+        }
+
+        return $looks;
+    }
+
+    /**
      * @param LookModel $look
      * @return LookInterface
      * @throws InvalidValueException
@@ -74,7 +100,9 @@ class LookRepository implements LookRepositoryInterface
             new Name($look->name),
             new Slug($look->slug),
             new Photo($look->photo),
-            $clothes
+            $clothes,
+            new Temperature($look->min_temperature),
+            new Temperature($look->max_temperature)
         );
     }
 

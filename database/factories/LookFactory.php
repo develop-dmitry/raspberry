@@ -16,10 +16,15 @@ class LookFactory extends Factory
      */
     public function definition(): array
     {
+        $minTemperature = $this->faker->numberBetween(-50, 10);
+        $maxTemperature = $this->faker->numberBetween($minTemperature + 1, 50);
+
         return [
             'name' => $this->faker->text(50),
             'slug' => $this->faker->slug(),
-            'photo' => $this->faker->imageUrl()
+            'photo' => $this->faker->imageUrl(),
+            'min_temperature' => $minTemperature,
+            'max_temperature' => $maxTemperature
         ];
     }
 }

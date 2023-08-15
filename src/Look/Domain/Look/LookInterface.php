@@ -8,6 +8,7 @@ use Raspberry\Common\Values\Id\IdInterface;
 use Raspberry\Common\Values\Name\NameInterface;
 use Raspberry\Common\Values\Photo\PhotoInterface;
 use Raspberry\Common\Values\Slug\SlugInterface;
+use Raspberry\Common\Values\Temperature\TemperatureInterface;
 use Raspberry\Look\Domain\Clothes\ClothesInterface;
 
 interface LookInterface
@@ -36,4 +37,14 @@ interface LookInterface
      * @return ClothesInterface[]
      */
     public function getClothes(): array;
+
+    /**
+     * @return TemperatureInterface
+     */
+    public function getMinTemperature(): TemperatureInterface;
+
+    /**
+     * @return TemperatureInterface
+     */
+    public function getMaxTemperature(): TemperatureInterface;
 }
