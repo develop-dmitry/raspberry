@@ -13,7 +13,9 @@ class Look extends Model
     protected $fillable = [
         'name',
         'slug',
-        'photo'
+        'photo',
+        'min_temperature',
+        'max_temperature'
     ];
 
     public function clothes(): BelongsToMany

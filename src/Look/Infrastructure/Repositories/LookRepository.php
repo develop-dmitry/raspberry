@@ -12,6 +12,7 @@ use Raspberry\Common\Values\Id\Id;
 use Raspberry\Common\Values\Name\Name;
 use Raspberry\Common\Values\Photo\Photo;
 use Raspberry\Common\Values\Slug\Slug;
+use Raspberry\Common\Values\Temperature\Temperature;
 use Raspberry\Look\Domain\Clothes\Clothes;
 use Raspberry\Look\Domain\Clothes\ClothesInterface;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;
@@ -74,7 +75,9 @@ class LookRepository implements LookRepositoryInterface
             new Name($look->name),
             new Slug($look->slug),
             new Photo($look->photo),
-            $clothes
+            $clothes,
+            new Temperature($look->min_temperature),
+            new Temperature($look->max_temperature)
         );
     }
 
