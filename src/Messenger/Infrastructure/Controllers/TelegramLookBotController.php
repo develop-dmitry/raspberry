@@ -10,6 +10,7 @@ use Psr\Log\LoggerInterface;
 use Raspberry\Authorization\Application\MessengerAuthorization\TelegramMessengerAuthorizationUseCase;
 use Raspberry\Authorization\Application\MessengerRegister\TelegramMessengerRegisterUseCase;
 use Raspberry\Messenger\Application\LookBot\HelloWorldHandler;
+use Raspberry\Messenger\Application\LookBot\StartCommandHandler;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainerInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
@@ -49,7 +50,7 @@ class TelegramLookBotController extends Controller
             ->addHandler(
                 'start',
                 HandlerTypeEnum::Command,
-                $this->makeAuthHandler(HelloWorldHandler::class)
+                $this->makeHandler(StartCommandHandler::class)
             );
 
         return $handlers;

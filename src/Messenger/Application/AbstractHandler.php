@@ -23,6 +23,8 @@ abstract class AbstractHandler implements HandlerInterface
 
     protected RequestInterface $contextRequest;
 
+    protected GuiInterface $gui;
+
     protected InlineButtonFactoryInterface $inlineButtonFactory;
 
     protected ReplyButtonFactoryInterface $replyButtonFactory;
@@ -44,8 +46,14 @@ abstract class AbstractHandler implements HandlerInterface
     {
         $this->contextRequest = $context->getRequest();
         $this->contextUser = $context->getUser();
+        $this->gui = $gui;
 
-        $guiFactory = $gui->getGuiFactory();
+       $this->initFactories();
+    }
+
+    private function initFactories(): void
+    {
+        $guiFactory = $this->gui->getGuiFactory();
 
         $this->inlineButtonFactory = $guiFactory->makeInlineButtonFactory();
         $this->replyButtonFactory = $guiFactory->makeReplyButtonFactory();
