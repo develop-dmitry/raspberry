@@ -18,6 +18,7 @@ use Raspberry\Look\Domain\Clothes\Clothes;
 use Raspberry\Look\Domain\Clothes\ClothesInterface;
 use Raspberry\Look\Domain\Event\Event;
 use Raspberry\Look\Domain\Event\EventInterface;
+use Raspberry\Look\Domain\Event\EventRepositoryInterface;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;
 use Raspberry\Look\Domain\Look\Look;
 use Raspberry\Look\Domain\Look\LookInterface;
@@ -26,6 +27,7 @@ use Raspberry\Look\Domain\Look\LookRepositoryInterface;
 class LookRepository implements LookRepositoryInterface
 {
     public function __construct(
+        protected EventRepositoryInterface $eventRepository,
         protected LoggerInterface $logger
     ) {
     }
@@ -93,18 +95,8 @@ class LookRepository implements LookRepositoryInterface
             $look->clothes->map([$this, 'makeClothes'])->toArray(),
             new Temperature($look->min_temperature),
             new Temperature($look->max_temperature),
-            $look->events->map([$this, 'makeEvent'])->toArray()
+            $this->eventRepository->getCollection($look->events()->pluck('id')->toArray())
         );
-    }
-
-    /**
-     * @param EventModel $event
-     * @return EventInterface
-     * @throws InvalidValueException
-     */
-    public function makeEvent(EventModel $event): EventInterface
-    {
-        return new Event(new Name($event->name), new Slug($event->slug));
     }
 
     /**
