@@ -10,6 +10,7 @@ use Raspberry\Common\Values\Photo\PhotoInterface;
 use Raspberry\Common\Values\Slug\SlugInterface;
 use Raspberry\Common\Values\Temperature\TemperatureInterface;
 use Raspberry\Look\Domain\Clothes\ClothesInterface;
+use Raspberry\Look\Domain\Event\EventInterface;
 use Raspberry\Look\Domain\Look\LookInterface;
 
 class Look implements LookInterface
@@ -22,6 +23,7 @@ class Look implements LookInterface
      * @param ClothesInterface[] $clothes
      * @param TemperatureInterface $minTemperature
      * @param TemperatureInterface $maxTemperature
+     * @param EventInterface[] $events
      */
     public function __construct(
         protected IdInterface $id,
@@ -30,7 +32,8 @@ class Look implements LookInterface
         protected PhotoInterface $photo,
         protected array $clothes,
         protected TemperatureInterface $minTemperature,
-        protected TemperatureInterface $maxTemperature
+        protected TemperatureInterface $maxTemperature,
+        protected array $events
     ) {
     }
 
@@ -88,5 +91,13 @@ class Look implements LookInterface
     public function getMaxTemperature(): TemperatureInterface
     {
         return $this->maxTemperature;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getEvents(): array
+    {
+        return $this->events;
     }
 }

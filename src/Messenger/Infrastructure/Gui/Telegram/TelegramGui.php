@@ -98,7 +98,7 @@ class TelegramGui extends AbstractGui
             $button->getText(),
             url: $button->getUrl()->getValue(),
             callback_data: $button->getCallbackData()->getValue(),
-            web_app: new WebAppInfo($button->getWebApp()->getValue())
+            web_app: $button->getWebApp()->getValue()
         );
     }
 }

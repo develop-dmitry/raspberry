@@ -10,6 +10,7 @@ use Raspberry\Common\Values\Photo\PhotoInterface;
 use Raspberry\Common\Values\Slug\SlugInterface;
 use Raspberry\Common\Values\Temperature\TemperatureInterface;
 use Raspberry\Look\Domain\Clothes\ClothesInterface;
+use Raspberry\Look\Domain\Event\EventInterface;
 
 interface LookInterface
 {
@@ -47,4 +48,9 @@ interface LookInterface
      * @return TemperatureInterface
      */
     public function getMaxTemperature(): TemperatureInterface;
+
+    /**
+     * @return EventInterface[]
+     */
+    public function getEvents(): array;
 }

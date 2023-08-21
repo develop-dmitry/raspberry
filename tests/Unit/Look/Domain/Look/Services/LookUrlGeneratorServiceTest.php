@@ -25,7 +25,8 @@ class LookUrlGeneratorServiceTest extends TestCase
             new Photo('/test.png'),
             [],
             new Temperature(-10),
-            new Temperature(10)
+            new Temperature(10),
+            []
         );
         $urlGenerator = $this->app->make(LookUrlGeneratorService::class);
 
