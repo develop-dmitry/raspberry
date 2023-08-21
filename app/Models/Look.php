@@ -22,4 +22,9 @@ class Look extends Model
     {
         return $this->belongsToMany(Clothes::class);
     }
+
+    public function events(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class);
+    }
 }
