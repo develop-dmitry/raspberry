@@ -1,5 +1,5 @@
 <template lang="pug">
-.look-composition
+.look-composition(v-if="look.clothes.length > 0")
     heading(:level="heading.level") {{ heading.text }}
     .look-composition__clothes
         clothes-card(

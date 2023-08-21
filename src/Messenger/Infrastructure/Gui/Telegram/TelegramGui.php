@@ -11,20 +11,14 @@ use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardButton;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardMarkup;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\KeyboardButton;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\ReplyKeyboardMarkup;
+use SergiX44\Nutgram\Telegram\Types\WebApp\WebAppInfo;
 
 class TelegramGui extends AbstractGui
 {
 
-    public function getMessage(): string
-    {
-        return $this->message;
-    }
-
-    public function isEditMessage(): bool
-    {
-        return $this->isEditMessage;
-    }
-
+    /**
+     * @return ReplyKeyboardMarkup|InlineKeyboardMarkup|null
+     */
     public function makeTelegramKeyboard(): ReplyKeyboardMarkup|InlineKeyboardMarkup|null
     {
         if ($this->hasReplyKeyboard()) {
@@ -38,16 +32,25 @@ class TelegramGui extends AbstractGui
         return null;
     }
 
+    /**
+     * @return bool
+     */
     protected function hasReplyKeyboard(): bool
     {
         return !is_null($this->replyKeyboard);
     }
 
+    /**
+     * @return bool
+     */
     protected function hasInlineKeyboard(): bool
     {
         return !is_null($this->inlineKeyboard);
     }
 
+    /**
+     * @return ReplyKeyboardMarkup
+     */
     protected function makeReplyKeyboardMarkup(): ReplyKeyboardMarkup
     {
         $keyboard = new ReplyKeyboardMarkup($this->replyKeyboard->isResize()->getValue());
@@ -59,6 +62,10 @@ class TelegramGui extends AbstractGui
         return $keyboard;
     }
 
+    /**
+     * @param ReplyButtonInterface $button
+     * @return KeyboardButton
+     */
     protected function makeReplyButton(ReplyButtonInterface $button): KeyboardButton
     {
         return new KeyboardButton(
@@ -67,6 +74,9 @@ class TelegramGui extends AbstractGui
         );
     }
 
+    /**
+     * @return InlineKeyboardMarkup
+     */
     protected function makeInlineKeyboardMarkup(): InlineKeyboardMarkup
     {
         $keyboard = new InlineKeyboardMarkup();
@@ -78,11 +88,17 @@ class TelegramGui extends AbstractGui
         return $keyboard;
     }
 
+    /**
+     * @param InlineButtonInterface $button
+     * @return InlineKeyboardButton
+     */
     protected function makeInlineKeyboardButton(InlineButtonInterface $button): InlineKeyboardButton
     {
         return new InlineKeyboardButton(
             $button->getText(),
-            callback_data: $button->getCallbackData()->getValue()
+            url: $button->getUrl()->getValue(),
+            callback_data: $button->getCallbackData()->getValue(),
+            web_app: new WebAppInfo($button->getWebApp()->getValue())
         );
     }
 }

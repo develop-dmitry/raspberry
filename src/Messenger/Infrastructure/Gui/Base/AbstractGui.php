@@ -28,6 +28,22 @@ class AbstractGui implements GuiInterface
     }
 
     /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEditMessage(): bool
+    {
+        return $this->isEditMessage;
+    }
+
+    /**
      * @inheritDoc
      */
     public function editMessage(): GuiInterface
