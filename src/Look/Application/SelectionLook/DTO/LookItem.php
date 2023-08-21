@@ -42,4 +42,13 @@ class LookItem
     {
         return $this->photo;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'photo' => $this->getPhoto()
+        ];
+    }
 }

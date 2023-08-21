@@ -17,4 +17,14 @@ interface InlineButtonInterface
      * @return OptionInterface
      */
     public function getCallbackData(): OptionInterface;
+
+    /**
+     * @return OptionInterface
+     */
+    public function getWebApp(): OptionInterface;
+
+    /**
+     * @return OptionInterface
+     */
+    public function getUrl(): OptionInterface;
 }

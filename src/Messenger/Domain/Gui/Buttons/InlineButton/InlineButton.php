@@ -13,7 +13,9 @@ class InlineButton implements InlineButtonInterface
 
     public function __construct(
         protected string $text,
-        protected OptionInterface $callbackData
+        protected OptionInterface $callbackData,
+        protected OptionInterface $webAppOption,
+        protected OptionInterface $url
     ) {
     }
 
@@ -23,5 +25,21 @@ class InlineButton implements InlineButtonInterface
     public function getCallbackData(): OptionInterface
     {
         return $this->callbackData;
+    }
+
+    /**
+     * @return OptionInterface
+     */
+    public function getWebApp(): OptionInterface
+    {
+        return $this->webAppOption;
+    }
+
+    /**
+     * @return OptionInterface
+     */
+    public function getUrl(): OptionInterface
+    {
+        return $this->url;
     }
 }

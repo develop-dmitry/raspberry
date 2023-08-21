@@ -16,6 +16,10 @@ class InlineButtonFactory implements InlineButtonFactoryInterface
 
     protected ?OptionInterface $callbackData;
 
+    protected ?OptionInterface $webApp;
+
+    protected ?OptionInterface $url;
+
     public function __construct()
     {
         $this->reset();
@@ -42,9 +46,27 @@ class InlineButtonFactory implements InlineButtonFactoryInterface
     /**
      * @inheritDoc
      */
+    public function setWebApp(OptionInterface $webApp): InlineButtonFactoryInterface
+    {
+        $this->webApp = $webApp;
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setUrl(OptionInterface $url): InlineButtonFactoryInterface
+    {
+        $this->url = $url;
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function make(): InlineButtonInterface
     {
-        $button = new InlineButton($this->getText(), $this->getCallbackData());
+        $button = new InlineButton($this->getText(), $this->getCallbackData(), $this->getWebApp(), $this->getUrl());
 
         $this->reset();
 
@@ -61,9 +83,21 @@ class InlineButtonFactory implements InlineButtonFactoryInterface
         return $this->callbackData ?: new NullOption();
     }
 
+    protected function getWebApp(): OptionInterface
+    {
+        return $this->webApp ?: new NullOption();
+    }
+
+    protected function getUrl(): OptionInterface
+    {
+        return $this->url ?: new NullOption();
+    }
+
     protected function reset(): void
     {
         $this->text = '';
         $this->callbackData = null;
+        $this->webApp = null;
+        $this->url = null;
     }
 }

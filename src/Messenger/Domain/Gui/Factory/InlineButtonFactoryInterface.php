@@ -22,6 +22,18 @@ interface InlineButtonFactoryInterface
     public function setCallbackData(OptionInterface $callbackData): self;
 
     /**
+     * @param OptionInterface $webApp
+     * @return self
+     */
+    public function setWebApp(OptionInterface $webApp): self;
+
+    /**
+     * @param OptionInterface $url
+     * @return self
+     */
+    public function setUrl(OptionInterface $url): self;
+
+    /**
      * @return InlineButtonInterface
      */
     public function make(): InlineButtonInterface;
