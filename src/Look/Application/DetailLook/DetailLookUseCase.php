@@ -7,7 +7,9 @@ namespace Raspberry\Look\Application\DetailLook;
 use Raspberry\Look\Application\DetailLook\DTO\ClothesItem;
 use Raspberry\Look\Application\DetailLook\DTO\DetailLookRequest;
 use Raspberry\Look\Application\DetailLook\DTO\DetailLookResponse;
+use Raspberry\Look\Application\DetailLook\DTO\EventItem;
 use Raspberry\Look\Domain\Clothes\ClothesInterface;
+use Raspberry\Look\Domain\Event\EventInterface;
 use Raspberry\Look\Domain\Look\LookInterface;
 use Raspberry\Look\Domain\Look\LookRepositoryInterface;
 
@@ -39,7 +41,8 @@ class DetailLookUseCase implements DetailLookInterface
             $look->getName()->getValue(),
             $look->getSlug()->getValue(),
             $look->getPhoto()->getValue(),
-            $this->makeClothes($look->getClothes())
+            $this->makeClothes($look->getClothes()),
+            $this->makeEvents($look->getEvents())
         );
     }
 
@@ -60,5 +63,20 @@ class DetailLookUseCase implements DetailLookInterface
         }
 
         return $clothes;
+    }
+
+    /**
+     * @param EventInterface[] $items
+     * @return EventItem[]
+     */
+    protected function makeEvents(array $items): array
+    {
+        $events = [];
+
+        foreach ($items as $item) {
+            $events[] = new EventItem($item->getName()->getValue());
+        }
+
+        return $events;
     }
 }

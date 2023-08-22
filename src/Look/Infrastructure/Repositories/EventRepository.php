@@ -31,7 +31,7 @@ class EventRepository implements EventRepositoryInterface
      */
     public function getCollection(array $ids): array
     {
-        return $this->makeEvents(EventModel::where('id', $ids)->get());
+        return $this->makeEvents(EventModel::whereIn('id', $ids)->get());
     }
 
     /**

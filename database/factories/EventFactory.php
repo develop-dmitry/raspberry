@@ -17,7 +17,7 @@ class EventFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->text(50),
+            'name' => $this->faker->text(20),
             'slug' => $this->faker->slug()
         ];
     }

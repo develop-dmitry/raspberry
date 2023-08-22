@@ -4,11 +4,16 @@ export interface Look {
     slug: string,
     photo: string,
     description: string,
-    clothes: Clothes[]
+    clothes: Clothes[],
+    events: Event[]
 }
 
 export interface Clothes {
     id: number,
     photo: string,
+    name: string
+}
+
+export interface Event {
     name: string
 }
