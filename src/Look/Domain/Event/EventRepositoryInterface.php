@@ -30,7 +30,7 @@ interface EventRepositoryInterface
      * @param int $perPage
      * @return PaginationInterface
      */
-    public function pagination(int $page, int $perPage): PaginationInterface;
+    public function withLooks(int $page, int $perPage): PaginationInterface;
 
     /**
      * @param int $eventId

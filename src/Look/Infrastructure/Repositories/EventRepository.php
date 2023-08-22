@@ -51,9 +51,9 @@ class EventRepository implements EventRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function pagination(int $page, int $perPage): PaginationInterface
+    public function withLooks(int $page, int $perPage): PaginationInterface
     {
-        $pagination = EventModel::paginate($perPage, page: $page);
+        $pagination = EventModel::whereHas('looks')->paginate($perPage, page: $page);
 
         return new Pagination(
             $this->makeEvents($pagination->getCollection()),

@@ -33,7 +33,7 @@ class EventListHandler extends AbstractPaginationHandler
     {
         parent::handle($context, $gui, $args);
 
-        $this->pagination = $this->eventRepository->pagination($this->page(), $this->perPage);
+        $this->pagination = $this->eventRepository->withLooks($this->page(), $this->perPage);
 
         if ($this->contextRequest->getRequestType() === HandlerTypeEnum::CallbackQuery) {
             $gui->editMessage();

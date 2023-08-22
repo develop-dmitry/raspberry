@@ -49,12 +49,12 @@ class EventRepositoryTest extends TestCase
         }
     }
 
-    public function testPagination(): void
+    public function testWithLooksQuery(): void
     {
-        $modelPagination = EventModel::paginate(10, page: 1);
+        $modelPagination = EventModel::whereHas('looks')->paginate(10, page: 1);
         $eventRepository = new EventRepository($this->app->make(LoggerInterface::class));
 
-        $pagination = $eventRepository->pagination(1, 10);
+        $pagination = $eventRepository->withLooks(1, 10);
 
         foreach ($pagination->getItems() as $key => $item) {
             $this->equalEvent($modelPagination->get($key), $item);
