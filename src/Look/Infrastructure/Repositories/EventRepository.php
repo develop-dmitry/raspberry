@@ -64,6 +64,14 @@ class EventRepository implements EventRepositoryInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function isExists(int $eventId): bool
+    {
+        return EventModel::find($eventId) !== null;
+    }
+
+    /**
      * @param Collection $models
      * @return EventInterface[]
      */

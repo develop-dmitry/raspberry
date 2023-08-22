@@ -31,4 +31,10 @@ interface EventRepositoryInterface
      * @return PaginationInterface
      */
     public function pagination(int $page, int $perPage): PaginationInterface;
+
+    /**
+     * @param int $eventId
+     * @return bool
+     */
+    public function isExists(int $eventId): bool;
 }

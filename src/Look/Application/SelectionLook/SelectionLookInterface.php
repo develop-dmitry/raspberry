@@ -15,8 +15,6 @@ interface SelectionLookInterface
     /**
      * @param SelectionLookRequest $request
      * @return SelectionLookResponse
-     * @throws EventNotFoundException
-     * @throws InvalidValueException
      */
     public function execute(SelectionLookRequest $request): SelectionLookResponse;
 }

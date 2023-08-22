@@ -52,17 +52,49 @@ class CallbackData implements CallbackDataInterface
      */
     public function get(string $path, mixed $default = null): mixed
     {
-        $keys = explode('.', $path);
+        if (!$this->has($path)) {
+            return $default;
+        }
+
+        $keys = $this->getKeys($path);
         $value = $this->query;
 
         foreach ($keys as $key) {
             if (isset($value[$key])) {
                 $value = $value[$key];
-            } else {
-                return $default;
             }
         }
 
         return $value;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function has(string $path): bool
+    {
+        $keys = $this->getKeys($path);
+        $isExists = !empty($keys);
+        $array = $this->query;
+
+        foreach ($keys as $key) {
+            if (!isset($array[$key])) {
+                $isExists = false;
+                break;
+            }
+
+            $array = $array[$key];
+        }
+
+        return $isExists;
+    }
+
+    /**
+     * @param string $path
+     * @return string[]
+     */
+    protected function getKeys(string $path): array
+    {
+        return explode('.', $path);
     }
 }

@@ -6,16 +6,18 @@ namespace Raspberry\Look\Domain\Look\Services\SelectionLook;
 
 use Raspberry\Look\Domain\Event\EventInterface;
 use Raspberry\Look\Domain\Look\LookRepositoryInterface;
+use Raspberry\Look\Infrastructure\Repositories\SelectionLookRepository;
 
 class SelectionLookService implements SelectionLookServiceInterface
 {
 
+    protected SelectionLookRepositoryInterface $selectionLookRepository;
+
     public function __construct(
         protected LookRepositoryInterface $lookRepository,
-        protected int $minTemperature,
-        protected int $maxTemperature,
-        protected int $eventId
+        int $userId
     ) {
+            $this->selectionLookRepository = new SelectionLookRepository($userId);
     }
 
     /**
@@ -24,9 +26,11 @@ class SelectionLookService implements SelectionLookServiceInterface
     public function selection(): array
     {
         return $this->lookRepository->findForSelection(
-            $this->minTemperature,
-            $this->maxTemperature,
-            $this->eventId
+            //$this->selectionLookRepository->getMinTemperature(),
+            //$this->selectionLookRepository->getMaxTemperature(),
+            -30,
+            30,
+            $this->selectionLookRepository->getEventId()
         );
     }
 }

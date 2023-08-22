@@ -20,10 +20,6 @@ trait AuthorizeTrait
 {
     protected int $userId;
 
-    protected MessengerAuthorizationInterface $messengerAuthorization;
-
-    protected MessengerRegisterInterface $messengerRegister;
-
     /**
      * @param int $messengerId
      * @return void

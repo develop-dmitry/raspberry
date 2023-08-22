@@ -33,4 +33,36 @@ class CallbackDataTest extends TestCase
 
         $this->assertEquals('value', $callbackData->get('test', 'value'));
     }
+
+    public function testCheckExistsElement(): void
+    {
+        $query = [
+            'action' => 'test',
+            'param1' => 'value1',
+            'param2' => [
+                'subparam1' => 'subvalue1',
+                'subparam2' => 'subvalue2'
+            ]
+        ];
+
+        $callbackData = CallbackData::fromJson(Json::encode($query));
+
+        $this->assertTrue($callbackData->has('param2.subparam2'));
+    }
+
+    public function testCheckNonExistsElement(): void
+    {
+        $query = [
+            'action' => 'test',
+            'param1' => 'value1',
+            'param2' => [
+                'subparam1' => 'subvalue1',
+                'subparam2' => 'subvalue2'
+            ]
+        ];
+
+        $callbackData = CallbackData::fromJson(Json::encode($query));
+
+        $this->assertFalse($callbackData->has('param3.subparam1'));
+    }
 }

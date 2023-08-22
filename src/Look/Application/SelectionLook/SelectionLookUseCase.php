@@ -30,13 +30,9 @@ class SelectionLookUseCase implements SelectionLookInterface
      */
     public function execute(SelectionLookRequest $request): SelectionLookResponse
     {
-        $event = $this->eventRepository->getById($request->getEventId());
-
         $selectionLookService = new SelectionLookService(
             $this->lookRepository,
-            $request->getMinTemperature(),
-            $request->getMaxTemperature(),
-            $event
+            $request->getUserId()
         );
 
         $looks = array_map([$this, 'makeLookItem'], $selectionLookService->selection());

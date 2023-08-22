@@ -8,38 +8,18 @@ class SelectionLookRequest
 {
 
     /**
-     * @param int $minTemperature
-     * @param int $maxTemperature
-     * @param int $eventId
+     * @param int $userId
      */
     public function __construct(
-        protected int $minTemperature,
-        protected int $maxTemperature,
-        protected int $eventId
+        protected int $userId
     ) {
     }
 
     /**
      * @return int
      */
-    public function getMinTemperature(): int
+    public function getUserId(): int
     {
-        return $this->minTemperature;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMaxTemperature(): int
-    {
-        return $this->maxTemperature;
-    }
-
-    /**
-     * @return int
-     */
-    public function getEventId(): int
-    {
-        return $this->eventId;
+        return $this->userId;
     }
 }

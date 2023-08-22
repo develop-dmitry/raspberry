@@ -35,4 +35,12 @@ class NullCallbackData implements CallbackDataInterface
     {
         return $default;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function has(string $path): bool
+    {
+        return false;
+    }
 }

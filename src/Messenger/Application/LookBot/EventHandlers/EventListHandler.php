@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Application\LookBot\EventHandlers;
 
+use Psr\Log\LoggerInterface;
 use Raspberry\Look\Domain\Event\EventInterface;
 use Raspberry\Look\Domain\Event\EventRepositoryInterface;
 use Raspberry\Messenger\Application\AbstractPaginationHandler;
@@ -15,6 +16,7 @@ use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\InlineKeyboardInterf
 use Raspberry\Messenger\Domain\Gui\Options\InlineButton\CallbackDataOption;
 use Raspberry\Messenger\Domain\Gui\Options\OptionInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
+use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
 
 class EventListHandler extends AbstractPaginationHandler
 {
@@ -22,13 +24,14 @@ class EventListHandler extends AbstractPaginationHandler
     protected int $perPage = 10;
 
     public function __construct(
-        protected EventRepositoryInterface $eventRepository
+        protected EventRepositoryInterface $eventRepository,
+        protected LoggerInterface $logger
     ) {
     }
 
-    public function handle(ContextInterface $context, GuiInterface $gui): void
+    public function handle(ContextInterface $context, GuiInterface $gui, ?HandlerArgumentsInterface $args = null): void
     {
-        parent::handle($context, $gui);
+        parent::handle($context, $gui, $args);
 
         $this->pagination = $this->eventRepository->pagination($this->page(), $this->perPage);
 
@@ -36,8 +39,16 @@ class EventListHandler extends AbstractPaginationHandler
             $gui->editMessage();
         }
 
-        $gui->sendMessage('Выберите мероприятие, для которого хотите подобрать образ');
+        $gui->sendMessage($this->message());
         $gui->sendInlineKeyboard($this->makeKeyboard());
+    }
+
+    protected function message(): string {
+        if ($this->args && $this->args->getMessage()) {
+            return $this->args->getMessage();
+        }
+
+        return 'Выберите мероприятие, для которого хотите подобрать образ';
     }
 
     protected function makeKeyboard(): InlineKeyboardInterface

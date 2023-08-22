@@ -14,11 +14,10 @@ final class SelectionLookRepository extends AbstractRedisRepository implements S
 
     protected string $name = 'look_selection';
 
-    protected int $userId;
-
-    public function wake(int $userId): void
-    {
-        $this->userId = $userId;
+    public function __construct(
+        protected int $userId
+    ) {
+        parent::__construct();
     }
 
     /**

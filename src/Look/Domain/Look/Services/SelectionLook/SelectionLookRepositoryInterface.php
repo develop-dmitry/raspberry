@@ -11,12 +11,6 @@ interface SelectionLookRepositoryInterface
 {
 
     /**
-     * @param int $userId
-     * @return void
-     */
-    public function wake(int $userId): void;
-
-    /**
      * @return int|null
      */
     public function getMinTemperature(): ?int;
@@ -42,7 +36,6 @@ interface SelectionLookRepositoryInterface
 
     /**
      * @return int|null
-     * @throws EventNotFoundException
      */
     public function getEventId(): ?int;
 

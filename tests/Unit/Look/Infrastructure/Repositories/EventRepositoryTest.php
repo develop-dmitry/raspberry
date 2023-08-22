@@ -61,6 +61,22 @@ class EventRepositoryTest extends TestCase
         }
     }
 
+    public function testCheckExistsForExistentEvent(): void
+    {
+        $eventModel = EventModel::first();
+        $eventRepository = new EventRepository($this->app->make(LoggerInterface::class));
+
+        $this->assertTrue($eventRepository->isExists($eventModel->id));
+    }
+
+    public function testCheckExistsForNonExistentEvent(): void
+    {
+        $eventModel = EventModel::all()->last();
+        $eventRepository = new EventRepository($this->app->make(LoggerInterface::class));
+
+        $this->assertFalse($eventRepository->isExists($eventModel->id + 1000));
+    }
+
     protected function equalEvent(EventModel $expected, EventInterface $actual): void
     {
         $this->assertEquals($expected->name, $actual->getName()->getValue());

@@ -17,6 +17,7 @@ use Raspberry\Messenger\Application\LookBot\SelectionLookHandler;
 use Raspberry\Messenger\Application\LookBot\StartHandler;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainerInterface;
+use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
 use Raspberry\Messenger\Infrastructure\Gateway\Exceptions\MessengerException;
 use Raspberry\Messenger\Infrastructure\Gateway\TelegramMessengerGateway;
@@ -54,41 +55,47 @@ class TelegramLookBotController extends Controller
             ->addHandler(
                 'start',
                 HandlerTypeEnum::Command,
-                $this->makeHandler(StartHandler::class)
+                app(StartHandler::class)
             )
             ->addHandler(
                 MenuEnum::SelectionLook->getText(),
                 HandlerTypeEnum::Text,
-                $this->makeHandler(EventListHandler::class)
+                $this->makeEventListHandler()
             )
             ->addHandler(
                 ActionEnum::EventList->value,
                 HandlerTypeEnum::CallbackQuery,
-                $this->makeHandler(EventListHandler::class)
+                $this->makeEventListHandler()
             )
             ->addHandler(
                 ActionEnum::EventChoose->value,
                 HandlerTypeEnum::CallbackQuery,
-                $this->makeHandler(EventChooseHandler::class)
+                $this->makeEventChooseHandler()
             );
 
         return $handlers;
     }
 
-    protected function makeAuthHandler(string $class): mixed
+    protected function makeEventChooseHandler(): HandlerInterface
     {
-        return app()
-            ->makeWith(
-                $class,
-                [
-                    'messengerAuthorization' => $this->messengerAuthorization,
-                    'messengerRegister' => $this->messengerRegister
-                ]
-            );
+        return app(EventChooseHandler::class, [
+            'back' => $this->makeEventListHandler(),
+            'next' => $this->makeSelectionLookHandler(),
+            'messengerAuthorization' => $this->messengerAuthorization,
+            'messengerRegister' => $this->messengerRegister
+        ]);
     }
 
-    protected function makeHandler(string $class): mixed
+    protected function makeEventListHandler(): HandlerInterface
     {
-        return app()->make($class);
+        return app(EventListHandler::class);
+    }
+
+    protected function makeSelectionLookHandler(): HandlerInterface
+    {
+        return app(SelectionLookHandler::class, [
+            'messengerAuthorization' => $this->messengerAuthorization,
+            'messengerRegister' => $this->messengerRegister
+        ]);
     }
 }

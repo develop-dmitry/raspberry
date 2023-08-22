@@ -22,4 +22,10 @@ interface CallbackDataInterface
      * @return mixed
      */
     public function get(string $path, mixed $default = null): mixed;
+
+    /**
+     * @param string $path
+     * @return bool
+     */
+    public function has(string $path): bool;
 }
