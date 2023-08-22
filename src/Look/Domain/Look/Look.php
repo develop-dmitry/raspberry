@@ -11,7 +11,6 @@ use Raspberry\Common\Values\Slug\SlugInterface;
 use Raspberry\Common\Values\Temperature\TemperatureInterface;
 use Raspberry\Look\Domain\Clothes\ClothesInterface;
 use Raspberry\Look\Domain\Event\EventInterface;
-use Raspberry\Look\Domain\Look\LookInterface;
 
 class Look implements LookInterface
 {

@@ -11,6 +11,7 @@ use Raspberry\Authorization\Application\MessengerAuthorization\TelegramMessenger
 use Raspberry\Authorization\Application\MessengerRegister\TelegramMessengerRegisterUseCase;
 use Raspberry\Messenger\Application\LookBot\Enums\ActionEnum;
 use Raspberry\Messenger\Application\LookBot\Enums\MenuEnum;
+use Raspberry\Messenger\Application\LookBot\EventHandlers\EventChooseHandler;
 use Raspberry\Messenger\Application\LookBot\EventHandlers\EventListHandler;
 use Raspberry\Messenger\Application\LookBot\SelectionLookHandler;
 use Raspberry\Messenger\Application\LookBot\StartHandler;
@@ -64,6 +65,11 @@ class TelegramLookBotController extends Controller
                 ActionEnum::EventList->value,
                 HandlerTypeEnum::CallbackQuery,
                 $this->makeHandler(EventListHandler::class)
+            )
+            ->addHandler(
+                ActionEnum::EventChoose->value,
+                HandlerTypeEnum::CallbackQuery,
+                $this->makeHandler(EventChooseHandler::class)
             );
 
         return $handlers;

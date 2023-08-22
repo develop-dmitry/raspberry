@@ -7,7 +7,6 @@ namespace Raspberry\Look\Domain\Event;
 use Raspberry\Common\Values\Id\IdInterface;
 use Raspberry\Common\Values\Name\NameInterface;
 use Raspberry\Common\Values\Slug\SlugInterface;
-use Raspberry\Look\Domain\Event\EventInterface;
 
 class Event implements EventInterface
 {

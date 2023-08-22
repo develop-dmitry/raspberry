@@ -4,28 +4,17 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Infrastructure\Repositories;
 
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Str;
-use Predis\Client;
+use Raspberry\Common\Base\AbstractRedisRepository;
 use Raspberry\Common\Exceptions\RepositoryException;
 use Raspberry\Messenger\Domain\Context\User\User;
 use Raspberry\Messenger\Domain\Context\User\UserInterface;
 use Raspberry\Messenger\Domain\Context\User\UserRepositoryInterface;
 use RedisException;
 
-class TelegramUserRepository implements UserRepositoryInterface
+class TelegramUserRepository extends AbstractRedisRepository implements UserRepositoryInterface
 {
 
-    protected Client $redis;
-
-    protected string $pattern = 'telegram:{id}:{property}';
-
-    protected string $prefix = 'raspberry_database_';
-
-    public function __construct()
-    {
-        $this->redis = Redis::client();
-    }
+    protected string $name = 'telegram';
 
     /**
      * @inheritDoc
@@ -33,7 +22,7 @@ class TelegramUserRepository implements UserRepositoryInterface
     public function getUserByMessengerId(int $messengerId): UserInterface
     {
         try {
-            $keys = $this->keys($this->pattern($messengerId));
+            $keys = $this->keys($this->path($messengerId));
             $values = $this->getValues($keys);
 
             return $this->makeUser($messengerId, $values);
@@ -53,68 +42,6 @@ class TelegramUserRepository implements UserRepositoryInterface
         } catch (RedisException $exception) {
             throw new RepositoryException($exception->getMessage());
         }
-    }
-
-    /**
-     * @param array $keys
-     * @return array
-     * @throws RedisException
-     */
-    protected function getValues(array $keys): array
-    {
-        $values = [];
-
-        foreach ($keys as $key) {
-            $valueName = $this->getValueName($key);
-            $values[$valueName] = $this->redis->get($key);
-        }
-
-        return $values;
-    }
-
-    /**
-     * @throws RedisException
-     */
-    protected function saveValues(int $id, array $values): void
-    {
-        foreach ($values as $name => $value) {
-            $key = $this->pattern($id, $name);
-            $this->redis->set($key, $value);
-        }
-    }
-
-    /**
-     * @param int $id
-     * @param string $property
-     * @return string
-     */
-    public function pattern(int $id, string $property = '*'): string
-    {
-        return Str::replace(['{id}', '{property}'], [$id, $property], $this->pattern);
-    }
-
-    /**
-     * @param string $pattern
-     * @return string[]
-     * @throws RedisException
-     */
-    protected function keys(string $pattern): array
-    {
-        $keys = $this->redis->keys($pattern);
-
-        return array_map(fn(string $key) => Str::replace($this->prefix, '', $key), $keys);
-    }
-
-    /**
-     * @param string $pattern
-     * @return string
-     */
-    protected function getValueName(string $pattern): string
-    {
-        $clearPattern = Str::replace($this->prefix, '', $pattern);
-        $parts = explode(':', $clearPattern);
-
-        return $parts[2] ?? '';
     }
 
     /**

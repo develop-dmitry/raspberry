@@ -14,7 +14,7 @@ class SelectionLookService implements SelectionLookServiceInterface
         protected LookRepositoryInterface $lookRepository,
         protected int $minTemperature,
         protected int $maxTemperature,
-        protected EventInterface $event
+        protected int $eventId
     ) {
     }
 
@@ -26,7 +26,7 @@ class SelectionLookService implements SelectionLookServiceInterface
         return $this->lookRepository->findForSelection(
             $this->minTemperature,
             $this->maxTemperature,
-            $this->event->getId()->getValue()
+            $this->eventId
         );
     }
 }

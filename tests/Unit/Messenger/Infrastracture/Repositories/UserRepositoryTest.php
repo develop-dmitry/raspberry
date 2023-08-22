@@ -27,8 +27,8 @@ class UserRepositoryTest extends TestCase
     {
         $userRepository = $this->app->make(TelegramUserRepository::class);
 
-        Redis::client()->set($userRepository->pattern(1, 'messenger_id'), 1);
-        Redis::client()->set($userRepository->pattern(1, 'message_handler'), 'test');
+        Redis::client()->set('telegram:1:messenger_id', 1);
+        Redis::client()->set('telegram:1:message_handler', 'test');
 
         $user = $userRepository->getUserByMessengerId(1);
 
