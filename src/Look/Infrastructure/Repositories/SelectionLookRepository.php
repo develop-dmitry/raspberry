@@ -23,21 +23,11 @@ final class SelectionLookRepository extends AbstractRedisRepository implements S
     /**
      * @inheritDoc
      */
-    public function getMinTemperature(): ?int
+    public function getTemperature(): ?int
     {
-        $value = $this->getValue($this->path($this->userId, 'min_temperature'));
+        $value = $this->getValue($this->path($this->userId, 'temperature'));
 
-        return $value ? (int) $value : null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getMaxTemperature(): ?int
-    {
-        $value = $this->getValue($this->path($this->userId, 'max_temperature'));
-
-        return $value ? (int) $value : null;
+        return $value === null ? null : (int) $value;
     }
 
     /**
@@ -47,23 +37,15 @@ final class SelectionLookRepository extends AbstractRedisRepository implements S
     {
         $value = $this->getValue($this->path($this->userId, 'event_id'));
 
-        return $value ? (int) $value : null;
+        return $value === null ? null : (int) $value;
     }
 
     /**
      * @inheritDoc
      */
-    public function setMinTemperature(int $minTemperature): void
+    public function setTemperature(int $temperature): void
     {
-        $this->saveValue($this->userId, 'min_temperature', $minTemperature);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setMaxTemperature(int $maxTemperature): void
-    {
-        $this->saveValue($this->userId, 'max_temperature', $maxTemperature);
+        $this->saveValue($this->userId, 'temperature', $temperature);
     }
 
     /**

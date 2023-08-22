@@ -34,15 +34,15 @@ class EventChooseHandler extends AbstractHandler
     ) {
     }
 
+    /**
+     * @inheritDoc
+     */
     public function handle(ContextInterface $context, GuiInterface $gui, ?HandlerArgumentsInterface $args = null): void
     {
         parent::handle($context, $gui, $args);
 
-        if (!$context->getUser()) {
-            throw new FailedAuthorizeException();
-        }
+        $this->identifyUser($context->getUser()?->getMessengerId());
 
-        $this->identifyUser($context->getUser()->getMessengerId());
         $this->selectionLookRepository = new SelectionLookRepository($this->userId);
 
         if (!$this->contextRequest->getCallbackData()->has('id')) {

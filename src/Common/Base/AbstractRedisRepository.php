@@ -72,7 +72,7 @@ abstract class AbstractRedisRepository
     {
         $value = $this->redis->get($key);
 
-        return $value ?: $default;
+        return $value ?? $default;
     }
 
     /**

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Application\LookBot\Enums;
 
-enum MenuEnum
+enum Menu
 {
 
     case SelectionLook;

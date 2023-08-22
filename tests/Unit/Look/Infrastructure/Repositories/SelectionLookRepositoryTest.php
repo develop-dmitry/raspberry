@@ -24,31 +24,21 @@ class SelectionLookRepositoryTest extends TestCase
 
     public function testRestoreData(): void
     {
-        $this->redis->set('look_selection:1:min_temperature', -10);
-        $this->redis->set('look_selection:1:max_temperature', 10);
+        $this->redis->set('look_selection:1:temperature', 10);
         $this->redis->set('look_selection:1:event_id', 1);
 
         $selectionLookRepository = new SelectionLookRepository(1);
 
-        $this->assertEquals(-10, $selectionLookRepository->getMinTemperature());
-        $this->assertEquals(10, $selectionLookRepository->getMaxTemperature());
+        $this->assertEquals(10, $selectionLookRepository->getTemperature());
         $this->assertEquals(1, $selectionLookRepository->getEventId());
     }
 
-    public function testSetMinTemperature(): void
+    public function testSetTemperature(): void
     {
         $selectionLookRepository = new SelectionLookRepository(1);
-        $selectionLookRepository->setMinTemperature(-20);
+        $selectionLookRepository->setTemperature(-20);
 
-        $this->assertEquals(-20, $this->redis->get('look_selection:1:min_temperature'));
-    }
-
-    public function testSetMaxTemperature(): void
-    {
-        $selectionLookRepository = new SelectionLookRepository(1);
-        $selectionLookRepository->setMaxTemperature(20);
-
-        $this->assertEquals(20, $this->redis->get('look_selection:1:max_temperature'));
+        $this->assertEquals(-20, $this->redis->get('look_selection:1:temperature'));
     }
 
     public function testSetEvent(): void

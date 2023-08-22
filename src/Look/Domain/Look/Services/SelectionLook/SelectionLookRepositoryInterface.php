@@ -13,26 +13,14 @@ interface SelectionLookRepositoryInterface
     /**
      * @return int|null
      */
-    public function getMinTemperature(): ?int;
+    public function getTemperature(): ?int;
 
     /**
-     * @param int $minTemperature
+     * @param int $temperature
      * @return void
      * @throws FailedSavePropertyException
      */
-    public function setMinTemperature(int $minTemperature): void;
-
-    /**
-     * @return int|null
-     */
-    public function getMaxTemperature(): ?int;
-
-    /**
-     * @param int $maxTemperature
-     * @return void
-     * @throws FailedSavePropertyException
-     */
-    public function setMaxTemperature(int $maxTemperature): void;
+    public function setTemperature(int $temperature): void;
 
     /**
      * @return int|null

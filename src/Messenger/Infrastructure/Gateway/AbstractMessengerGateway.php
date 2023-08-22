@@ -16,7 +16,7 @@ use Raspberry\Messenger\Domain\Handlers\Container\Exceptions\HandlerNotFoundExce
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
 use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
 use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
-use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
+use Raspberry\Messenger\Domain\Handlers\HandlerType;
 use Throwable;
 
 abstract class AbstractMessengerGateway implements MessengerGatewayInterface
@@ -63,7 +63,7 @@ abstract class AbstractMessengerGateway implements MessengerGatewayInterface
     protected function executeCallbackQueryHandler(): void
     {
         $callbackQuery = $this->context->getRequest()->getCallbackData();
-        $handler = $this->handlers->getHandler($callbackQuery->getAction(), HandlerTypeEnum::CallbackQuery);
+        $handler = $this->handlers->getHandler($callbackQuery->getAction(), HandlerType::CallbackQuery);
 
         $this->executeHandler($handler);
     }
@@ -75,7 +75,7 @@ abstract class AbstractMessengerGateway implements MessengerGatewayInterface
     protected function executeMessageHandler(): void
     {
         $handlerName = ($user = $this->context->getUser()) ? $user->getMessageHandler() : '';
-        $handler = $this->handlers->getHandler($handlerName, HandlerTypeEnum::Message);
+        $handler = $this->handlers->getHandler($handlerName, HandlerType::Message);
 
         $this->executeHandler($handler);
     }

@@ -17,7 +17,7 @@ class SelectionLookService implements SelectionLookServiceInterface
         protected LookRepositoryInterface $lookRepository,
         int $userId
     ) {
-            $this->selectionLookRepository = new SelectionLookRepository($userId);
+        $this->selectionLookRepository = new SelectionLookRepository($userId);
     }
 
     /**
@@ -26,11 +26,19 @@ class SelectionLookService implements SelectionLookServiceInterface
     public function selection(): array
     {
         return $this->lookRepository->findForSelection(
-            //$this->selectionLookRepository->getMinTemperature(),
-            //$this->selectionLookRepository->getMaxTemperature(),
-            -30,
-            30,
+            $this->minTemperature(),
+            $this->maxTemperature(),
             $this->selectionLookRepository->getEventId()
         );
+    }
+
+    protected function minTemperature(): int
+    {
+        return $this->selectionLookRepository->getTemperature() - 10;
+    }
+
+    protected function maxTemperature(): int
+    {
+        return $this->selectionLookRepository->getTemperature() + 10;
     }
 }
