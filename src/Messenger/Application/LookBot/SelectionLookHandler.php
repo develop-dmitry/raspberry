@@ -6,7 +6,6 @@ namespace Raspberry\Messenger\Application\LookBot;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Look\Application\DetailLookUrl\DetailLookUrlInterface;
 use Raspberry\Look\Application\DetailLookUrl\DTO\DetailLookUrlRequest;
 use Raspberry\Look\Application\SelectionLook\DTO\LookItem;
@@ -19,6 +18,7 @@ use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\InlineKeyboardInterface;
+use Raspberry\Messenger\Domain\Gui\Options\InlineButton\WebAppOption;
 
 class SelectionLookHandler extends AbstractHandler
 {
@@ -34,9 +34,10 @@ class SelectionLookHandler extends AbstractHandler
     {
         parent::handle($context, $gui);
 
-        $selectionRequest = new SelectionLookRequest(-30, 30);
+        /*$selectionRequest = new SelectionLookRequest(-30, 30);
         $selectionResponse = $this->selectionLook->execute($selectionRequest);
-        $looks = $selectionResponse->getLooks();
+        $looks = $selectionResponse->getLooks();*/
+        $looks = [];
 
         if (empty($looks)) {
             $gui->sendMessage('К сожалению, мы не смогли подобрать для вас образ :(');
@@ -74,7 +75,6 @@ class SelectionLookHandler extends AbstractHandler
     /**
      * @param LookItem $item
      * @return InlineButtonInterface
-     * @throws InvalidValueException
      * @throws FailedUrlGenerateException
      * @throws LookNotFoundException
      */
@@ -82,7 +82,7 @@ class SelectionLookHandler extends AbstractHandler
     {
         return $this->inlineButtonFactory
             ->setText($item->getName())
-            ->setWebApp($this->inlineButtonOptionFactory->makeWebAppOption($this->makeUrl($item)))
+            ->setWebApp(new WebAppOption($this->makeUrl($item)))
             ->make();
     }
 

@@ -6,6 +6,7 @@ namespace Tests\Unit\Look\Infrastructure\Repositories;
 
 use App\Models\Event as EventModel;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Psr\Log\LoggerInterface;
 use Raspberry\Look\Domain\Event\EventInterface;
 use Raspberry\Look\Domain\Event\Exceptions\EventNotFoundException;
 use Raspberry\Look\Infrastructure\Repositories\EventRepository;
@@ -18,7 +19,7 @@ class EventRepositoryTest extends TestCase
     public function testGetExistentEvent(): void
     {
         $eventModel = EventModel::factory()->create();
-        $eventRepository = $this->app->make(EventRepository::class);
+        $eventRepository = new EventRepository($this->app->make(LoggerInterface::class));
 
         $event = $eventRepository->getById($eventModel->id);
 
@@ -28,7 +29,7 @@ class EventRepositoryTest extends TestCase
     public function testGetNonExistentEvent(): void
     {
         $eventModel = EventModel::all()->last();
-        $eventRepository = $this->app->make(EventRepository::class);
+        $eventRepository = new EventRepository($this->app->make(LoggerInterface::class));
 
         $this->expectException(EventNotFoundException::class);
         $eventRepository->getById($eventModel->id + 1000);
@@ -37,7 +38,7 @@ class EventRepositoryTest extends TestCase
     public function testGetEventCollection(): void
     {
         $eventModels = EventModel::factory(5)->create();
-        $eventRepository = $this->app->make(EventRepository::class);
+        $eventRepository = new EventRepository($this->app->make(LoggerInterface::class));
 
         $events = $eventRepository->getCollection($eventModels->map(fn (EventModel $event) => $event->id)->toArray());
 
@@ -45,6 +46,18 @@ class EventRepositoryTest extends TestCase
 
         foreach ($events as $key => $event) {
             $this->equalEvent($eventModels->get($key), $event);
+        }
+    }
+
+    public function testPagination(): void
+    {
+        $modelPagination = EventModel::paginate(10, page: 1);
+        $eventRepository = new EventRepository($this->app->make(LoggerInterface::class));
+
+        $pagination = $eventRepository->pagination(1, 10);
+
+        foreach ($pagination->getItems() as $key => $item) {
+            $this->equalEvent($modelPagination->get($key), $item);
         }
     }
 

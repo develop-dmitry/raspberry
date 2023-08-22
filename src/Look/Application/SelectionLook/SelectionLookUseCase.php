@@ -7,6 +7,7 @@ namespace Raspberry\Look\Application\SelectionLook;
 use Raspberry\Look\Application\SelectionLook\DTO\LookItem;
 use Raspberry\Look\Application\SelectionLook\DTO\SelectionLookRequest;
 use Raspberry\Look\Application\SelectionLook\DTO\SelectionLookResponse;
+use Raspberry\Look\Domain\Event\EventRepositoryInterface;
 use Raspberry\Look\Domain\Look\LookInterface;
 use Raspberry\Look\Domain\Look\LookRepositoryInterface;
 use Raspberry\Look\Domain\Look\Services\SelectionLook\SelectionLookService;
@@ -16,9 +17,11 @@ class SelectionLookUseCase implements SelectionLookInterface
 
     /**
      * @param LookRepositoryInterface $lookRepository
+     * @param EventRepositoryInterface $eventRepository
      */
     public function __construct(
-        protected LookRepositoryInterface $lookRepository
+        protected LookRepositoryInterface $lookRepository,
+        protected EventRepositoryInterface $eventRepository
     ) {
     }
 
@@ -27,10 +30,13 @@ class SelectionLookUseCase implements SelectionLookInterface
      */
     public function execute(SelectionLookRequest $request): SelectionLookResponse
     {
+        $event = $this->eventRepository->getById($request->getEventId());
+
         $selectionLookService = new SelectionLookService(
             $this->lookRepository,
             $request->getMinTemperature(),
-            $request->getMaxTemperature()
+            $request->getMaxTemperature(),
+            $event
         );
 
         $looks = array_map([$this, 'makeLookItem'], $selectionLookService->selection());

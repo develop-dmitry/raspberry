@@ -7,6 +7,7 @@ namespace Raspberry\Look\Infrastructure\Repositories;
 use App\Models\Clothes as ClothesModel;
 use App\Models\Event as EventModel;
 use App\Models\Look as LookModel;
+use Illuminate\Database\Eloquent\Builder;
 use Psr\Log\LoggerInterface;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Common\Values\Id\Id;
@@ -56,12 +57,16 @@ class LookRepository implements LookRepositoryInterface
     }
 
     /**
+     * @param int $minTemperature
+     * @param int $maxTemperature
+     * @param int $eventId
      * @inheritDoc
      */
-    public function findByTemperature(int $minTemperature, int $maxTemperature): array
+    public function findForSelection(int $minTemperature, int $maxTemperature, int $eventId): array
     {
         $lookModels = LookModel::where('min_temperature', '>=', $minTemperature)
             ->where('max_temperature', '<=', $maxTemperature)
+            ->whereHas('events', fn (Builder $builder) => $builder->where('id', $eventId))
             ->get();
 
         $looks = [];

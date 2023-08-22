@@ -10,10 +10,12 @@ class SelectionLookRequest
     /**
      * @param int $minTemperature
      * @param int $maxTemperature
+     * @param int $eventId
      */
     public function __construct(
         protected int $minTemperature,
-        protected int $maxTemperature
+        protected int $maxTemperature,
+        protected int $eventId
     ) {
     }
 
@@ -31,5 +33,13 @@ class SelectionLookRequest
     public function getMaxTemperature(): int
     {
         return $this->maxTemperature;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEventId(): int
+    {
+        return $this->eventId;
     }
 }

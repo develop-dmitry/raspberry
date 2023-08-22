@@ -8,12 +8,9 @@ use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Context\Request\RequestInterface;
 use Raspberry\Messenger\Domain\Context\User\UserInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\InlineButtonFactoryInterface;
-use Raspberry\Messenger\Domain\Gui\Factory\InlineButtonOptionFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\InlineKeyboardFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\ReplyButtonFactoryInterface;
-use Raspberry\Messenger\Domain\Gui\Factory\ReplyButtonOptionFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\ReplyKeyboardFactoryInterface;
-use Raspberry\Messenger\Domain\Gui\Factory\ReplyKeyboardOptionFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
 
@@ -32,12 +29,6 @@ abstract class AbstractHandler implements HandlerInterface
     protected InlineKeyboardFactoryInterface $inlineKeyboardFactory;
 
     protected ReplyKeyboardFactoryInterface $replyKeyboardFactory;
-
-    protected InlineButtonOptionFactoryInterface $inlineButtonOptionFactory;
-
-    protected ReplyKeyboardOptionFactoryInterface $replyKeyboardOptionFactory;
-
-    protected ReplyButtonOptionFactoryInterface $replyButtonOptionFactory;
 
     /**
      * @inheritDoc
@@ -59,8 +50,5 @@ abstract class AbstractHandler implements HandlerInterface
         $this->replyButtonFactory = $guiFactory->makeReplyButtonFactory();
         $this->inlineKeyboardFactory = $guiFactory->makeInlineKeyboardFactory();
         $this->replyKeyboardFactory = $guiFactory->makeReplyKeyboardFactory();
-        $this->inlineButtonOptionFactory = $guiFactory->makeInlineButtonOptionFactory();
-        $this->replyKeyboardOptionFactory = $guiFactory->makeReplyKeyboardOptionFactory();
-        $this->replyButtonOptionFactory = $guiFactory->makeReplyButtonOptionFactory();
     }
 }

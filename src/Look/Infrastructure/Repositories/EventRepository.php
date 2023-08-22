@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Raspberry\Look\Infrastructure\Repositories;
 
 use App\Models\Event as EventModel;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Psr\Log\LoggerInterface;
+use Raspberry\Common\Pagination\Pagination;
+use Raspberry\Common\Pagination\PaginationInterface;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Common\Values\Id\Id;
 use Raspberry\Common\Values\Name\Name;
@@ -47,6 +49,21 @@ class EventRepository implements EventRepositoryInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function pagination(int $page, int $perPage): PaginationInterface
+    {
+        $pagination = EventModel::paginate($perPage, page: $page);
+
+        return new Pagination(
+            $this->makeEvents($pagination->getCollection()),
+            $pagination->lastPage(),
+            $pagination->currentPage(),
+            $pagination->perPage()
+        );
+    }
+
+    /**
      * @param Collection $models
      * @return EventInterface[]
      */
@@ -58,7 +75,7 @@ class EventRepository implements EventRepositoryInterface
             try {
                 $events[] = $this->makeEvent($model);
             } catch (InvalidValueException $exception) {
-                $this->logger->error('Invalid data in database');
+                $this->logger->error('Invalid data in database', ['exception' => $exception->getMessage()]);
             }
         }
 
