@@ -16,57 +16,49 @@ use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;
 use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
 
-class AbstractAuthorizeHandler extends AbstractHandler
+trait AuthorizeTrait
 {
     protected int $userId;
 
     /**
-     * @param MessengerAuthorizationInterface $messengerAuthorization
-     * @param MessengerRegisterInterface $messengerRegister
+     * @param int $messengerId
+     * @return void
+     * @throws FailedAuthorizeException
      */
-    public function __construct(
-        private readonly MessengerAuthorizationInterface $messengerAuthorization,
-        private readonly MessengerRegisterInterface $messengerRegister
-    ) {
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function handle(ContextInterface $context, GuiInterface $gui): void
+    protected function identifyUser(int $messengerId): void
     {
-        parent::handle($context, $gui);
-
         try {
-            $this->authorize();
+            $this->authorize($messengerId);
         } catch (UserNotFoundException) {
-            $this->register();
+            $this->register($messengerId);
         } catch (Exception $exception) {
             throw new FailedAuthorizeException($exception->getMessage());
         }
     }
 
     /**
+     * @param int $messengerId
      * @return void
-     * @throws UserNotFoundException
      * @throws InvalidValueException
+     * @throws UserNotFoundException
      */
-    private function authorize(): void
+    private function authorize(int $messengerId): void
     {
-        $authRequest = new MessengerAuthorizationRequest($this->contextUser->getMessengerId());
+        $authRequest = new MessengerAuthorizationRequest($messengerId);
         $authResponse = $this->messengerAuthorization->execute($authRequest);
 
         $this->userId = $authResponse->getUserId();
     }
 
     /**
+     * @param int $messengerId
      * @return void
      * @throws FailedSaveUserException
      * @throws InvalidValueException
      */
-    private function register(): void
+    private function register(int $messengerId): void
     {
-        $registerRequest = new MessengerRegisterRequest($this->contextUser->getMessengerId());
+        $registerRequest = new MessengerRegisterRequest($messengerId);
         $registerResponse = $this->messengerRegister->execute($registerRequest);
 
         $this->userId = $registerResponse->getUserId();

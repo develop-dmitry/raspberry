@@ -23,7 +23,7 @@ class CallbackDataOption implements OptionInterface
 
     public function getValue(): mixed
     {
-        $toJson = array_merge(['action' => $this->action, $this->query]);
+        $toJson = array_merge(['action' => $this->action], $this->query);
 
         return Json::encode($toJson);
     }

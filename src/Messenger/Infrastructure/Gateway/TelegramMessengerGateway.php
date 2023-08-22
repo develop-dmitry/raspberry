@@ -42,7 +42,7 @@ class TelegramMessengerGateway extends AbstractMessengerGateway
     ) {
         parent::__construct($handlers, $userRepository, $logger);
 
-        $this->gui = new TelegramGui();
+        $this->gui = app(TelegramGui::class);
     }
 
     /**
@@ -82,7 +82,12 @@ class TelegramMessengerGateway extends AbstractMessengerGateway
         $keyboard = $this->gui->makeTelegramKeyboard();
 
         if ($this->gui->isEditMessage()) {
-            return $this->bot->editMessageText($message, reply_markup: $keyboard);
+            return $this->bot->editMessageText(
+                $message,
+                $this->bot->chatId(),
+                $this->bot->messageId(),
+                reply_markup: $keyboard
+            );
         }
 
         return $this->bot->sendMessage($message, reply_markup: $keyboard);
@@ -104,7 +109,23 @@ class TelegramMessengerGateway extends AbstractMessengerGateway
             $callbackData = new NullCallbackData();
         }
 
-        return new Request($this->bot->message()?->getText() ?: '', $callbackData);
+        $message = $this->bot->message()?->getText() ?: '';
+        $requestType = $this->getRequestType();
+
+        return new Request($message, $callbackData, $requestType);
+    }
+
+    protected function getRequestType(): HandlerTypeEnum
+    {
+        if ($this->bot->isCommand()) {
+            return HandlerTypeEnum::Command;
+        }
+
+        if ($this->bot->isCallbackQuery()) {
+            return HandlerTypeEnum::CallbackQuery;
+        }
+
+        return HandlerTypeEnum::Message;
     }
 
     /**

@@ -12,13 +12,15 @@ class DetailLookResponse
      * @param string $slug
      * @param string $photo
      * @param ClothesItem[] $clothes
+     * @param array $events
      */
     public function __construct(
         protected int $id,
         protected string $name,
         protected string $slug,
         protected string $photo,
-        protected array $clothes
+        protected array $clothes,
+        protected array $events
     ) {
     }
 
@@ -60,5 +62,13 @@ class DetailLookResponse
     public function getClothes(): array
     {
         return $this->clothes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getEvents(): array
+    {
+        return $this->events;
     }
 }

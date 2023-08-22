@@ -11,13 +11,19 @@ page.detail-look
                         :alt="look.name"
                     )
                 .detail-look__description
+                    .detail-look__events
+                        look-event(
+                            v-for="(event, index) in look.events"
+                            :event="event"
+                            :key="index"
+                        )
                     text(
                         is="vue:text"
                         v-html="look.description"
                     )
                 look-composition.detail-look__composition(:look="look")
     template(v-else)
-        not-found
+        page-not-found
 </template>
 
 <script lang="ts">
@@ -27,10 +33,11 @@ import {mapActions, mapState} from "pinia";
 import {useLookStore} from "../stores/look/LookStore.ts";
 import Page from "../components/page/Page.vue";
 import PageTitle from "../components/page/page-title/PageTitle.vue";
-import NotFound from "./NotFound.vue";
 import Image from "../components/ui/image/Image.vue";
 import Text from "../components/ui/text/Text.vue";
 import LookComposition from "../components/look/look-composition/LookComposition.vue";
+import PageNotFound from "../components/page/page-not-found/PageNotFound.vue";
+import LookEvent from "../components/look/look-event/LookEvent.vue";
 
 export default defineComponent({
     name: 'DetailLook',
@@ -38,10 +45,11 @@ export default defineComponent({
     components: {
         Page,
         PageTitle,
-        NotFound,
+        PageNotFound,
         Image,
         Text,
-        LookComposition
+        LookComposition,
+        LookEvent
     },
 
     data() {
@@ -139,6 +147,21 @@ export default defineComponent({
         @include media-max($mobile) {
             margin-top: 20px;
             width: 100%;
+        }
+    }
+
+    &__events {
+        display: flex;
+        flex-wrap: wrap;
+
+        @include media-always {
+            gap: 15px;
+        }
+
+        &:not(:last-child) {
+            @include media-always {
+                margin-bottom: 30px;
+            }
         }
     }
 }

@@ -8,14 +8,12 @@ use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Context\Request\RequestInterface;
 use Raspberry\Messenger\Domain\Context\User\UserInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\InlineButtonFactoryInterface;
-use Raspberry\Messenger\Domain\Gui\Factory\InlineButtonOptionFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\InlineKeyboardFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\ReplyButtonFactoryInterface;
-use Raspberry\Messenger\Domain\Gui\Factory\ReplyButtonOptionFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\ReplyKeyboardFactoryInterface;
-use Raspberry\Messenger\Domain\Gui\Factory\ReplyKeyboardOptionFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
+use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
 
 abstract class AbstractHandler implements HandlerInterface
 {
@@ -25,6 +23,8 @@ abstract class AbstractHandler implements HandlerInterface
 
     protected GuiInterface $gui;
 
+    protected ?HandlerArgumentsInterface $args;
+
     protected InlineButtonFactoryInterface $inlineButtonFactory;
 
     protected ReplyButtonFactoryInterface $replyButtonFactory;
@@ -33,20 +33,18 @@ abstract class AbstractHandler implements HandlerInterface
 
     protected ReplyKeyboardFactoryInterface $replyKeyboardFactory;
 
-    protected InlineButtonOptionFactoryInterface $inlineButtonOptionFactory;
-
-    protected ReplyKeyboardOptionFactoryInterface $replyKeyboardOptionFactory;
-
-    protected ReplyButtonOptionFactoryInterface $replyButtonOptionFactory;
-
     /**
+     * @param ContextInterface $context
+     * @param GuiInterface $gui
+     * @param HandlerArgumentsInterface|null $args
      * @inheritDoc
      */
-    public function handle(ContextInterface $context, GuiInterface $gui): void
+    public function handle(ContextInterface $context, GuiInterface $gui, ?HandlerArgumentsInterface $args = null): void
     {
         $this->contextRequest = $context->getRequest();
         $this->contextUser = $context->getUser();
         $this->gui = $gui;
+        $this->args = $args;
 
        $this->initFactories();
     }
@@ -59,8 +57,5 @@ abstract class AbstractHandler implements HandlerInterface
         $this->replyButtonFactory = $guiFactory->makeReplyButtonFactory();
         $this->inlineKeyboardFactory = $guiFactory->makeInlineKeyboardFactory();
         $this->replyKeyboardFactory = $guiFactory->makeReplyKeyboardFactory();
-        $this->inlineButtonOptionFactory = $guiFactory->makeInlineButtonOptionFactory();
-        $this->replyKeyboardOptionFactory = $guiFactory->makeReplyKeyboardOptionFactory();
-        $this->replyButtonOptionFactory = $guiFactory->makeReplyButtonOptionFactory();
     }
 }

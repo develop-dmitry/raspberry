@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Application\LookBot;
+namespace Raspberry\Messenger\Application\LookBot\Enums;
 
 enum MenuEnum
 {
@@ -14,8 +14,8 @@ enum MenuEnum
         switch ($this) {
             case self::SelectionLook:
                 return 'Подобрать образ';
-            default:
-                return 'Без названия';
         }
+
+        return 'Без названия';
     }
 }

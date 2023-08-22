@@ -6,7 +6,8 @@ namespace Raspberry\Messenger\Application\LookBot;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
+use Raspberry\Authorization\Application\MessengerAuthorization\MessengerAuthorizationInterface;
+use Raspberry\Authorization\Application\MessengerRegister\MessengerRegisterInterface;
 use Raspberry\Look\Application\DetailLookUrl\DetailLookUrlInterface;
 use Raspberry\Look\Application\DetailLookUrl\DTO\DetailLookUrlRequest;
 use Raspberry\Look\Application\SelectionLook\DTO\LookItem;
@@ -15,28 +16,48 @@ use Raspberry\Look\Application\SelectionLook\SelectionLookInterface;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;
 use Raspberry\Look\Domain\Look\Services\LookUrlGenerator\Exceptions\FailedUrlGenerateException;
 use Raspberry\Messenger\Application\AbstractHandler;
+use Raspberry\Messenger\Application\AuthorizeTrait;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\InlineKeyboardInterface;
+use Raspberry\Messenger\Domain\Gui\Options\InlineButton\WebAppOption;
+use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
+use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
+use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
 
 class SelectionLookHandler extends AbstractHandler
 {
 
+    use AuthorizeTrait;
+
     public function __construct(
         protected SelectionLookInterface $selectionLook,
         protected DetailLookUrlInterface $detailLookUrl,
-        protected LoggerInterface $logger
+        protected LoggerInterface $logger,
+        protected MessengerAuthorizationInterface $messengerAuthorization,
+        protected MessengerRegisterInterface $messengerRegister
     ) {
     }
 
-    public function handle(ContextInterface $context, GuiInterface $gui): void
+    public function handle(ContextInterface $context, GuiInterface $gui, ?HandlerArgumentsInterface $args = null): void
     {
-        parent::handle($context, $gui);
+        parent::handle($context, $gui, $args);
 
-        $selectionRequest = new SelectionLookRequest(-30, 30);
+        if (!$context->getUser()) {
+            throw new FailedAuthorizeException();
+        }
+
+        $this->identifyUser($context->getUser()->getMessengerId());
+
+        $selectionRequest = new SelectionLookRequest($this->userId);
+
         $selectionResponse = $this->selectionLook->execute($selectionRequest);
         $looks = $selectionResponse->getLooks();
+
+        if ($context->getRequest()->getRequestType() === HandlerTypeEnum::CallbackQuery) {
+            $gui->editMessage();
+        }
 
         if (empty($looks)) {
             $gui->sendMessage('К сожалению, мы не смогли подобрать для вас образ :(');
@@ -74,7 +95,6 @@ class SelectionLookHandler extends AbstractHandler
     /**
      * @param LookItem $item
      * @return InlineButtonInterface
-     * @throws InvalidValueException
      * @throws FailedUrlGenerateException
      * @throws LookNotFoundException
      */
@@ -82,7 +102,7 @@ class SelectionLookHandler extends AbstractHandler
     {
         return $this->inlineButtonFactory
             ->setText($item->getName())
-            ->setWebApp($this->inlineButtonOptionFactory->makeWebAppOption($this->makeUrl($item)))
+            ->setWebApp(new WebAppOption($this->makeUrl($item)))
             ->make();
     }
 

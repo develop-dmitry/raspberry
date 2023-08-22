@@ -2,6 +2,7 @@ import HelloWorld from "./views/HelloWorld.vue";
 import Wardrobe from "./views/Wardrobe.vue";
 import WardrobeOffers from "./views/WardroberOffers.vue";
 import DetailLook from "./views/DetailLook.vue";
+import NotFound from "./views/NotFound.vue";
 
 export default [
     {
@@ -19,5 +20,9 @@ export default [
     {
         path: '/look/:id',
         component: DetailLook
+    },
+    {
+        path: '/:pathMatch(.*)',
+        component: NotFound
     }
 ]

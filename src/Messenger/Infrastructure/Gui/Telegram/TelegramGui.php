@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Infrastructure\Gui\Telegram;
 
+use Psr\Log\LoggerInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButtonInterface;
 use Raspberry\Messenger\Infrastructure\Gui\Base\AbstractGui;
@@ -15,6 +16,12 @@ use SergiX44\Nutgram\Telegram\Types\WebApp\WebAppInfo;
 
 class TelegramGui extends AbstractGui
 {
+
+    public function __construct(
+        protected LoggerInterface $logger
+    ) {
+        parent::__construct();
+    }
 
     /**
      * @return ReplyKeyboardMarkup|InlineKeyboardMarkup|null
@@ -98,7 +105,7 @@ class TelegramGui extends AbstractGui
             $button->getText(),
             url: $button->getUrl()->getValue(),
             callback_data: $button->getCallbackData()->getValue(),
-            web_app: new WebAppInfo($button->getWebApp()->getValue())
+            web_app: new WebAppInfo($button->getWebApp()->getValue() ?: '')
         );
     }
 }

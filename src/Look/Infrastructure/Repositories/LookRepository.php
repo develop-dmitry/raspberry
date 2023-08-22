@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Raspberry\Look\Infrastructure\Repositories;
 
 use App\Models\Clothes as ClothesModel;
+use App\Models\Event as EventModel;
 use App\Models\Look as LookModel;
+use Illuminate\Database\Eloquent\Builder;
 use Psr\Log\LoggerInterface;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Common\Values\Id\Id;
@@ -15,6 +17,9 @@ use Raspberry\Common\Values\Slug\Slug;
 use Raspberry\Common\Values\Temperature\Temperature;
 use Raspberry\Look\Domain\Clothes\Clothes;
 use Raspberry\Look\Domain\Clothes\ClothesInterface;
+use Raspberry\Look\Domain\Event\Event;
+use Raspberry\Look\Domain\Event\EventInterface;
+use Raspberry\Look\Domain\Event\EventRepositoryInterface;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;
 use Raspberry\Look\Domain\Look\Look;
 use Raspberry\Look\Domain\Look\LookInterface;
@@ -23,6 +28,7 @@ use Raspberry\Look\Domain\Look\LookRepositoryInterface;
 class LookRepository implements LookRepositoryInterface
 {
     public function __construct(
+        protected EventRepositoryInterface $eventRepository,
         protected LoggerInterface $logger
     ) {
     }
@@ -51,12 +57,16 @@ class LookRepository implements LookRepositoryInterface
     }
 
     /**
+     * @param int $minTemperature
+     * @param int $maxTemperature
+     * @param int $eventId
      * @inheritDoc
      */
-    public function findByTemperature(int $minTemperature, int $maxTemperature): array
+    public function findForSelection(int $minTemperature, int $maxTemperature, int $eventId): array
     {
         $lookModels = LookModel::where('min_temperature', '>=', $minTemperature)
             ->where('max_temperature', '<=', $maxTemperature)
+            ->whereHas('events', fn (Builder $builder) => $builder->where('id', $eventId))
             ->get();
 
         $looks = [];
@@ -82,27 +92,15 @@ class LookRepository implements LookRepositoryInterface
      */
     protected function makeLook(LookModel $look): LookInterface
     {
-        $clothes = [];
-
-        foreach ($look->clothes as $item) {
-            try {
-                $clothes[] = $this->makeClothes($item);
-            } catch (InvalidValueException $exception) {
-                $this->logger->error('Invalid clothes in database', [
-                    'exception' => $exception->getMessage(),
-                    'clothes' => $item->toArray()
-                ]);
-            }
-        }
-
         return new Look(
             new Id($look->id),
             new Name($look->name),
             new Slug($look->slug),
             new Photo($look->photo),
-            $clothes,
+            $look->clothes->map([$this, 'makeClothes'])->toArray(),
             new Temperature($look->min_temperature),
-            new Temperature($look->max_temperature)
+            new Temperature($look->max_temperature),
+            $this->eventRepository->getCollection($look->events()->pluck('id')->toArray())
         );
     }
 
@@ -111,7 +109,7 @@ class LookRepository implements LookRepositoryInterface
      * @return ClothesInterface
      * @throws InvalidValueException
      */
-    protected function makeClothes(ClothesModel $clothes): ClothesInterface
+    public function makeClothes(ClothesModel $clothes): ClothesInterface
     {
         return new Clothes(
             new Id($clothes->id),

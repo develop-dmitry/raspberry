@@ -1,22 +1,19 @@
 <template lang="pug">
-page-title(:title="title")
+page
+    page-not-found
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import PageTitle from "../components/page/page-title/PageTitle.vue";
+import Page from "../components/page/Page.vue";
+import PageNotFound from "../components/page/page-not-found/PageNotFound.vue";
 
 export default defineComponent({
     name: 'NotFound',
 
     components: {
-        PageTitle
-    },
-
-    data() {
-        return {
-            title: 'Страница не найдена'
-        };
+        Page,
+        PageNotFound
     }
 });
 </script>

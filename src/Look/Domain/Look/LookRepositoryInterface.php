@@ -18,7 +18,8 @@ interface LookRepositoryInterface
     /**
      * @param int $minTemperature
      * @param int $maxTemperature
+     * @param int $eventId
      * @return LookInterface[]
      */
-    public function findByTemperature(int $minTemperature, int $maxTemperature): array;
+    public function findForSelection(int $minTemperature, int $maxTemperature, int $eventId): array;
 }
