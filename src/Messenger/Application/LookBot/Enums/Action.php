@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Application\LookBot\Enums;
 
-enum ActionEnum: string
+enum Action: string
 {
 
     case EventList = 'look_event_list';

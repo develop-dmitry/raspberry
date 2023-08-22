@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Domain\Handlers;
 
-enum HandlerTypeEnum: string
+enum HandlerType: string
 {
 
     case Message = 'message';

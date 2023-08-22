@@ -8,14 +8,14 @@ use Psr\Log\LoggerInterface;
 use Raspberry\Look\Domain\Event\EventInterface;
 use Raspberry\Look\Domain\Event\EventRepositoryInterface;
 use Raspberry\Messenger\Application\AbstractPaginationHandler;
-use Raspberry\Messenger\Application\LookBot\Enums\ActionEnum;
+use Raspberry\Messenger\Application\LookBot\Enums\Action;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\InlineKeyboardInterface;
 use Raspberry\Messenger\Domain\Gui\Options\InlineButton\CallbackDataOption;
 use Raspberry\Messenger\Domain\Gui\Options\OptionInterface;
-use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
+use Raspberry\Messenger\Domain\Handlers\HandlerType;
 use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
 
 class EventListHandler extends AbstractPaginationHandler
@@ -35,7 +35,7 @@ class EventListHandler extends AbstractPaginationHandler
 
         $this->pagination = $this->eventRepository->withLooks($this->page(), $this->perPage);
 
-        if ($this->contextRequest->getRequestType() === HandlerTypeEnum::CallbackQuery) {
+        if ($this->contextRequest->getRequestType() === HandlerType::CallbackQuery) {
             $gui->editMessage();
         }
 
@@ -77,7 +77,7 @@ class EventListHandler extends AbstractPaginationHandler
     protected function makeCallbackData(EventInterface $event): OptionInterface
     {
         return new CallbackDataOption(
-            ActionEnum::EventChoose->value,
+            Action::EventChoose->value,
             ['id' => $event->getId()->getValue()]
         );
     }
@@ -87,6 +87,6 @@ class EventListHandler extends AbstractPaginationHandler
      */
     protected function action(): string
     {
-        return ActionEnum::EventList->value;
+        return Action::EventList->value;
     }
 }

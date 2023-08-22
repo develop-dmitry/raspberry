@@ -9,16 +9,19 @@ use Illuminate\Http\Request;
 use Psr\Log\LoggerInterface;
 use Raspberry\Authorization\Application\MessengerAuthorization\TelegramMessengerAuthorizationUseCase;
 use Raspberry\Authorization\Application\MessengerRegister\TelegramMessengerRegisterUseCase;
-use Raspberry\Messenger\Application\LookBot\Enums\ActionEnum;
-use Raspberry\Messenger\Application\LookBot\Enums\MenuEnum;
+use Raspberry\Messenger\Application\LookBot\Enums\Action;
+use Raspberry\Messenger\Application\LookBot\Enums\Menu;
+use Raspberry\Messenger\Application\LookBot\Enums\TextAction;
 use Raspberry\Messenger\Application\LookBot\EventHandlers\EventChooseHandler;
 use Raspberry\Messenger\Application\LookBot\EventHandlers\EventListHandler;
 use Raspberry\Messenger\Application\LookBot\SelectionLookHandler;
 use Raspberry\Messenger\Application\LookBot\StartHandler;
+use Raspberry\Messenger\Application\LookBot\TemperatureHandlers\InputTemperatureHandler;
+use Raspberry\Messenger\Application\LookBot\TemperatureHandlers\SaveTemperatureHandler;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainerInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
-use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
+use Raspberry\Messenger\Domain\Handlers\HandlerType;
 use Raspberry\Messenger\Infrastructure\Gateway\Exceptions\MessengerException;
 use Raspberry\Messenger\Infrastructure\Gateway\TelegramMessengerGateway;
 
@@ -35,7 +38,7 @@ class TelegramLookBotController extends Controller
     {
         $this->logger->debug('Request from telegram', $request->toArray());
 
-        $telegram = app()->makeWith(TelegramMessengerGateway::class, ['handlers' => $this->getHandlers()]);
+        $telegram = app(TelegramMessengerGateway::class, ['handlers' => $this->getHandlers()]);
 
         try {
             $telegram->handleRequest();
@@ -54,26 +57,40 @@ class TelegramLookBotController extends Controller
         $handlers
             ->addHandler(
                 'start',
-                HandlerTypeEnum::Command,
+                HandlerType::Command,
                 app(StartHandler::class)
             )
             ->addHandler(
-                MenuEnum::SelectionLook->getText(),
-                HandlerTypeEnum::Text,
+                Menu::SelectionLook->getText(),
+                HandlerType::Text,
+                app(InputTemperatureHandler::class)
+            )
+            ->addHandler(
+                TextAction::SaveTemperature->value,
+                HandlerType::Message,
+                $this->makeSaveTemperatureHandler()
+            )
+            ->addHandler(
+                Action::EventList->value,
+                HandlerType::CallbackQuery,
                 $this->makeEventListHandler()
             )
             ->addHandler(
-                ActionEnum::EventList->value,
-                HandlerTypeEnum::CallbackQuery,
-                $this->makeEventListHandler()
-            )
-            ->addHandler(
-                ActionEnum::EventChoose->value,
-                HandlerTypeEnum::CallbackQuery,
+                Action::EventChoose->value,
+                HandlerType::CallbackQuery,
                 $this->makeEventChooseHandler()
             );
 
         return $handlers;
+    }
+
+    protected function makeSaveTemperatureHandler(): HandlerInterface
+    {
+        return app(SaveTemperatureHandler::class, [
+            'messengerAuthorization' => $this->messengerAuthorization,
+            'messengerRegister' => $this->messengerRegister,
+            'next' => $this->makeEventListHandler()
+        ]);
     }
 
     protected function makeEventChooseHandler(): HandlerInterface

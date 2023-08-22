@@ -12,16 +12,16 @@ class Temperature implements TemperatureInterface
     protected int $value;
 
     /**
-     * @param int $value
+     * @param int|string $value
      * @throws InvalidValueException
      */
-    public function __construct(int $value)
+    public function __construct(int|string $value)
     {
         if (!$this->validate($value)) {
             throw new InvalidValueException();
         }
 
-        $this->value = $value;
+        $this->value = (int) $value;
     }
 
     /**
@@ -32,8 +32,14 @@ class Temperature implements TemperatureInterface
         return $this->value;
     }
 
-    protected function validate(int $value): bool
+    protected function validate(int|string $value): bool
     {
+        if (!is_numeric($value)) {
+            return false;
+        }
+
+        $value = (int) $value;
+
         return $value >= -50 && $value <= 50;
     }
 }

@@ -16,7 +16,7 @@ use Raspberry\Messenger\Domain\Context\User\UserInterface;
 use Raspberry\Messenger\Domain\Context\User\UserRepositoryInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
-use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
+use Raspberry\Messenger\Domain\Handlers\HandlerType;
 use Raspberry\Messenger\Infrastructure\Gateway\Exceptions\MessengerException;
 use Raspberry\Messenger\Infrastructure\Gui\Telegram\TelegramGui;
 use SergiX44\Nutgram\Nutgram;
@@ -52,12 +52,12 @@ class TelegramMessengerGateway extends AbstractMessengerGateway
     {
         $this->bot->setRunningMode(Webhook::class);
 
-        foreach ($this->handlers->filterByType(HandlerTypeEnum::Command) as $command => $handler) {
+        foreach ($this->handlers->filterByType(HandlerType::Command) as $command => $handler) {
             $commandHandler = fn() => $this->executeHandler($handler);
             $this->bot->onCommand($command, fn() => $this->execute($commandHandler));
         }
 
-        foreach ($this->handlers->filterByType(HandlerTypeEnum::Text) as $pattern => $handler) {
+        foreach ($this->handlers->filterByType(HandlerType::Text) as $pattern => $handler) {
             $textHandler = fn() => $this->executeHandler($handler);
             $this->bot->onText($pattern, fn() => $this->execute($textHandler));
         }
@@ -109,23 +109,27 @@ class TelegramMessengerGateway extends AbstractMessengerGateway
             $callbackData = new NullCallbackData();
         }
 
-        $message = $this->bot->message()?->getText() ?: '';
         $requestType = $this->getRequestType();
+        $message = $this->bot->message()?->getText();
+
+        if ($message === null) {
+            $message = '';
+        }
 
         return new Request($message, $callbackData, $requestType);
     }
 
-    protected function getRequestType(): HandlerTypeEnum
+    protected function getRequestType(): HandlerType
     {
         if ($this->bot->isCommand()) {
-            return HandlerTypeEnum::Command;
+            return HandlerType::Command;
         }
 
         if ($this->bot->isCallbackQuery()) {
-            return HandlerTypeEnum::CallbackQuery;
+            return HandlerType::CallbackQuery;
         }
 
-        return HandlerTypeEnum::Message;
+        return HandlerType::Message;
     }
 
     /**

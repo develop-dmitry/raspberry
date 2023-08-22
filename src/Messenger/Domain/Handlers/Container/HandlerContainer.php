@@ -6,7 +6,7 @@ namespace Raspberry\Messenger\Domain\Handlers\Container;
 
 use Raspberry\Messenger\Domain\Handlers\Container\Exceptions\HandlerNotFoundException;
 use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
-use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
+use Raspberry\Messenger\Domain\Handlers\HandlerType;
 
 class HandlerContainer implements HandlerContainerInterface
 {
@@ -18,7 +18,7 @@ class HandlerContainer implements HandlerContainerInterface
     /**
      * @inheritDoc
      */
-    public function addHandler(string $name, HandlerTypeEnum $type, HandlerInterface $handler): self
+    public function addHandler(string $name, HandlerType $type, HandlerInterface $handler): self
     {
         $this->handlers[$type->value][$name] = $handler;
         return $this;
@@ -27,7 +27,7 @@ class HandlerContainer implements HandlerContainerInterface
     /**
      * @inheritDoc
      */
-    public function getHandler(string $name, HandlerTypeEnum $type): HandlerInterface
+    public function getHandler(string $name, HandlerType $type): HandlerInterface
     {
         if (!isset($this->handlers[$type->value][$name])) {
             throw new HandlerNotFoundException();
@@ -39,7 +39,7 @@ class HandlerContainer implements HandlerContainerInterface
     /**
      * @inheritDoc
      */
-    public function filterByType(HandlerTypeEnum $type): array
+    public function filterByType(HandlerType $type): array
     {
         return $this->handlers[$type->value] ?? [];
     }

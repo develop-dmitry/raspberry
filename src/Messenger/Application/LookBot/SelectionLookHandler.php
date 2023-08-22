@@ -23,7 +23,7 @@ use Raspberry\Messenger\Domain\Gui\GuiInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\InlineKeyboardInterface;
 use Raspberry\Messenger\Domain\Gui\Options\InlineButton\WebAppOption;
 use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
-use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
+use Raspberry\Messenger\Domain\Handlers\HandlerType;
 use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
 
 class SelectionLookHandler extends AbstractHandler
@@ -44,18 +44,14 @@ class SelectionLookHandler extends AbstractHandler
     {
         parent::handle($context, $gui, $args);
 
-        if (!$context->getUser()) {
-            throw new FailedAuthorizeException();
-        }
-
-        $this->identifyUser($context->getUser()->getMessengerId());
+        $this->identifyUser($context->getUser()?->getMessengerId());
 
         $selectionRequest = new SelectionLookRequest($this->userId);
 
         $selectionResponse = $this->selectionLook->execute($selectionRequest);
         $looks = $selectionResponse->getLooks();
 
-        if ($context->getRequest()->getRequestType() === HandlerTypeEnum::CallbackQuery) {
+        if ($context->getRequest()->getRequestType() === HandlerType::CallbackQuery) {
             $gui->editMessage();
         }
 

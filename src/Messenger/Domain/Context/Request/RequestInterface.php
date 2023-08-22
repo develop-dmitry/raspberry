@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Raspberry\Messenger\Domain\Context\Request;
 
 use Raspberry\Messenger\Domain\Context\Request\CallbackData\CallbackDataInterface;
-use Raspberry\Messenger\Domain\Handlers\HandlerTypeEnum;
+use Raspberry\Messenger\Domain\Handlers\HandlerType;
 
 interface RequestInterface
 {
@@ -20,7 +20,7 @@ interface RequestInterface
     public function getMessage(): string;
 
     /**
-     * @return HandlerTypeEnum
+     * @return HandlerType
      */
-    public function getRequestType(): HandlerTypeEnum;
+    public function getRequestType(): HandlerType;
 }

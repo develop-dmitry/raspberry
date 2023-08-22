@@ -21,12 +21,18 @@ trait AuthorizeTrait
     protected int $userId;
 
     /**
-     * @param int $messengerId
+     * @param int|null $messengerId
      * @return void
      * @throws FailedAuthorizeException
+     * @throws FailedSaveUserException
+     * @throws InvalidValueException
      */
-    protected function identifyUser(int $messengerId): void
+    protected function identifyUser(?int $messengerId): void
     {
+        if (!$messengerId) {
+            throw new FailedAuthorizeException();
+        }
+
         try {
             $this->authorize($messengerId);
         } catch (UserNotFoundException) {

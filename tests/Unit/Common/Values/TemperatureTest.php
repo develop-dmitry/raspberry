@@ -28,4 +28,16 @@ class TemperatureTest extends TestCase
         $this->expectException(InvalidValueException::class);
         new Temperature(51);
     }
+
+    public function testStringValue(): void
+    {
+        $this->expectNotToPerformAssertions();
+        new Temperature('+10');
+    }
+
+    public function testZeroValue(): void
+    {
+        $this->expectNotToPerformAssertions();
+        new Temperature('0');
+    }
 }
