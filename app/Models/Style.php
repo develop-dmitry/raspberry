@@ -19,4 +19,9 @@ class Style extends Model
     {
         return $this->belongsToMany(Clothes::class);
     }
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
+    }
 }
