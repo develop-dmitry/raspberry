@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Authorization\Domain\User;
+namespace Raspberry\Look\Domain\User;
 
 use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
 use Raspberry\Common\Exceptions\UserExceptions\UserNotFoundException;
@@ -10,19 +10,20 @@ use Raspberry\Common\Values\Exceptions\InvalidValueException;
 
 interface UserRepositoryInterface
 {
+
     /**
-     * @param int $telegramId
+     * @param int $id
      * @return UserInterface
      * @throws UserNotFoundException
      * @throws InvalidValueException
      */
-    public function getUserByTelegram(int $telegramId): UserInterface;
+    public function getById(int $id): UserInterface;
 
     /**
      * @param UserInterface $user
-     * @return UserInterface
+     * @return void
      * @throws FailedSaveUserException
-     * @throws InvalidValueException
+     * @throws UserNotFoundException
      */
-    public function createUser(UserInterface $user): UserInterface;
+    public function save(UserInterface $user): void;
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Authorization\Domain\User\Exceptions;
+namespace Raspberry\Common\Exceptions\UserExceptions;
 
 use Exception;
 

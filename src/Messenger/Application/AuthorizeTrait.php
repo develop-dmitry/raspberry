@@ -6,14 +6,10 @@ namespace Raspberry\Messenger\Application;
 
 use Exception;
 use Raspberry\Authorization\Application\MessengerAuthorization\DTO\MessengerAuthorizationRequest;
-use Raspberry\Authorization\Application\MessengerAuthorization\MessengerAuthorizationInterface;
 use Raspberry\Authorization\Application\MessengerRegister\DTO\MessengerRegisterRequest;
-use Raspberry\Authorization\Application\MessengerRegister\MessengerRegisterInterface;
-use Raspberry\Authorization\Domain\User\Exceptions\FailedSaveUserException;
-use Raspberry\Authorization\Domain\User\Exceptions\UserNotFoundException;
+use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
+use Raspberry\Common\Exceptions\UserExceptions\UserNotFoundException;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
-use Raspberry\Messenger\Domain\Context\ContextInterface;
-use Raspberry\Messenger\Domain\Gui\GuiInterface;
 use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
 
 trait AuthorizeTrait
