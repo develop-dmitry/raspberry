@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Application\LookBot\Enums;
 
-enum Menu
+enum SettingsMenu
 {
 
-    case SelectionLook;
+    case Styles;
 
-    case Settings;
+    case Back;
 
     public function getText(): string
     {
         switch ($this) {
-            case self::SelectionLook:
-                return 'Подобрать образ';
-            case self::Settings:
-                return 'Настройки';
+            case self::Styles:
+                return 'Предпочитаемые стили';
+            case self::Back:
+                return 'Назад';
         }
 
         return 'Без названия';

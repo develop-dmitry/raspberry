@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Application\LookBot;
+namespace Raspberry\Messenger\Application\LookBot\SettingsHandlers;
 
 use Raspberry\Messenger\Application\AbstractHandler;
-use Raspberry\Messenger\Application\LookBot\Enums\Menu;
+use Raspberry\Messenger\Application\LookBot\Enums\SettingsMenu;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButtonInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;
@@ -13,36 +13,27 @@ use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboardInterfac
 use Raspberry\Messenger\Domain\Gui\Options\ReplyKeyboard\ResizeOption;
 use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
 
-class StartHandler extends AbstractHandler
+class SettingsHandler extends AbstractHandler
 {
 
-    /**
-     * @param ContextInterface $context
-     * @param GuiInterface $gui
-     * @param HandlerArgumentsInterface|null $args
-     * @inheritDoc
-     */
     public function handle(ContextInterface $context, GuiInterface $gui, ?HandlerArgumentsInterface $args = null): void
     {
         parent::handle($context, $gui, $args);
 
-        $gui->sendMessage('Добро пожаловать в Raspberry!');
-        $gui->sendReplyKeyboard($this->makeMenu());
+        $gui->sendMessage('Настройки');
+        $gui->sendReplyKeyboard($this->makeSettingsKeyboard());
     }
 
-    /**
-     * @return ReplyKeyboardInterface
-     */
-    protected function makeMenu(): ReplyKeyboardInterface
+    protected function makeSettingsKeyboard(): ReplyKeyboardInterface
     {
         return $this->replyKeyboardFactory
             ->setResize(new ResizeOption(true))
             ->make()
-            ->addRow($this->makeMenuButton(Menu::SelectionLook->getText()))
-            ->addRow($this->makeMenuButton(Menu::Settings->getText()));
+            ->addRow($this->makeSettingsButton(SettingsMenu::Styles->getText()))
+            ->addRow($this->makeSettingsButton(SettingsMenu::Back->getText()));
     }
 
-    protected function makeMenuButton(string $text): ReplyButtonInterface
+    protected function makeSettingsButton(string $text): ReplyButtonInterface
     {
         return $this->replyButtonFactory
             ->setText($text)

@@ -35,6 +35,18 @@ class StyleRepositoryTest extends TestCase
         $this->equalStyle($styleModel, $style);
     }
 
+    public function testPaginateQuery(): void
+    {
+        $modelPagination = StyleModel::paginate(10, page: 1);
+        $styleRepository = new StyleRepository($this->app->make(LoggerInterface::class));
+
+        $pagination = $styleRepository->paginate(1, 10);
+
+        foreach ($pagination->getItems() as $key => $item) {
+            $this->equalStyle($modelPagination->get($key), $item);
+        }
+    }
+
     protected function equalStyle(StyleModel $expected, StyleInterface $actual): void
     {
         $this->assertEquals($expected->id, $actual->getId()->getValue());

@@ -6,6 +6,7 @@ namespace Raspberry\Messenger\Application;
 
 use Raspberry\Common\Pagination\PaginationInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
+use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\InlineKeyboardInterface;
 use Raspberry\Messenger\Domain\Gui\Options\InlineButton\CallbackDataOption;
 
 abstract class AbstractPaginationHandler extends AbstractHandler
@@ -13,10 +14,37 @@ abstract class AbstractPaginationHandler extends AbstractHandler
 
     protected PaginationInterface $pagination;
 
+    /**
+     * @return bool
+     */
     protected function canSwitchPage(): bool
     {
         return $this->pagination->hasPrev() || $this->pagination->hasNext();
     }
+
+    /**
+     * @return InlineKeyboardInterface
+     */
+    protected function makePaginationKeyboard(): InlineKeyboardInterface
+    {
+        $keyboard = $this->inlineKeyboardFactory->make();
+
+        foreach ($this->pagination->getItems() as $item) {
+            $keyboard->addRow($this->makeItemButton($item));
+        }
+
+        if ($this->canSwitchPage()) {
+            $keyboard->addRow(...$this->makePaginationRow());
+        }
+
+        return $keyboard;
+    }
+
+    /**
+     * @param mixed $item
+     * @return InlineButtonInterface
+     */
+    abstract protected function makeItemButton(mixed $item): InlineButtonInterface;
 
     /**
      * @return InlineButtonInterface[]

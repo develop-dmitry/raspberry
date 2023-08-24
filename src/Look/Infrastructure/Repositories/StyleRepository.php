@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Raspberry\Look\Infrastructure\Repositories;
 
 use App\Models\Style as StyleModel;
+use Illuminate\Support\Collection;
 use Psr\Log\LoggerInterface;
+use Raspberry\Common\Pagination\Pagination;
+use Raspberry\Common\Pagination\PaginationInterface;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Common\Values\Id\Id;
 use Raspberry\Common\Values\Name\Name;
@@ -30,18 +33,7 @@ class StyleRepository implements StyleRepositoryInterface
      */
     public function getCollection(array $ids): array
     {
-        $styles = [];
-        $models = StyleModel::whereIn('id', $ids)->get();
-
-        foreach ($models as $model) {
-            try {
-                $styles[] = $this->makeStyle($model);
-            } catch (InvalidValueException $exception) {
-                $this->logger->error('Invalid style data in database', ['exception' => $exception->getMessage()]);
-            }
-        }
-
-        return $styles;
+        return $this->makeStyles(StyleModel::whereIn('id', $ids)->get());
     }
 
     /**
@@ -56,6 +48,40 @@ class StyleRepository implements StyleRepositoryInterface
         }
 
         return $this->makeStyle($model);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function paginate(int $page, int $perPage): PaginationInterface
+    {
+        $pagination = StyleModel::paginate($perPage, page: $page);
+
+        return new Pagination(
+            $this->makeStyles($pagination->getCollection()),
+            $pagination->lastPage(),
+            $pagination->currentPage(),
+            $pagination->perPage()
+        );
+    }
+
+    /**
+     * @param Collection $models
+     * @return StyleInterface[]
+     */
+    protected function makeStyles(Collection $models): array
+    {
+        $styles = [];
+
+        foreach ($models as $model) {
+            try {
+                $styles[] = $this->makeStyle($model);
+            } catch (InvalidValueException $exception) {
+                $this->logger->error('Invalid data in database', ['exception' => $exception->getMessage()]);
+            }
+        }
+
+        return $styles;
     }
 
     /**
