@@ -7,8 +7,8 @@ namespace Tests\Unit\Look\Application\UserStyles;
 use App\Models\Style as StyleModel;
 use App\Models\User as UserModel;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Raspberry\Look\Application\UserStyles\DTO\ToggleStyleRequest;
-use Raspberry\Look\Application\UserStyles\UserStylesUseCase;
+use Raspberry\Look\Application\StylesUser\DTO\ToggleStyleRequest;
+use Raspberry\Look\Application\StylesUser\StylesUserUseCase;
 use Raspberry\Look\Domain\Style\StyleRepositoryInterface;
 use Raspberry\Look\Domain\User\UserRepositoryInterface;
 use Tests\TestCase;
@@ -21,7 +21,7 @@ class UserStylesTest extends TestCase
     {
         $user = UserModel::factory(1)->create()->first();
         $style = StyleModel::factory(1)->create()->first();
-        $userStyles = new UserStylesUseCase(
+        $userStyles = new StylesUserUseCase(
             $this->app->make(StyleRepositoryInterface::class),
             $this->app->make(UserRepositoryInterface::class)
         );
@@ -36,7 +36,7 @@ class UserStylesTest extends TestCase
         $user = UserModel::factory(1)->create()->first();
         $style = StyleModel::factory(1)->create()->first();
         $user->styles()->attach($style);
-        $userStyles = new UserStylesUseCase(
+        $userStyles = new StylesUserUseCase(
             $this->app->make(StyleRepositoryInterface::class),
             $this->app->make(UserRepositoryInterface::class)
         );

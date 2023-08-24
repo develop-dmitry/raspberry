@@ -9,8 +9,8 @@ use Raspberry\Look\Application\DetailLookUrl\DetailLookUrlInterface;
 use Raspberry\Look\Application\DetailLookUrl\DetailLookUrlUseCase;
 use Raspberry\Look\Application\SelectionLook\SelectionLookUseCase;
 use Raspberry\Look\Application\SelectionLook\SelectionLookInterface;
-use Raspberry\Look\Application\UserStyles\UserStylesInterface;
-use Raspberry\Look\Application\UserStyles\UserStylesUseCase;
+use Raspberry\Look\Application\StylesUser\StylesUserInterface;
+use Raspberry\Look\Application\StylesUser\StylesUserUseCase;
 use Raspberry\Look\Domain\Event\EventRepositoryInterface;
 use Raspberry\Look\Domain\Look\LookRepositoryInterface;
 use Raspberry\Look\Domain\Look\Services\LookUrlGenerator\LookUrlGeneratorServiceInterface;
@@ -37,7 +37,7 @@ class LookServiceProvider extends ServiceProvider
         $this->app->bind(EventRepositoryInterface::class, EventRepository::class);
         $this->app->bind(StyleRepositoryInterface::class, StyleRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
-        $this->app->bind(UserStylesInterface::class, UserStylesUseCase::class);
+        $this->app->bind(StylesUserInterface::class, StylesUserUseCase::class);
     }
 
     /**

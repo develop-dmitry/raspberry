@@ -12,4 +12,6 @@ enum Action: string
     case EventChoose = 'look_event_choose';
 
     case StylesUser = 'styles_user';
+
+    case StylesChoose = 'styles_choose';
 }

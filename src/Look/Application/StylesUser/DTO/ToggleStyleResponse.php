@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Look\Application\UserStyles\DTO;
+namespace Raspberry\Look\Application\StylesUser\DTO;
 
 class ToggleStyleResponse
 {

@@ -97,6 +97,11 @@ class TelegramLookBotController extends Controller
                 $this->makeStylesHandler()
             )
             ->addHandler(
+                Action::StylesChoose->value,
+                HandlerType::CallbackQuery,
+                $this->makeStylesHandler()
+            )
+            ->addHandler(
                 SettingsMenu::Back->getText(),
                 HandlerType::Text,
                 app(StartHandler::class)
