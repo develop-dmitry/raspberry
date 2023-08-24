@@ -62,6 +62,22 @@ class UserTest extends TestCase
         $this->assertCount(1, $user->getStyles());
     }
 
+    public function testHasStyle(): void
+    {
+        $style = $this->makeStyle(1);
+        $user = new User(new Id(1), [$style]);
+
+        $this->assertTrue($user->hasStyle($style));
+    }
+
+    public function testHasNotStyle(): void
+    {
+        $style = $this->makeStyle(1);
+        $user = new User(new Id(1), [$style]);
+
+        $this->assertFalse($user->hasStyle($this->makeStyle(2)));
+    }
+
     protected function makeStyle(int $id): StyleInterface
     {
         return new Style(new Id($id), new Name(Str::random(10)));

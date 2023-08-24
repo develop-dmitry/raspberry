@@ -62,12 +62,12 @@ class User implements UserInterface
         );
     }
 
-    protected function hasStyle(StyleInterface $style): bool
+    public function hasStyle(StyleInterface $style): bool
     {
         $isFind = false;
 
         foreach ($this->styles as $item) {
-            $isFind = $isFind || $item->getId() === $style->getId();
+            $isFind = $isFind || $item->getId()->getValue() === $style->getId()->getValue();
         }
 
         return $isFind;

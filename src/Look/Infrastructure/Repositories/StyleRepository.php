@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Common\Values\Id\Id;
 use Raspberry\Common\Values\Name\Name;
+use Raspberry\Look\Domain\Style\Exceptions\StyleNotFoundException;
 use Raspberry\Look\Domain\Style\Style;
 use Raspberry\Look\Domain\Style\StyleInterface;
 use Raspberry\Look\Domain\Style\StyleRepositoryInterface;
@@ -41,6 +42,20 @@ class StyleRepository implements StyleRepositoryInterface
         }
 
         return $styles;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getById(int $id): StyleInterface
+    {
+        $model = StyleModel::find($id);
+
+        if (!$model) {
+            throw new StyleNotFoundException();
+        }
+
+        return $this->makeStyle($model);
     }
 
     /**
