@@ -24,11 +24,13 @@ use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;
 use Raspberry\Look\Domain\Look\Look;
 use Raspberry\Look\Domain\Look\LookInterface;
 use Raspberry\Look\Domain\Look\LookRepositoryInterface;
+use Raspberry\Look\Domain\Style\StyleRepositoryInterface;
 
 class LookRepository implements LookRepositoryInterface
 {
     public function __construct(
         protected EventRepositoryInterface $eventRepository,
+        protected StyleRepositoryInterface $styleRepository,
         protected LoggerInterface $logger
     ) {
     }
@@ -114,7 +116,8 @@ class LookRepository implements LookRepositoryInterface
         return new Clothes(
             new Id($clothes->id),
             new Photo($clothes->photo),
-            new Name($clothes->name)
+            new Name($clothes->name),
+            $this->styleRepository->getCollection($clothes->styles()->pluck('id')->toArray())
         );
     }
 }

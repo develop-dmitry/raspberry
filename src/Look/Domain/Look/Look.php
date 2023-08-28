@@ -6,11 +6,14 @@ namespace Raspberry\Look\Domain\Look;
 
 use Raspberry\Common\Values\Id\IdInterface;
 use Raspberry\Common\Values\Name\NameInterface;
+use Raspberry\Common\Values\Percent\Percent;
+use Raspberry\Common\Values\Percent\PercentInterface;
 use Raspberry\Common\Values\Photo\PhotoInterface;
 use Raspberry\Common\Values\Slug\SlugInterface;
 use Raspberry\Common\Values\Temperature\TemperatureInterface;
 use Raspberry\Look\Domain\Clothes\ClothesInterface;
 use Raspberry\Look\Domain\Event\EventInterface;
+use Raspberry\Look\Domain\User\UserInterface;
 
 class Look implements LookInterface
 {
@@ -98,5 +101,39 @@ class Look implements LookInterface
     public function getEvents(): array
     {
         return $this->events;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getStyles(): array
+    {
+        $allStyles = array_map(fn(ClothesInterface $clothes) => $clothes->getStyles(), $this->clothes);
+        $allStyles = array_reduce($allStyles, 'array_merge', []);
+
+        $styles = [];
+
+        foreach ($allStyles as $style) {
+            $styles[$style->getId()->getValue()] = $style;
+        }
+
+        return $styles;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function howFit(UserInterface $user): PercentInterface
+    {
+        $styles = $this->getStyles();
+        $userStyles = array_map(fn ($style) => $style->getId()->getValue(), $user->getStyles());
+
+        if (empty($styles) || empty($userStyles)) {
+            return Percent::max();
+        }
+
+        $fitStyles = array_filter($styles, fn ($style) => in_array($style->getId()->getValue(), $userStyles));
+
+        return Percent::fromDecimal(count($fitStyles) / count($styles));
     }
 }
