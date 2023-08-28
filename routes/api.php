@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Raspberry\Look\Infrastructure\Http\Controllers\DetailLookController;
+use Raspberry\Look\Infrastructure\Http\Controllers\HowFitController;
 use Raspberry\Messenger\Infrastructure\Controllers\TelegramLookBotController;
 use Raspberry\Wardrobe\Infrastructure\Http\Controllers\AddClothesController;
 use Raspberry\Wardrobe\Infrastructure\Http\Controllers\RemoveClothesController;
@@ -35,7 +36,10 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('look')->group(function () {
-        Route::post('{look_id}', DetailLookController::class);
+        Route::prefix('{look_id}')->group(function () {
+            Route::post('/', DetailLookController::class);
+            Route::post('how-fit', HowFitController::class);
+        });
     });
 
     Route::prefix('look-bot')->group(function () {
