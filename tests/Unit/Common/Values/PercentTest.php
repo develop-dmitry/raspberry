@@ -51,4 +51,19 @@ class PercentTest extends TestCase
 
         $this->assertEquals(10, $percent->getValue());
     }
+
+    public function testCompareEqual(): void
+    {
+        $this->assertEquals(0, Percent::max()->compare(Percent::max()));
+    }
+
+    public function testCompareLess(): void
+    {
+        $this->assertEquals(-1, Percent::fromDecimal(0.1)->compare(Percent::max()));
+    }
+
+    public function testCompareMore(): void
+    {
+        $this->assertEquals(1, Percent::max()->compare(Percent::fromDecimal(0.1)));
+    }
 }

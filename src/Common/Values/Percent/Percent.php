@@ -3,6 +3,8 @@
 namespace Raspberry\Common\Values\Percent;
 
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
+use Raspberry\Common\Values\Interfaces\Comparable\ComparableInterface;
+use Raspberry\Common\Values\Interfaces\Comparable\CompareResult;
 
 class Percent implements PercentInterface
 {
@@ -26,6 +28,19 @@ class Percent implements PercentInterface
     public function getValue(): float
     {
         return $this->value;
+    }
+
+    public function compare(PercentInterface $percent): int
+    {
+        if ($this->getValue() > $percent->getValue()) {
+            return 1;
+        }
+
+        if ($this->getValue() < $percent->getValue()) {
+            return -1;
+        }
+
+        return 0;
     }
 
     /**
