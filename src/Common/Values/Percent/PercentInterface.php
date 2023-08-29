@@ -2,6 +2,8 @@
 
 namespace Raspberry\Common\Values\Percent;
 
+use Raspberry\Common\Base\Enums\CompareResult;
+
 interface PercentInterface
 {
 
@@ -11,12 +13,8 @@ interface PercentInterface
     public function getValue(): float;
 
     /**
-     * Return 0 if value equals
-     * Return 1 if value more
-     * Return -1 if value less
-     *
      * @param PercentInterface $percent
-     * @return int
+     * @return CompareResult
      */
-    public function compare(PercentInterface $percent): int;
+    public function compare(PercentInterface $percent): CompareResult;
 }

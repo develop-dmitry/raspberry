@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Common\Values;
 
+use Raspberry\Common\Base\Enums\CompareResult;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Common\Values\Percent\Percent;
 use Tests\TestCase;
@@ -54,16 +55,16 @@ class PercentTest extends TestCase
 
     public function testCompareEqual(): void
     {
-        $this->assertEquals(0, Percent::max()->compare(Percent::max()));
+        $this->assertEquals(CompareResult::Equal, Percent::max()->compare(Percent::max()));
     }
 
     public function testCompareLess(): void
     {
-        $this->assertEquals(-1, Percent::fromDecimal(0.1)->compare(Percent::max()));
+        $this->assertEquals(CompareResult::Less, Percent::fromDecimal(0.1)->compare(Percent::max()));
     }
 
     public function testCompareMore(): void
     {
-        $this->assertEquals(1, Percent::max()->compare(Percent::fromDecimal(0.1)));
+        $this->assertEquals(CompareResult::More, Percent::max()->compare(Percent::fromDecimal(0.1)));
     }
 }

@@ -2,9 +2,8 @@
 
 namespace Raspberry\Common\Values\Percent;
 
+use Raspberry\Common\Base\Enums\CompareResult;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
-use Raspberry\Common\Values\Interfaces\Comparable\ComparableInterface;
-use Raspberry\Common\Values\Interfaces\Comparable\CompareResult;
 
 class Percent implements PercentInterface
 {
@@ -30,17 +29,20 @@ class Percent implements PercentInterface
         return $this->value;
     }
 
-    public function compare(PercentInterface $percent): int
+    /**
+     * @inheritDoc
+     */
+    public function compare(PercentInterface $percent): CompareResult
     {
         if ($this->getValue() > $percent->getValue()) {
-            return 1;
+            return CompareResult::More;
         }
 
         if ($this->getValue() < $percent->getValue()) {
-            return -1;
+            return CompareResult::Less;
         }
 
-        return 0;
+        return CompareResult::Equal;
     }
 
     /**
