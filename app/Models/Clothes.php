@@ -25,4 +25,9 @@ class Clothes extends Model
     {
         return $this->belongsToMany(Look::class);
     }
+
+    public function styles(): BelongsToMany
+    {
+        return $this->belongsToMany(Style::class);
+    }
 }

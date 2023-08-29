@@ -40,7 +40,7 @@ class EventListHandler extends AbstractPaginationHandler
         }
 
         $gui->sendMessage($this->message());
-        $gui->sendInlineKeyboard($this->makeKeyboard());
+        $gui->sendInlineKeyboard($this->makePaginationKeyboard());
     }
 
     protected function message(): string {
@@ -51,26 +51,11 @@ class EventListHandler extends AbstractPaginationHandler
         return 'Выберите мероприятие, для которого хотите подобрать образ';
     }
 
-    protected function makeKeyboard(): InlineKeyboardInterface
-    {
-        $keyboard = $this->inlineKeyboardFactory->make();
-
-        foreach ($this->pagination->getItems() as $item) {
-            $keyboard->addRow($this->makeButton($item));
-        }
-
-        if ($this->canSwitchPage()) {
-            $keyboard->addRow(...$this->makePaginationRow());
-        }
-
-        return $keyboard;
-    }
-
-    protected function makeButton(EventInterface $event): InlineButtonInterface
+    protected function makeItemButton(mixed $item): InlineButtonInterface
     {
         return $this->inlineButtonFactory
-            ->setText($event->getName()->getValue())
-            ->setCallbackData($this->makeCallbackData($event))
+            ->setText($item->getName()->getValue())
+            ->setCallbackData($this->makeCallbackData($item))
             ->make();
     }
 

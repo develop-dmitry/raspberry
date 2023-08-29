@@ -11,10 +11,13 @@ use Raspberry\Authorization\Application\MessengerAuthorization\TelegramMessenger
 use Raspberry\Authorization\Application\MessengerRegister\TelegramMessengerRegisterUseCase;
 use Raspberry\Messenger\Application\LookBot\Enums\Action;
 use Raspberry\Messenger\Application\LookBot\Enums\Menu;
+use Raspberry\Messenger\Application\LookBot\Enums\SettingsMenu;
 use Raspberry\Messenger\Application\LookBot\Enums\TextAction;
 use Raspberry\Messenger\Application\LookBot\EventHandlers\EventChooseHandler;
 use Raspberry\Messenger\Application\LookBot\EventHandlers\EventListHandler;
 use Raspberry\Messenger\Application\LookBot\SelectionLookHandler;
+use Raspberry\Messenger\Application\LookBot\SettingsHandlers\SettingsHandler;
+use Raspberry\Messenger\Application\LookBot\SettingsHandlers\StylesHandler;
 use Raspberry\Messenger\Application\LookBot\StartHandler;
 use Raspberry\Messenger\Application\LookBot\TemperatureHandlers\InputTemperatureHandler;
 use Raspberry\Messenger\Application\LookBot\TemperatureHandlers\SaveTemperatureHandler;
@@ -52,9 +55,7 @@ class TelegramLookBotController extends Controller
 
     protected function getHandlers(): HandlerContainerInterface
     {
-        $handlers = new HandlerContainer();
-
-        $handlers
+        return (new HandlerContainer())
             ->addHandler(
                 'start',
                 HandlerType::Command,
@@ -79,9 +80,40 @@ class TelegramLookBotController extends Controller
                 Action::EventChoose->value,
                 HandlerType::CallbackQuery,
                 $this->makeEventChooseHandler()
+            )
+            ->addHandler(
+                Menu::Settings->getText(),
+                HandlerType::Text,
+                app(SettingsHandler::class)
+            )
+            ->addHandler(
+                SettingsMenu::Styles->getText(),
+                HandlerType::Text,
+                $this->makeStylesHandler()
+            )
+            ->addHandler(
+                Action::StylesUser->value,
+                HandlerType::CallbackQuery,
+                $this->makeStylesHandler()
+            )
+            ->addHandler(
+                Action::StylesChoose->value,
+                HandlerType::CallbackQuery,
+                $this->makeStylesHandler()
+            )
+            ->addHandler(
+                SettingsMenu::Back->getText(),
+                HandlerType::Text,
+                app(StartHandler::class)
             );
+    }
 
-        return $handlers;
+    protected function makeStylesHandler(): HandlerInterface
+    {
+        return app(StylesHandler::class, [
+            'messengerAuthorization' => $this->messengerAuthorization,
+            'messengerRegister' => $this->messengerRegister
+        ]);
     }
 
     protected function makeSaveTemperatureHandler(): HandlerInterface

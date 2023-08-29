@@ -11,7 +11,6 @@ use Raspberry\Look\Application\DetailLook\DTO\DetailLookRequest;
 use Raspberry\Look\Application\DetailLook\DTO\DetailLookResponse;
 use Raspberry\Look\Application\DetailLook\DTO\EventItem;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;
-use Raspberry\Wardrobe\Infrastructure\Http\Controllers\AbstractController;
 
 class DetailLookController extends AbstractController
 {
@@ -69,15 +68,5 @@ class DetailLookController extends AbstractController
         return [
             'name' => $event->getName()
         ];
-    }
-
-    /**
-     * @return JsonResponse
-     */
-    protected function lookNotFound(): JsonResponse
-    {
-        $response = $this->makeDefaultResponse(false, 'Образ не найден');
-
-        return response()->json($response);
     }
 }

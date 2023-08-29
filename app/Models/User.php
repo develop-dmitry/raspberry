@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Clothes::class);
     }
+
+    public function styles(): BelongsToMany
+    {
+        return $this->belongsToMany(Style::class);
+    }
 }

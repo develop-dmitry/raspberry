@@ -4,20 +4,26 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Domain\Look\Services\SelectionLook;
 
+use Raspberry\Common\Base\Enums\CompareResult;
+use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Look\Domain\Event\EventInterface;
+use Raspberry\Look\Domain\Look\LookInterface;
 use Raspberry\Look\Domain\Look\LookRepositoryInterface;
-use Raspberry\Look\Infrastructure\Repositories\SelectionLookRepository;
+use Raspberry\Look\Domain\User\UserInterface;
 
 class SelectionLookService implements SelectionLookServiceInterface
 {
 
-    protected SelectionLookRepositoryInterface $selectionLookRepository;
-
+    /**
+     * @param LookRepositoryInterface $lookRepository
+     * @param SelectionLookRepositoryInterface $selectionLookRepository
+     * @param UserInterface $user
+     */
     public function __construct(
         protected LookRepositoryInterface $lookRepository,
-        int $userId
+        protected SelectionLookRepositoryInterface $selectionLookRepository,
+        protected UserInterface $user
     ) {
-        $this->selectionLookRepository = new SelectionLookRepository($userId);
     }
 
     /**
@@ -25,11 +31,32 @@ class SelectionLookService implements SelectionLookServiceInterface
      */
     public function selection(): array
     {
-        return $this->lookRepository->findForSelection(
+        $looks = $this->lookRepository->findForSelection(
             $this->minTemperature(),
             $this->maxTemperature(),
             $this->selectionLookRepository->getEventId()
         );
+
+        usort($looks, [$this, 'compareLooks']);
+
+        return $looks;
+    }
+
+    /**
+     * @param LookInterface $a
+     * @param LookInterface $b
+     * @return int
+     */
+    protected function compareLooks(LookInterface $a, LookInterface $b): int
+    {
+        try {
+            $percentA = $a->howFit($this->user);
+            $percentB = $b->howFit($this->user);
+
+            return $percentB->compare($percentA)->value;
+        } catch (InvalidValueException) {
+            return CompareResult::Equal->value;
+        }
     }
 
     protected function minTemperature(): int

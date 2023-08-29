@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Raspberry\Authorization\Infrastructure\Repositories;
 
 use App\Models\User as UserModel;
-use Raspberry\Authorization\Domain\User\Exceptions\FailedSaveUserException;
-use Raspberry\Authorization\Domain\User\Exceptions\UserNotFoundException;
 use Raspberry\Authorization\Domain\User\User;
 use Raspberry\Authorization\Domain\User\UserInterface;
 use Raspberry\Authorization\Domain\User\UserRepositoryInterface;
+use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
+use Raspberry\Common\Exceptions\UserExceptions\UserNotFoundException;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Common\Values\Id\Id;
 

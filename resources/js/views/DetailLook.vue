@@ -11,6 +11,10 @@ page.detail-look
                         :alt="look.name"
                     )
                 .detail-look__description
+                    text.detail-look__how-fit(
+                        v-if="howFit"
+                        is="vue:text"
+                    ) {{ `Подходит вам на ${howFit}%` }}
                     .detail-look__events
                         look-event(
                             v-for="(event, index) in look.events"
@@ -27,8 +31,8 @@ page.detail-look
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import {Look} from "../stores/look/types/enitites.ts";
+import {defineComponent, PropType} from "vue";
+import {Look, User} from "../stores/look/types/enitites.ts";
 import {mapActions, mapState} from "pinia";
 import {useLookStore} from "../stores/look/LookStore.ts";
 import Page from "../components/page/Page.vue";
@@ -58,9 +62,17 @@ export default defineComponent({
         };
     },
 
+    props: {
+        user: {
+            type: Object as PropType<User>,
+            required: true
+        }
+    },
+
     computed: {
         ...mapState(useLookStore, {
-            findLook: 'findLook'
+            findLook: 'findLook',
+            howFitStore: 'howFit'
         }),
 
         id(): number {
@@ -77,21 +89,33 @@ export default defineComponent({
 
         title(): string {
             return this.look?.name ?? '';
+        },
+
+        howFit(): number|null {
+            return this.howFitStore(this.id);
         }
     },
 
     methods: {
         ...mapActions(useLookStore, {
-            fetchDetailLook: 'fetchDetailLook'
+            fetchDetailLook: 'fetchDetailLook',
+            fetchHowFit: 'fetchHowFit',
+            setUser: 'setUser'
         })
     },
 
     mounted() {
+        this.setUser(this.user);
+
         if (!this.look) {
             this.fetchDetailLook(this.id)
                 .then(() => {
                     this.isExists = this.look !== null;
                 });
+        }
+
+        if (!this.howFit) {
+            this.fetchHowFit(this.id);
         }
     }
 });
@@ -162,6 +186,12 @@ export default defineComponent({
             @include media-always {
                 margin-bottom: 30px;
             }
+        }
+    }
+
+    &__how-fit {
+        @include media-always {
+            margin-bottom: 30px;
         }
     }
 }

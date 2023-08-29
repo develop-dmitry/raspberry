@@ -7,14 +7,22 @@ use Raspberry\Look\Application\DetailLook\DetailLookInterface;
 use Raspberry\Look\Application\DetailLook\DetailLookUseCase;
 use Raspberry\Look\Application\DetailLookUrl\DetailLookUrlInterface;
 use Raspberry\Look\Application\DetailLookUrl\DetailLookUrlUseCase;
+use Raspberry\Look\Application\HowFit\HowFitInterface;
+use Raspberry\Look\Application\HowFit\HowFitUseCase;
 use Raspberry\Look\Application\SelectionLook\SelectionLookUseCase;
 use Raspberry\Look\Application\SelectionLook\SelectionLookInterface;
+use Raspberry\Look\Application\StylesUser\StylesUserInterface;
+use Raspberry\Look\Application\StylesUser\StylesUserUseCase;
 use Raspberry\Look\Domain\Event\EventRepositoryInterface;
 use Raspberry\Look\Domain\Look\LookRepositoryInterface;
 use Raspberry\Look\Domain\Look\Services\LookUrlGenerator\LookUrlGeneratorServiceInterface;
 use Raspberry\Look\Domain\Look\Services\LookUrlGenerator\LookUrlGeneratorService;
+use Raspberry\Look\Domain\Style\StyleRepositoryInterface;
+use Raspberry\Look\Domain\User\UserRepositoryInterface;
 use Raspberry\Look\Infrastructure\Repositories\EventRepository;
 use Raspberry\Look\Infrastructure\Repositories\LookRepository;
+use Raspberry\Look\Infrastructure\Repositories\StyleRepository;
+use Raspberry\Look\Infrastructure\Repositories\UserRepository;
 
 class LookServiceProvider extends ServiceProvider
 {
@@ -29,6 +37,10 @@ class LookServiceProvider extends ServiceProvider
         $this->app->bind(LookUrlGeneratorServiceInterface::class, LookUrlGeneratorService::class);
         $this->app->bind(DetailLookUrlInterface::class, DetailLookUrlUseCase::class);
         $this->app->bind(EventRepositoryInterface::class, EventRepository::class);
+        $this->app->bind(StyleRepositoryInterface::class, StyleRepository::class);
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(StylesUserInterface::class, StylesUserUseCase::class);
+        $this->app->bind(HowFitInterface::class, HowFitUseCase::class);
     }
 
     /**

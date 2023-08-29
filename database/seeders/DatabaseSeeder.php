@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use App\Models\Clothes;
 use App\Models\Event;
 use App\Models\Look;
+use App\Models\Style;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -16,8 +17,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $clothes = Clothes::factory(100)->create();
         $events = Event::factory(30)->create();
+        $styles = Style::factory(15)->create();
+
+        $clothes = Clothes::factory(100)
+            ->create()
+            ->each(fn (Clothes $clothes) => $clothes->styles()->attach($styles->random(3)));
 
         User::factory(10)
             ->create()

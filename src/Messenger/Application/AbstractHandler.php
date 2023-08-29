@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Raspberry\Messenger\Application;
 
 use Raspberry\Messenger\Domain\Context\ContextInterface;
+use Raspberry\Messenger\Domain\Context\Request\CallbackData\CallbackDataInterface;
 use Raspberry\Messenger\Domain\Context\Request\RequestInterface;
 use Raspberry\Messenger\Domain\Context\User\UserInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\InlineButtonFactoryInterface;
@@ -57,5 +58,10 @@ abstract class AbstractHandler implements HandlerInterface
         $this->replyButtonFactory = $guiFactory->makeReplyButtonFactory();
         $this->inlineKeyboardFactory = $guiFactory->makeInlineKeyboardFactory();
         $this->replyKeyboardFactory = $guiFactory->makeReplyKeyboardFactory();
+    }
+
+    protected function getCallbackData(): CallbackDataInterface
+    {
+        return $this->contextRequest->getCallbackData();
     }
 }
