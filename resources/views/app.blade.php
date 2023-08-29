@@ -11,8 +11,15 @@
     @vite(['resources/css/app.scss', 'resources/js/app.ts'])
 </head>
 <body>
+@php
+    if ($user = auth()->user()) {
+        $apiToken = $user->api_token;
+    } else {
+        $apiToken = request()->get('api_token', '');
+    }
+@endphp
 <div id="app">
-    <router-view :user="{id: 1}"></router-view>
+    <router-view api-token="{{ $apiToken }}"></router-view>
 </div>
 </body>
 </html>

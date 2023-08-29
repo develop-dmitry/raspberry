@@ -19,11 +19,11 @@ class AddClothesController extends AbstractController
     ) {
     }
 
-    public function __invoke(AddClothesPostRequest $request, int $userId): JsonResponse
+    public function __invoke(AddClothesPostRequest $request): JsonResponse
     {
         $clothesId = (int) $request->validated('clothes_id');
 
-        $addClothesRequest = new AddClothesRequest($userId, $clothesId);
+        $addClothesRequest = new AddClothesRequest(auth()->user()->id, $clothesId);
 
         try {
             $this->addClothes->execute($addClothesRequest);

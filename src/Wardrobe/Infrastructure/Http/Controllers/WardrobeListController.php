@@ -17,9 +17,9 @@ class WardrobeListController extends AbstractController
     ) {
     }
 
-    public function __invoke(int $userId): JsonResponse
+    public function __invoke(): JsonResponse
     {
-        $wardrobeListRequest = new WardrobeListRequest($userId);
+        $wardrobeListRequest = new WardrobeListRequest(auth()->user()->id);
 
         try {
             $response = $this->wardrobeList->execute($wardrobeListRequest);

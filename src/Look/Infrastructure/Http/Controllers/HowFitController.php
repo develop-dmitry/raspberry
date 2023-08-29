@@ -8,7 +8,6 @@ use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Look\Application\HowFit\DTO\HowFitRequest;
 use Raspberry\Look\Application\HowFit\HowFitInterface;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;
-use Raspberry\Look\Infrastructure\Http\Requests\HowFitPostRequest;
 
 class HowFitController extends AbstractController
 {
@@ -21,12 +20,10 @@ class HowFitController extends AbstractController
     ) {
     }
 
-    public function __invoke(int $lookId, HowFitPostRequest $request): JsonResponse
+    public function __invoke(int $lookId): JsonResponse
     {
-        $userId = (int) $request->validated('user_id');
-
         try {
-            $howFitResponse = $this->howFit->execute(new HowFitRequest($userId, $lookId));
+            $howFitResponse = $this->howFit->execute(new HowFitRequest(auth()->user()->id, $lookId));
 
             return response()->json([
                 'success' => true,

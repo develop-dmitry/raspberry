@@ -10,14 +10,13 @@ page.wardrobe-offers
 </template>
 
 <script lang="ts">
-import {defineComponent, PropType} from "vue";
+import {defineComponent} from "vue";
 import Page from "../components/page/Page.vue";
 import PageTitle from "../components/page/page-title/PageTitle.vue";
 import {mapActions, mapState} from "pinia";
 import {useOffersStore} from "../stores/wardrobe/OffersStore.ts";
 import WardrobeClothesCard from "../components/wardrobe/wardrobe-clothes-card/WardrobeClothesCard.vue";
 import {useWardrobeStore} from "../stores/wardrobe/WardrobeStore.ts";
-import {User} from "../stores/wardrobe/types/enitities.ts";
 
 export default defineComponent({
     name: 'WardrobeOffers',
@@ -37,8 +36,8 @@ export default defineComponent({
     },
 
     props: {
-        user: {
-            type: Object as PropType<User>,
+        apiToken: {
+            type: String,
             required: true
         }
     },
@@ -51,12 +50,12 @@ export default defineComponent({
         ...mapActions(useOffersStore, {
             fetchOffers: 'fetchOffers',
             loadMoreOffers: 'loadMoreOffers',
-            setOffersUser: 'setUser'
+            setOffersApiToken: 'setApiToken'
         }),
 
         ...mapActions(useWardrobeStore, {
             fetchWardrobe: 'fetchWardrobe',
-            setWardrobeUser: 'setUser'
+            setWardrobeApiToken: 'setApiToken'
         })
     },
 
@@ -80,8 +79,8 @@ export default defineComponent({
     },
 
     created() {
-        this.setOffersUser(this.user);
-        this.setWardrobeUser(this.user)
+        this.setOffersApiToken(this.apiToken);
+        this.setWardrobeApiToken(this.apiToken);
 
         this.fetchOffers(1, this.count);
         this.fetchWardrobe();

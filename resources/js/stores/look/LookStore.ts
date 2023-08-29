@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia';
-import {Look, User} from "./types/enitites.ts";
+import {Look} from "./types/enitites.ts";
 import axios, {AxiosResponse} from "axios";
 import {DetailLookResponse, HowFitResponse} from "./types/responses.ts";
 
@@ -7,9 +7,9 @@ export const useLookStore = defineStore('look', {
 
     state: () => {
         return {
-            user: null as unknown as User,
             looks: [] as Look[],
-            lookFits: {} as { [id: number]: number }
+            lookFits: {} as { [id: number]: number },
+            apiToken: null as unknown as string
         };
     },
 
@@ -34,12 +34,18 @@ export const useLookStore = defineStore('look', {
 
         howFit: (state) => {
             return (id: number): number|null => state.lookFits[id] ?? null;
+        },
+
+        requestData: (state) => {
+            return (data: unknown = {}) => {
+                return Object.assign({ api_token: state.apiToken }, data);
+            }
         }
     },
 
     actions: {
         async fetchDetailLook(id: number): Promise<void> {
-            const response: AxiosResponse = await axios.post(this.detailRequestUrl(id));
+            const response: AxiosResponse = await axios.post(this.detailRequestUrl(id), this.requestData());
             const data: DetailLookResponse = response.data;
 
             if (response.data.success) {
@@ -49,13 +55,11 @@ export const useLookStore = defineStore('look', {
         },
 
         async fetchHowFit(id: number): Promise<void> {
-            if (!this.user) {
+            if (!this.apiToken) {
                 throw new Error('Unknown user');
             }
 
-            const response: AxiosResponse = await axios.post(this.howFitRequestUrl(id), {
-                user_id: this.user.id
-            });
+            const response: AxiosResponse = await axios.post(this.howFitRequestUrl(id), this.requestData());
             const data: HowFitResponse = response.data;
 
             if (data.success) {
@@ -63,8 +67,8 @@ export const useLookStore = defineStore('look', {
             }
         },
 
-        setUser(user: User): void {
-            this.user = user;
+        setApiToken(apiToken: string): void {
+            this.apiToken = apiToken;
         }
     }
 });

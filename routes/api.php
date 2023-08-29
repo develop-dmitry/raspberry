@@ -26,16 +26,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function () {
-    Route::prefix('wardrobe')->group(function () {
-        Route::prefix('{user_id}')->group(function () {
-            Route::post('add', AddClothesController::class);
-            Route::post('remove', RemoveClothesController::class);
-            Route::post('offers', WardrobeOffersController::class);
-            Route::post('/', WardrobeListController::class);
-        });
+    Route::middleware('auth:api')->prefix('wardrobe')->group(function () {
+        Route::post('add', AddClothesController::class);
+        Route::post('remove', RemoveClothesController::class);
+        Route::post('offers', WardrobeOffersController::class);
+        Route::post('/', WardrobeListController::class);
     });
 
-    Route::prefix('look')->group(function () {
+    Route::middleware('auth:api')->prefix('look')->group(function () {
         Route::prefix('{look_id}')->group(function () {
             Route::post('/', DetailLookController::class);
             Route::post('how-fit', HowFitController::class);

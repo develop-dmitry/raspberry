@@ -16,11 +16,11 @@ class WardrobeOffersController extends AbstractController
     ) {
     }
 
-    public function __invoke(WardrobeOffersPostRequest $request, int $userId): JsonResponse
+    public function __invoke(WardrobeOffersPostRequest $request): JsonResponse
     {
         $page = $request->validated('page');
         $count = $request->validated('count');
-        $wardrobeOffersRequest = new WardrobeOffersRequest($userId, $page, $count);
+        $wardrobeOffersRequest = new WardrobeOffersRequest(auth()->user()->id, $page, $count);
 
         try {
             $wardrobeOffersResponse = $this->wardrobeOffers->execute($wardrobeOffersRequest);
