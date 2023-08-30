@@ -31,7 +31,7 @@ class TelegramMessengerRegisterUseCase implements MessengerRegisterInterface
     {
         $user = $this->createUser($request->getMessengerId());
 
-        return new MessengerRegisterResponse($user->getId()->getValue());
+        return new MessengerRegisterResponse($user->getId()->getValue(), $user->getApiToken()->getHashValue());
     }
 
     /**

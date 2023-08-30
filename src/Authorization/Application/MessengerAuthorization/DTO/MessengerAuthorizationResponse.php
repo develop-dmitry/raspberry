@@ -9,9 +9,11 @@ class MessengerAuthorizationResponse
 
     /**
      * @param int $userId
+     * @param string $apiToken
      */
     public function __construct(
-        protected int $userId
+        protected int $userId,
+        protected string $apiToken
     ) {
     }
 
@@ -21,5 +23,13 @@ class MessengerAuthorizationResponse
     public function getUserId(): int
     {
         return $this->userId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiToken(): string
+    {
+        return $this->apiToken;
     }
 }

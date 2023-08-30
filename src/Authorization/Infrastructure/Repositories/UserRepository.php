@@ -12,6 +12,7 @@ use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
 use Raspberry\Common\Exceptions\UserExceptions\UserNotFoundException;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Common\Values\Id\Id;
+use Raspberry\Common\Values\Token\Token;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -35,7 +36,10 @@ class UserRepository implements UserRepositoryInterface
      */
     public function createUser(UserInterface $user): UserInterface
     {
-        $userModel = UserModel::create(['telegram_id' => $user->getTelegramId()?->getValue()]);
+        $userModel = UserModel::create([
+            'telegram_id' => $user->getTelegramId()?->getValue(),
+            'api_token' => $user->getApiToken()->getValue()
+        ]);
 
         if (!$userModel->exists()) {
             throw new FailedSaveUserException();
@@ -53,7 +57,8 @@ class UserRepository implements UserRepositoryInterface
     {
         return User::make(
             new Id($user->id),
-            ($user->telegram_id) ? new Id($user->telegram_id) : null
+            ($user->telegram_id) ? new Id($user->telegram_id) : null,
+            new Token($user->api_token)
         );
     }
 }

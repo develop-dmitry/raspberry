@@ -22,7 +22,11 @@ class LookUrlGeneratorService implements LookUrlGeneratorServiceInterface
     public function makeDetailLookUrl(LookInterface $look, array $query = []): UrlInterface
     {
         $path = Str::replace('{id}', $look->getId()->getValue(), $this->pattern);
-        $url = $this->getDomain() . $path . '?' . http_build_query($query);
+        $url = $this->getDomain() . $path;
+
+        if (!empty($query)) {
+            $url .= http_build_query($query);
+        }
 
         try {
             return new Url($url);
