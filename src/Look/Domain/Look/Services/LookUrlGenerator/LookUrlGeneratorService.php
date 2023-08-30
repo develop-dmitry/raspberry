@@ -14,16 +14,15 @@ use Raspberry\Look\Domain\Look\Services\LookUrlGenerator\Exceptions\FailedUrlGen
 class LookUrlGeneratorService implements LookUrlGeneratorServiceInterface
 {
 
-    protected string $pattern = 'look/{id}';
+    protected string $pattern = '/look/{id}';
 
     /**
-     * @param LookInterface $look
      * @inheritDoc
      */
-    public function makeDetailLookUrl(LookInterface $look): UrlInterface
+    public function makeDetailLookUrl(LookInterface $look, array $query = []): UrlInterface
     {
         $path = Str::replace('{id}', $look->getId()->getValue(), $this->pattern);
-        $url = "{$this->getDomain()}/$path";
+        $url = $this->getDomain() . $path . '?' . http_build_query($query);
 
         try {
             return new Url($url);

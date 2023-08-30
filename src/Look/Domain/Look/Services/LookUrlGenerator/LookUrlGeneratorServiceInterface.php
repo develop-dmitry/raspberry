@@ -13,8 +13,9 @@ interface LookUrlGeneratorServiceInterface
 
     /**
      * @param LookInterface $look
+     * @param array $query
      * @return UrlInterface
      * @throws FailedUrlGenerateException
      */
-    public function makeDetailLookUrl(LookInterface $look): UrlInterface;
+    public function makeDetailLookUrl(LookInterface $look, array $query = []): UrlInterface;
 }
