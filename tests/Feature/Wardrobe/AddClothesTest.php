@@ -14,15 +14,14 @@ class AddClothesTest extends TestCase
 {
     use DatabaseTransactions;
 
-    protected string $uri = '/api/v1/wardrobe/{user_id}/add';
+    protected string $uri = '/api/v1/wardrobe/add';
 
     public function testSuccessAddClothes(): void
     {
         $user = User::factory(1)->create()->first();
         $clothes = Clothes::factory(1)->create()->first();
-        $uri = Str::replace('{user_id}', $user->id, $this->uri);
 
-        $response = $this->post($uri, ['clothes_id' => $clothes->id]);
+        $response = $this->post($this->uri, ['clothes_id' => $clothes->id, 'api_token' => $user->api_token]);
 
         $response->assertStatus(200);
         $this->assertTrue($response->json('success'));
@@ -32,14 +31,13 @@ class AddClothesTest extends TestCase
     {
         $user = User::factory(1)->create()->first();
         $clothes = Clothes::factory(1)->create()->first();
-        $uri = Str::replace('{user_id}', $user->id, $this->uri);
 
-        $response = $this->post($uri, ['clothes_id' => $clothes->id]);
+        $response = $this->post($this->uri, ['clothes_id' => $clothes->id, 'api_token' => $user->api_token]);
 
         $response->assertStatus(200);
         $this->assertTrue($response->json('success'));
 
-        $response = $this->post($uri, ['clothes_id' => $clothes->id]);
+        $response = $this->post($this->uri, ['clothes_id' => $clothes->id, 'api_token' => $user->api_token]);
 
         $response->assertStatus(200);
         $this->assertFalse($response->json('success'));
@@ -49,9 +47,8 @@ class AddClothesTest extends TestCase
     {
         $user = User::factory(1)->create()->first();
         $clothes = Clothes::all()->last();
-        $uri = Str::replace('{user_id}', $user->id, $this->uri);
 
-        $response = $this->post($uri, ['clothes_id' => $clothes->id + 100]);
+        $response = $this->post($this->uri, ['clothes_id' => $clothes->id + 100, 'api_token' => $user->api_token]);
 
         $response->assertStatus(200);
         $this->assertFalse($response->json('success'));
@@ -59,13 +56,11 @@ class AddClothesTest extends TestCase
 
     public function testAddClothesForNonExistentUser(): void
     {
-        $user = User::all()->last();
         $clothes = Clothes::all()->last();
-        $uri = Str::replace('{user_id}', $user->id + 100, $this->uri);
 
-        $response = $this->post($uri, ['clothes_id' => $clothes->id]);
+        $response = $this->withHeader('Accept', 'application/json')
+            ->post($this->uri, ['clothes_id' => $clothes->id, 'api_token' => '']);
 
-        $response->assertStatus(200);
-        $this->assertFalse($response->json('success'));
+        $response->assertStatus(401);
     }
 }

@@ -14,16 +14,15 @@ class WardrobeListTest extends TestCase
 {
     use DatabaseTransactions;
 
-    protected string $uri = '/api/v1/wardrobe/{user_id}';
+    protected string $uri = '/api/v1/wardrobe/';
 
     public function testWardrobeForExistentUser(): void
     {
         $clothes = Clothes::factory(10)->create();
         $user = User::factory(1)->create()->first();
         $user->clothes()->sync($clothes);
-        $uri = Str::replace('{user_id}', $user->id, $this->uri);
 
-        $response = $this->post($uri);
+        $response = $this->post($this->uri, ['api_token' => $user->api_token]);
 
         $response->assertStatus(200);
         $this->assertTrue($response->json('success'));
@@ -31,13 +30,10 @@ class WardrobeListTest extends TestCase
 
     public function testWardrobeForNonExistentUser(): void
     {
-        $user = User::all()->last();
-        $uri = Str::replace('{user_id}', $user->id + 100, $this->uri);
+        $response = $this->withHeader('Accept', 'application/json')
+            ->post($this->uri, ['api_token' => '']);
 
-        $response = $this->post($uri);
-
-        $response->assertStatus(200);
-        $this->assertFalse($response->json('success'));
+        $response->assertStatus(401);
     }
 
     public function testWardrobeForEmpty(): void
@@ -45,9 +41,8 @@ class WardrobeListTest extends TestCase
         $clothes = Clothes::factory(10)->create();
         $user = User::factory(1)->create()->first();
         $user->clothes()->sync($clothes);
-        $uri = Str::replace('{user_id}', $user->id, $this->uri);
 
-        $response = $this->post($uri);
+        $response = $this->post($this->uri, ['api_token' => $user->api_token]);
 
         $response->assertStatus(200);
         $this->assertNotEmpty($response->json('items'));

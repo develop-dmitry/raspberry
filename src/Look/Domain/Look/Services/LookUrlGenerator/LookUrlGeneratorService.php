@@ -25,7 +25,7 @@ class LookUrlGeneratorService implements LookUrlGeneratorServiceInterface
         $url = $this->getDomain() . $path;
 
         if (!empty($query)) {
-            $url .= http_build_query($query);
+            $url .= '?' . http_build_query($query);
         }
 
         try {

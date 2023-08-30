@@ -108,7 +108,7 @@ class SelectionLookHandler extends AbstractHandler
      */
     protected function makeUrl(LookItem $item): string
     {
-        $request = new DetailLookUrlRequest($item->getId());
+        $request = new DetailLookUrlRequest($item->getId(), ['api_token' => $this->apiToken]);
 
         return $this->detailLookUrl->execute($request)->getUrl();
     }
