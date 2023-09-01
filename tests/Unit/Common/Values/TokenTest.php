@@ -14,13 +14,4 @@ class TokenTest extends TestCase
         $this->expectNotToPerformAssertions();
         new Token(Str::random(60));
     }
-
-
-    public function testGetHashToken(): void
-    {
-        $value = Str::random(60);
-        $token = new Token($value);
-
-        $this->assertEquals(hash('sha256', $value), $token->getHashValue());
-    }
 }

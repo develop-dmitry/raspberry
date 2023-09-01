@@ -9,9 +9,4 @@ interface TokenInterface
      * @return string
      */
     public function getValue(): string;
-
-    /**
-     * @return string
-     */
-    public function getHashValue(): string;
 }

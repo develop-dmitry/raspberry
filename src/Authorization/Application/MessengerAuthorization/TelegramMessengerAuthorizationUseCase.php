@@ -26,6 +26,6 @@ class TelegramMessengerAuthorizationUseCase implements MessengerAuthorizationInt
     {
         $user = $this->userRepository->getUserByTelegram($request->getMessengerId());
 
-        return new MessengerAuthorizationResponse($user->getId()->getValue(), $user->getApiToken()->getHashValue());
+        return new MessengerAuthorizationResponse($user->getId()->getValue(), $user->getApiToken()->getValue());
     }
 }

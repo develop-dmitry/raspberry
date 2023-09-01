@@ -21,12 +21,4 @@ class Token implements TokenInterface
     {
         return $this->value;
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function getHashValue(): string
-    {
-        return hash('sha256', $this->value);
-    }
 }
