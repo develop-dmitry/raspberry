@@ -7,6 +7,8 @@ use Raspberry\Wardrobe\Application\AddClothes\AddClothesInterface;
 use Raspberry\Wardrobe\Application\AddClothes\AddClothesUseCase;
 use Raspberry\Wardrobe\Application\RemoveClothes\RemoveClothesInterface;
 use Raspberry\Wardrobe\Application\RemoveClothes\RemoveClothesUseCase;
+use Raspberry\Wardrobe\Application\UrlGenerator\UrlGeneratorInterface;
+use Raspberry\Wardrobe\Application\UrlGenerator\UrlGeneratorUseCase;
 use Raspberry\Wardrobe\Application\WardrobeList\WardrobeListInterface;
 use Raspberry\Wardrobe\Application\WardrobeList\WardrobeListUseCase;
 use Raspberry\Wardrobe\Application\WardrobeOffers\WardrobeOffersInterface;
@@ -35,6 +37,7 @@ class WardrobeServiceProvider extends ServiceProvider
         $this->app->bind(WardrobeOffersInterface::class, WardrobeOffersUseCase::class);
         $this->app->bind(WardrobeListInterface::class, WardrobeListUseCase::class);
         $this->app->bind(UrlGeneratorServiceInterface::class, UrlGeneratorService::class);
+        $this->app->bind(UrlGeneratorInterface::class, UrlGeneratorUseCase::class);
     }
 
     /**
