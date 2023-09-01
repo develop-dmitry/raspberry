@@ -22,6 +22,12 @@ interface ReplyButtonFactoryInterface
     public function setSendLocation(OptionInterface $sendLocation): self;
 
     /**
+     * @param OptionInterface $webApp
+     * @return self
+     */
+    public function setWebApp(OptionInterface $webApp): self;
+
+    /**
      * @return ReplyButtonInterface
      */
     public function make(): ReplyButtonInterface;

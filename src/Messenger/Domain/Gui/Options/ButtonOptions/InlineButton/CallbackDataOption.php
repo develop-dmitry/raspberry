@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Domain\Gui\Options\InlineButton;
+namespace Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\InlineButton;
 
 use Illuminate\Database\Eloquent\Casts\Json;
 use Raspberry\Messenger\Domain\Gui\Options\OptionInterface;

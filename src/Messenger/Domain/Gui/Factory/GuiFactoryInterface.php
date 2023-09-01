@@ -12,11 +12,6 @@ interface GuiFactoryInterface
     public function makeInlineButtonFactory(): InlineButtonFactoryInterface;
 
     /**
-     * @return InlineButtonOptionFactoryInterface
-     */
-    public function makeInlineButtonOptionFactory(): InlineButtonOptionFactoryInterface;
-
-    /**
      * @return InlineKeyboardFactoryInterface
      */
     public function makeInlineKeyboardFactory(): InlineKeyboardFactoryInterface;
@@ -27,17 +22,7 @@ interface GuiFactoryInterface
     public function makeReplyButtonFactory(): ReplyButtonFactoryInterface;
 
     /**
-     * @return ReplyButtonOptionFactoryInterface
-     */
-    public function makeReplyButtonOptionFactory(): ReplyButtonOptionFactoryInterface;
-
-    /**
      * @return ReplyKeyboardFactoryInterface
      */
     public function makeReplyKeyboardFactory(): ReplyKeyboardFactoryInterface;
-
-    /**
-     * @return ReplyKeyboardOptionFactoryInterface
-     */
-    public function makeReplyKeyboardOptionFactory(): ReplyKeyboardOptionFactoryInterface;
 }

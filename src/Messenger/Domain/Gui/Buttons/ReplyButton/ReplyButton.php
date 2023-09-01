@@ -13,7 +13,8 @@ class ReplyButton implements ReplyButtonInterface
 
     public function __construct(
         protected string $text,
-        protected OptionInterface $sendLocation
+        protected OptionInterface $sendLocation,
+        protected OptionInterface $webApp
     ) {
     }
 
@@ -23,5 +24,13 @@ class ReplyButton implements ReplyButtonInterface
     public function getSendLocation(): OptionInterface
     {
         return $this->sendLocation;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getWebApp(): OptionInterface
+    {
+        return $this->webApp;
     }
 }

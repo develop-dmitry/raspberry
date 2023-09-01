@@ -17,4 +17,9 @@ interface ReplyButtonInterface
      * @return OptionInterface
      */
     public function getSendLocation(): OptionInterface;
+
+    /**
+     * @return OptionInterface
+     */
+    public function getWebApp(): OptionInterface;
 }

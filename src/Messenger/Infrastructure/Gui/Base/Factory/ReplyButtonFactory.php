@@ -16,6 +16,8 @@ class ReplyButtonFactory implements ReplyButtonFactoryInterface
 
     protected ?OptionInterface $sendLocation;
 
+    protected ?OptionInterface $webApp;
+
     public function __construct()
     {
         $this->reset();
@@ -42,9 +44,18 @@ class ReplyButtonFactory implements ReplyButtonFactoryInterface
     /**
      * @inheritDoc
      */
+    public function setWebApp(OptionInterface $webApp): ReplyButtonFactoryInterface
+    {
+        $this->webApp = $webApp;
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function make(): ReplyButtonInterface
     {
-        $button = new ReplyButton($this->getText(), $this->getSendLocation());
+        $button = new ReplyButton($this->getText(), $this->getSendLocation(), $this->getWebApp());
 
         $this->reset();
 
@@ -61,9 +72,15 @@ class ReplyButtonFactory implements ReplyButtonFactoryInterface
         return $this->sendLocation ?: new NullOption();
     }
 
+    protected function getWebApp(): OptionInterface
+    {
+        return $this->webApp ?: new NullOption();
+    }
+
     protected function reset(): void
     {
         $this->text = '';
         $this->sendLocation = null;
+        $this->webApp = null;
     }
 }
