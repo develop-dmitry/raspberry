@@ -12,11 +12,10 @@ use Raspberry\Messenger\Application\LookBot\Enums\Action;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;
-use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\InlineKeyboardInterface;
-use Raspberry\Messenger\Domain\Gui\Options\InlineButton\CallbackDataOption;
+use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\InlineButton\CallbackDataOption;
 use Raspberry\Messenger\Domain\Gui\Options\OptionInterface;
-use Raspberry\Messenger\Domain\Handlers\HandlerType;
 use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
+use Raspberry\Messenger\Domain\Handlers\HandlerType;
 
 class EventListHandler extends AbstractPaginationHandler
 {

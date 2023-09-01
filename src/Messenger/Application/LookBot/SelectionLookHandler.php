@@ -21,10 +21,9 @@ use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\InlineKeyboardInterface;
-use Raspberry\Messenger\Domain\Gui\Options\InlineButton\WebAppOption;
-use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
-use Raspberry\Messenger\Domain\Handlers\HandlerType;
+use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\WebAppOption;
 use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
+use Raspberry\Messenger\Domain\Handlers\HandlerType;
 
 class SelectionLookHandler extends AbstractHandler
 {
@@ -96,7 +95,6 @@ class SelectionLookHandler extends AbstractHandler
      */
     protected function makeButton(LookItem $item): InlineButtonInterface
     {
-        $this->logger->debug('Look url', ['url' => $this->makeUrl($item)]);
         return $this->inlineButtonFactory
             ->setText($item->getName())
             ->setWebApp(new WebAppOption($this->makeUrl($item)))

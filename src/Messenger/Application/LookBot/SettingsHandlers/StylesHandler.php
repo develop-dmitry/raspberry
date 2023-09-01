@@ -17,11 +17,11 @@ use Raspberry\Messenger\Application\AbstractPaginationHandler;
 use Raspberry\Messenger\Application\AuthorizeTrait;
 use Raspberry\Messenger\Application\LookBot\Enums\Action;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
+use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;
-use Raspberry\Messenger\Domain\Gui\Options\InlineButton\CallbackDataOption;
+use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\InlineButton\CallbackDataOption;
 use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
 use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
-use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerType;
 
 class StylesHandler extends AbstractPaginationHandler

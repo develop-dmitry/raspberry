@@ -77,7 +77,8 @@ class TelegramGui extends AbstractGui
     {
         return new KeyboardButton(
             $button->getText(),
-            request_location: $button->getSendLocation()->getValue()
+            request_location: $button->getSendLocation()->getValue(),
+            web_app: ($button->getWebApp()->getValue()) ? new WebAppInfo($button->getWebApp()->getValue()) : null
         );
     }
 
@@ -105,7 +106,7 @@ class TelegramGui extends AbstractGui
             $button->getText(),
             url: $button->getUrl()->getValue(),
             callback_data: $button->getCallbackData()->getValue(),
-            web_app: new WebAppInfo($button->getWebApp()->getValue() ?: '')
+            web_app: ($button->getWebApp()->getValue()) ? new WebAppInfo($button->getWebApp()->getValue()) : null
         );
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Domain\Style;
 
-use Raspberry\Common\Pagination\PaginationInterface;
+use Raspberry\Common\Base\Pagination\PaginationInterface;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Look\Domain\Style\Exceptions\StyleNotFoundException;
 

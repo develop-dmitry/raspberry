@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Raspberry\Look\Domain\Look\Services\LookUrlGenerator;
 
 use Illuminate\Support\Str;
+use Raspberry\Common\Base\UrlGenerator\AbstractUrlGenerator;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Common\Values\Url\Url;
 use Raspberry\Common\Values\Url\UrlInterface;
 use Raspberry\Look\Domain\Look\LookInterface;
 use Raspberry\Look\Domain\Look\Services\LookUrlGenerator\Exceptions\FailedUrlGenerateException;
 
-class LookUrlGeneratorService implements LookUrlGeneratorServiceInterface
+class LookUrlGeneratorService extends AbstractUrlGenerator implements LookUrlGeneratorServiceInterface
 {
 
     protected string $pattern = '/look/{id}';
@@ -33,14 +34,5 @@ class LookUrlGeneratorService implements LookUrlGeneratorServiceInterface
         } catch (InvalidValueException $exception) {
             throw new FailedUrlGenerateException($exception->getMessage());
         }
-    }
-
-    protected function getDomain(): string
-    {
-        if (config('app.env') === 'production') {
-            return config('app.url');
-        }
-
-        return config('app.asset_url');
     }
 }

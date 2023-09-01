@@ -9,17 +9,16 @@ enum Menu
 
     case SelectionLook;
 
+    case Wardrobe;
+
     case Settings;
 
     public function getText(): string
     {
-        switch ($this) {
-            case self::SelectionLook:
-                return 'Подобрать образ';
-            case self::Settings:
-                return 'Настройки';
-        }
-
-        return 'Без названия';
+        return match ($this) {
+            self::SelectionLook => 'Подобрать образ',
+            self::Wardrobe => 'Гардероб',
+            self::Settings => 'Настройки'
+        };
     }
 }
