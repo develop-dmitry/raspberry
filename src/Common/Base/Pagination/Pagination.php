@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Common\Pagination;
+namespace Raspberry\Common\Base\Pagination;
 
 class Pagination implements PaginationInterface
 {
