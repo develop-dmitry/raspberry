@@ -35,11 +35,15 @@ class StartHandler extends AbstractHandler
      */
     protected function makeMenu(): ReplyKeyboardInterface
     {
-        return $this->replyKeyboardFactory
+        $keyboard = $this->replyKeyboardFactory
             ->setResize(new ResizeOption(true))
-            ->make()
-            ->addRow($this->makeMenuButton(Menu::SelectionLook->getText()))
-            ->addRow($this->makeMenuButton(Menu::Settings->getText()));
+            ->make();
+
+        foreach (Menu::cases() as $item) {
+            $keyboard->addRow($this->makeMenuButton($item->getText()));
+        }
+
+        return $keyboard;
     }
 
     protected function makeMenuButton(string $text): ReplyButtonInterface

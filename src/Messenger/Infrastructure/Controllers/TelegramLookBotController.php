@@ -21,6 +21,7 @@ use Raspberry\Messenger\Application\LookBot\SettingsHandlers\StylesHandler;
 use Raspberry\Messenger\Application\LookBot\StartHandler;
 use Raspberry\Messenger\Application\LookBot\TemperatureHandlers\InputTemperatureHandler;
 use Raspberry\Messenger\Application\LookBot\TemperatureHandlers\SaveTemperatureHandler;
+use Raspberry\Messenger\Application\LookBot\WardrobeHandlers\WardrobeHandler;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainerInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
@@ -105,7 +106,20 @@ class TelegramLookBotController extends Controller
                 SettingsMenu::Back->getText(),
                 HandlerType::Text,
                 app(StartHandler::class)
+            )
+            ->addHandler(
+                Menu::Wardrobe->getText(),
+                HandlerType::Text,
+                $this->makeWardrobeHandler()
             );
+    }
+
+    protected function makeWardrobeHandler(): HandlerInterface
+    {
+        return app(WardrobeHandler::class, [
+            'messengerAuthorization' => $this->messengerAuthorization,
+            'messengerRegister' => $this->messengerRegister
+        ]);
     }
 
     protected function makeStylesHandler(): HandlerInterface
