@@ -23,7 +23,7 @@ class HowFitTest extends TestCase
         $look = Look::factory(1)->create()->first();
         $look->clothes()->sync($clothes);
 
-        $response = $this->post($this->getUrl($look->id), ['user_id' => $user->id]);
+        $response = $this->post($this->getUrl($look->id), ['api_token' => $user->api_token]);
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -40,13 +40,10 @@ class HowFitTest extends TestCase
         $look = Look::factory(1)->create()->first();
         $look->clothes()->sync($clothes);
 
-        $response = $this->post($this->getUrl($look->id), ['user_id' => User::all()->last()->id + 100]);
+        $response = $this->withHeader('Accept', 'application/json')
+            ->post($this->getUrl($look->id), ['api_token' => '']);
 
-        $response->assertStatus(200);
-        $response->assertJsonStructure([
-            'success',
-            'message'
-        ]);
+        $response->assertStatus(401);
     }
 
     public function testHowFitForNonExistentLook(): void
@@ -55,7 +52,7 @@ class HowFitTest extends TestCase
         $user = User::factory(1)->create()->first();
         $user->styles()->sync($styles);
 
-        $response = $this->post($this->getUrl(Look::all()->last()->id + 100), ['user_id' => $user->id]);
+        $response = $this->post($this->getUrl(Look::all()->last()->id + 100), ['api_token' => $user->api_token]);
 
         $response->assertStatus(200);
         $response->assertJsonStructure([

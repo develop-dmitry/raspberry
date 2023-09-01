@@ -33,8 +33,39 @@ class LookUrlGeneratorServiceTest extends TestCase
         $url = $urlGenerator->makeDetailLookUrl($look);
 
         $this->assertEquals(
-            config('app.asset_url') . '/look/1',
+            $this->getDomain() . '/look/1',
             $url->getValue()
         );
+    }
+
+    public function testDetailUrlGenerateWithQuery(): void
+    {
+        $look = new Look(
+            new Id(1),
+            new Name('test'),
+            new Slug('test'),
+            new Photo('/test.png'),
+            [],
+            new Temperature(-10),
+            new Temperature(10),
+            []
+        );
+        $urlGenerator = $this->app->make(LookUrlGeneratorService::class);
+
+        $url = $urlGenerator->makeDetailLookUrl($look, ['param1' => 'value1', 'param2' => 'value2']);
+
+        $this->assertEquals(
+            $this->getDomain() . '/look/1?param1=value1&param2=value2',
+            $url->getValue()
+        );
+    }
+
+    protected function getDomain(): string
+    {
+        if (config('app.env') === 'production') {
+            return config('app.url');
+        }
+
+        return config('app.asset_url');
     }
 }

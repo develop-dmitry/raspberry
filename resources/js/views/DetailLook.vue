@@ -31,8 +31,8 @@ page.detail-look
 </template>
 
 <script lang="ts">
-import {defineComponent, PropType} from "vue";
-import {Look, User} from "../stores/look/types/enitites.ts";
+import {defineComponent} from "vue";
+import {Look} from "../stores/look/types/enitites.ts";
 import {mapActions, mapState} from "pinia";
 import {useLookStore} from "../stores/look/LookStore.ts";
 import Page from "../components/page/Page.vue";
@@ -63,8 +63,8 @@ export default defineComponent({
     },
 
     props: {
-        user: {
-            type: Object as PropType<User>,
+        apiToken: {
+            type: String,
             required: true
         }
     },
@@ -100,12 +100,12 @@ export default defineComponent({
         ...mapActions(useLookStore, {
             fetchDetailLook: 'fetchDetailLook',
             fetchHowFit: 'fetchHowFit',
-            setUser: 'setUser'
+            setApiToken: 'setApiToken'
         })
     },
 
     mounted() {
-        this.setUser(this.user);
+        this.setApiToken(this.apiToken);
 
         if (!this.look) {
             this.fetchDetailLook(this.id)

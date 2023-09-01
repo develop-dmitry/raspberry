@@ -96,6 +96,7 @@ class SelectionLookHandler extends AbstractHandler
      */
     protected function makeButton(LookItem $item): InlineButtonInterface
     {
+        $this->logger->debug('Look url', ['url' => $this->makeUrl($item)]);
         return $this->inlineButtonFactory
             ->setText($item->getName())
             ->setWebApp(new WebAppOption($this->makeUrl($item)))
@@ -108,7 +109,7 @@ class SelectionLookHandler extends AbstractHandler
      */
     protected function makeUrl(LookItem $item): string
     {
-        $request = new DetailLookUrlRequest($item->getId());
+        $request = new DetailLookUrlRequest($item->getId(), ['api_token' => $this->apiToken]);
 
         return $this->detailLookUrl->execute($request)->getUrl();
     }

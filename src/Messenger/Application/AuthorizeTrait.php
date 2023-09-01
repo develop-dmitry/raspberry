@@ -16,6 +16,8 @@ trait AuthorizeTrait
 {
     protected int $userId;
 
+    protected string $apiToken;
+
     /**
      * @param int|null $messengerId
      * @return void
@@ -50,6 +52,7 @@ trait AuthorizeTrait
         $authResponse = $this->messengerAuthorization->execute($authRequest);
 
         $this->userId = $authResponse->getUserId();
+        $this->apiToken = $authResponse->getApiToken();
     }
 
     /**
@@ -64,5 +67,6 @@ trait AuthorizeTrait
         $registerResponse = $this->messengerRegister->execute($registerRequest);
 
         $this->userId = $registerResponse->getUserId();
+        $this->apiToken = $registerResponse->getApiToken();
     }
 }

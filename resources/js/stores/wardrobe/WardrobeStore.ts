@@ -1,43 +1,49 @@
 import {defineStore} from "pinia";
 import {AddClothesResponse, RemoveClothesResponse, WardrobeResponse} from "./types/responses.ts";
 import axios, {AxiosResponse} from "axios";
-import {Clothes, User} from "./types/enitities.ts";
+import {Clothes} from "./types/enitities.ts";
 
 export const useWardrobeStore = defineStore('wardrobe', {
     state: () => {
         return {
             wardrobe: [] as Clothes[],
-            user: null as unknown as User
+            apiToken: null as unknown as string
         };
     },
 
     getters: {
-        inWardrobe: (state) => {
+        inWardrobe(state) {
             return (id: number): boolean => {
                 return state.wardrobe.find((clothes: Clothes): boolean => clothes.id === id) !== undefined
             };
         },
 
         listRequestUrl(): string {
-            return `/api/v1/wardrobe/${this.user.id}`;
+            return `/api/v1/wardrobe/`;
         },
 
         addRequestUrl(): string {
-            return `/api/v1/wardrobe/${this.user.id}/add`;
+            return `/api/v1/wardrobe/add`;
         },
 
         removeClothesUrl(): string {
-            return `/api/v1/wardrobe/${this.user.id}/remove`;
+            return `/api/v1/wardrobe/remove`;
+        },
+
+        requestData: (state) => {
+            return (data: unknown = {}) => {
+                return Object.assign({ api_token: state.apiToken }, data);
+            }
         }
     },
 
     actions: {
         async fetchWardrobe(): Promise<void> {
-            if (!this.user) {
+            if (!this.apiToken) {
                 throw new Error('Unknown user');
             }
 
-            const response: AxiosResponse = await axios.post(this.listRequestUrl);
+            const response: AxiosResponse = await axios.post(this.listRequestUrl, this.requestData());
             const data: WardrobeResponse = response.data;
 
             if (data.success) {
@@ -46,11 +52,13 @@ export const useWardrobeStore = defineStore('wardrobe', {
         },
 
         async addClothes(clothes: Clothes): Promise<void> {
-            if (!this.user) {
+            if (!this.apiToken) {
                 throw new Error('Unknown user');
             }
 
-            const response: AxiosResponse = await axios.post(this.addRequestUrl, { clothes_id: clothes.id });
+            const response: AxiosResponse = await axios.post(this.addRequestUrl, this.requestData({
+                clothes_id: clothes.id
+            }));
             const data: AddClothesResponse = response.data;
 
             if (data.success) {
@@ -59,11 +67,13 @@ export const useWardrobeStore = defineStore('wardrobe', {
         },
 
         async removeClothes(clothes: Clothes): Promise<void> {
-            if (!this.user) {
+            if (!this.apiToken) {
                 throw new Error('Unknown user');
             }
 
-            const response: AxiosResponse = await axios.post(this.removeClothesUrl, { clothes_id: clothes.id});
+            const response: AxiosResponse = await axios.post(this.removeClothesUrl, this.requestData({
+                clothes_id: clothes.id
+            }));
             const data: RemoveClothesResponse = response.data;
 
             if (data.success) {
@@ -71,8 +81,8 @@ export const useWardrobeStore = defineStore('wardrobe', {
             }
         },
 
-        setUser(user: User): void {
-            this.user = user;
+        setApiToken(apiToken: string): void {
+            this.apiToken = apiToken;
         }
     }
 });

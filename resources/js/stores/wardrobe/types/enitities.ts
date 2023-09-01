@@ -3,7 +3,3 @@ export interface Clothes {
     name: string,
     photo: string
 }
-
-export interface User {
-    id: number
-}

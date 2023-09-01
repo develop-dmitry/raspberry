@@ -17,7 +17,3 @@ export interface Clothes {
 export interface Event {
     name: string
 }
-
-export interface User {
-    id: number
-}

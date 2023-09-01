@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import {WardrobeOffersResponse} from "./types/responses.ts";
 import axios, {AxiosResponse} from "axios";
-import {Clothes, User} from "./types/enitities.ts";
+import {Clothes} from "./types/enitities.ts";
 
 export const useOffersStore = defineStore('offers-store', {
     state() {
@@ -10,13 +10,13 @@ export const useOffersStore = defineStore('offers-store', {
             page: 1,
             total: 0,
             count: 20,
-            user: null as unknown as User
+            apiToken: null as unknown as string
         };
     },
 
     getters: {
         listRequestUrl(): string {
-            return `/api/v1/wardrobe/${this.user.id}/offers`;
+            return `/api/v1/wardrobe/offers`;
         },
 
         lastPage(): number {
@@ -25,6 +25,12 @@ export const useOffersStore = defineStore('offers-store', {
 
         hasNextPage(): boolean {
             return this.page < this.lastPage;
+        },
+
+        requestData: (state) => {
+            return (data: unknown = {}) => {
+                return Object.assign({ api_token: state.apiToken }, data);
+            }
         }
     },
 
@@ -34,17 +40,17 @@ export const useOffersStore = defineStore('offers-store', {
         },
 
         async fetchOffers(page: number, count: number): Promise<void> {
-            if (!this.user) {
+            if (!this.apiToken) {
                 throw new Error('Unknown user');
             }
 
             this.page = page;
             this.count = count;
 
-            const response: AxiosResponse = await axios.post(this.listRequestUrl, {
+            const response: AxiosResponse = await axios.post(this.listRequestUrl, this.requestData({
                 page: this.page,
                 count: this.count
-            });
+            }));
 
             const data: WardrobeOffersResponse = response.data;
 
@@ -54,8 +60,8 @@ export const useOffersStore = defineStore('offers-store', {
             }
         },
 
-        setUser(user: User): void {
-            this.user = user;
+        setApiToken(apiToken: string): void {
+            this.apiToken = apiToken;
         }
     }
 })

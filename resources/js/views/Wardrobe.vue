@@ -10,13 +10,12 @@ page.wardrobe
 </template>
 
 <script lang="ts">
-import {defineComponent, PropType} from "vue";
+import {defineComponent} from "vue";
 import {mapActions, mapState} from "pinia";
 import {useWardrobeStore} from "../stores/wardrobe/WardrobeStore.ts";
 import Page from "../components/page/Page.vue";
 import PageTitle from "../components/page/page-title/PageTitle.vue";
 import WardrobeClothesCard from "../components/wardrobe/wardrobe-clothes-card/WardrobeClothesCard.vue";
-import {User} from "../stores/wardrobe/types/enitities.ts";
 
 export default defineComponent({
     name: 'Wardrobe',
@@ -34,8 +33,8 @@ export default defineComponent({
     },
 
     props: {
-        user: {
-            type: Object as PropType<User>,
+        apiToken: {
+            type: String,
             required: true
         }
     },
@@ -47,12 +46,12 @@ export default defineComponent({
     methods: {
         ...mapActions(useWardrobeStore, {
             fetchWardrobe: 'fetchWardrobe',
-            setUser: 'setUser'
+            setApiToken: 'setApiToken'
         })
     },
 
     created() {
-        this.setUser(this.user);
+        this.setApiToken(this.apiToken);
         this.fetchWardrobe();
     }
 });
