@@ -36,7 +36,7 @@ class Geolocation implements GeolocationInterface
     /**
      * @inheritDoc
      */
-    public function getLot(): float
+    public function getLon(): float
     {
         return $this->lon;
     }

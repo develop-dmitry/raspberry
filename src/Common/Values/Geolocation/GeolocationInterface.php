@@ -13,5 +13,5 @@ interface GeolocationInterface
     /**
      * @return float
      */
-    public function getLot(): float;
+    public function getLon(): float;
 }
