@@ -26,6 +26,22 @@ class Geolocation implements GeolocationInterface
     }
 
     /**
+     * @param string $decimal
+     * @return self
+     * @throws InvalidValueException
+     */
+    public static function fromDecimal(string $decimal): self
+    {
+        $regex = "/^(\d{1,2}\.\d*),\s(\d{1,3}\.\d*)$/";
+
+        if (!preg_match($regex, $decimal, $matches)) {
+            throw new InvalidValueException();
+        }
+
+        return new self($matches[1], $matches[2]);
+    }
+
+    /**
      * @inheritDoc
      */
     public function getLat(): float
@@ -39,6 +55,14 @@ class Geolocation implements GeolocationInterface
     public function getLon(): float
     {
         return $this->lon;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDecimal(): string
+    {
+        return "$this->lat, $this->lon";
     }
 
     /**

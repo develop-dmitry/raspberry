@@ -40,4 +40,25 @@ class GeolocationTest extends TestCase
         $this->expectException(InvalidValueException::class);
         new Geolocation(53, 181);
     }
+
+    public function testDecimalFormat(): void
+    {
+        $geolocation = new Geolocation(47.46, 53.25);
+
+        $this->assertEquals('47.46, 53.25', $geolocation->getDecimal());
+    }
+
+    public function testCreateFromDecimal(): void
+    {
+        $geolocation = Geolocation::fromDecimal('47.46, 53.25');
+
+        $this->assertEquals(47.46, $geolocation->getLat());
+        $this->assertEquals(53.25, $geolocation->getLon());
+    }
+
+    public function testCreateFromInvalidDecimal(): void
+    {
+        $this->expectException(InvalidValueException::class);
+        Geolocation::fromDecimal('test');
+    }
 }
