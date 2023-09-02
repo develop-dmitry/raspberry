@@ -16,7 +16,7 @@ class UserRepositoryTest extends TestCase
 
     public function testSaveUser(): void
     {
-        $user = new User(1, 'test');
+        $user = new User(1, 'test', null);
         $userRepository = $this->app->make(TelegramUserRepository::class);
 
         $this->expectNotToPerformAssertions();

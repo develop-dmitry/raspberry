@@ -6,6 +6,9 @@ namespace Raspberry\Messenger\Infrastructure\Repositories;
 
 use Raspberry\Common\Base\AbstractRedisRepository;
 use Raspberry\Common\Exceptions\RepositoryException;
+use Raspberry\Common\Values\Exceptions\InvalidValueException;
+use Raspberry\Common\Values\Geolocation\Geolocation;
+use Raspberry\Common\Values\Geolocation\GeolocationInterface;
 use Raspberry\Messenger\Domain\Context\User\User;
 use Raspberry\Messenger\Domain\Context\User\UserInterface;
 use Raspberry\Messenger\Domain\Context\User\UserRepositoryInterface;
@@ -51,9 +54,28 @@ class TelegramUserRepository extends AbstractRedisRepository implements UserRepo
      */
     protected function makeUser(int $messengerId, array $values): UserInterface
     {
-        $messageHandler = $values['message_handler'] ?? '';
+        return new User(
+            $messengerId,
+            $values['message_handler'] ?? '',
+            $this->makeGeolocation($values['geolocation'] ?? '')
+        );
+    }
 
-        return new User($messengerId, $messageHandler);
+    /**
+     * @param string|null $value
+     * @return GeolocationInterface|null
+     */
+    protected function makeGeolocation(?string $value): ?GeolocationInterface
+    {
+        if (!$value) {
+            return null;
+        }
+
+        try {
+            return Geolocation::fromDecimal($value);
+        } catch (InvalidValueException) {
+            return null;
+        }
     }
 
     /**
@@ -64,7 +86,8 @@ class TelegramUserRepository extends AbstractRedisRepository implements UserRepo
     {
         return [
             'messenger_id' => $user->getMessengerId(),
-            'message_handler' => $user->getMessageHandler()
+            'message_handler' => $user->getMessageHandler(),
+            'geolocation' => $user->getGeolocation()?->getDecimal()
         ];
     }
 }
