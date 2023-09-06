@@ -8,10 +8,12 @@ use Psr\Log\LoggerInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButtonInterface;
 use Raspberry\Messenger\Infrastructure\Gui\Base\AbstractGui;
+use SergiX44\Nutgram\Telegram\Types\Keyboard\ForceReply;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardButton;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardMarkup;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\KeyboardButton;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\ReplyKeyboardMarkup;
+use SergiX44\Nutgram\Telegram\Types\Keyboard\ReplyKeyboardRemove;
 use SergiX44\Nutgram\Telegram\Types\WebApp\WebAppInfo;
 
 class TelegramGui extends AbstractGui
@@ -24,9 +26,9 @@ class TelegramGui extends AbstractGui
     }
 
     /**
-     * @return ReplyKeyboardMarkup|InlineKeyboardMarkup|null
+     * @return ReplyKeyboardMarkup|InlineKeyboardMarkup|ReplyKeyboardRemove|null
      */
-    public function makeTelegramKeyboard(): ReplyKeyboardMarkup|InlineKeyboardMarkup|null
+    public function makeTelegramKeyboard(): ReplyKeyboardMarkup|InlineKeyboardMarkup|ReplyKeyboardRemove|null
     {
         if ($this->hasReplyKeyboard()) {
             return $this->makeReplyKeyboardMarkup();
@@ -34,6 +36,10 @@ class TelegramGui extends AbstractGui
 
         if ($this->hasInlineKeyboard()) {
             return $this->makeInlineKeyboardMarkup();
+        }
+
+        if ($this->isRemoveKeyboard) {
+            return new ReplyKeyboardRemove(true);
         }
 
         return null;

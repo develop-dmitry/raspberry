@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Application\LookBot\Enums;
+namespace Raspberry\Messenger\Application\LookBot\Wardrobe;
 
 enum WardrobeMenu
 {

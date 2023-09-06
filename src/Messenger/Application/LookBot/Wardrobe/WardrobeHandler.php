@@ -1,12 +1,11 @@
 <?php
 
-namespace Raspberry\Messenger\Application\LookBot\WardrobeHandlers;
+namespace Raspberry\Messenger\Application\LookBot\Wardrobe;
 
 use Raspberry\Authorization\Application\MessengerAuthorization\MessengerAuthorizationInterface;
 use Raspberry\Authorization\Application\MessengerRegister\MessengerRegisterInterface;
 use Raspberry\Messenger\Application\AbstractHandler;
 use Raspberry\Messenger\Application\AuthorizeTrait;
-use Raspberry\Messenger\Application\LookBot\Enums\WardrobeMenu;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButtonInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;

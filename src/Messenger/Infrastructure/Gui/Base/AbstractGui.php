@@ -22,6 +22,8 @@ class AbstractGui implements GuiInterface
 
     protected GuiFactoryInterface $guiFactory;
 
+    protected bool $isRemoveKeyboard = false;
+
     public function __construct()
     {
         $this->guiFactory = new GuiFactory();
@@ -82,5 +84,14 @@ class AbstractGui implements GuiInterface
     public function getGuiFactory(): GuiFactoryInterface
     {
         return $this->guiFactory;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function removeKeyboard(): GuiInterface
+    {
+        $this->isRemoveKeyboard = true;
+        return $this;
     }
 }
