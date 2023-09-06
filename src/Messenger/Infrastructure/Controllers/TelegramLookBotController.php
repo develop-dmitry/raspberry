@@ -11,17 +11,20 @@ use Raspberry\Authorization\Application\MessengerAuthorization\TelegramMessenger
 use Raspberry\Authorization\Application\MessengerRegister\TelegramMessengerRegisterUseCase;
 use Raspberry\Messenger\Application\LookBot\Enums\Action;
 use Raspberry\Messenger\Application\LookBot\Enums\Menu;
-use Raspberry\Messenger\Application\LookBot\Enums\SettingsMenu;
 use Raspberry\Messenger\Application\LookBot\Enums\TextAction;
 use Raspberry\Messenger\Application\LookBot\EventHandlers\EventChooseHandler;
 use Raspberry\Messenger\Application\LookBot\EventHandlers\EventListHandler;
 use Raspberry\Messenger\Application\LookBot\SelectionLookHandler;
-use Raspberry\Messenger\Application\LookBot\SettingsHandlers\SettingsHandler;
-use Raspberry\Messenger\Application\LookBot\SettingsHandlers\StylesHandler;
+use Raspberry\Messenger\Application\LookBot\Settings\SettingsHandler;
+use Raspberry\Messenger\Application\LookBot\Settings\SettingsMenu;
+use Raspberry\Messenger\Application\LookBot\Settings\StylesHandler;
 use Raspberry\Messenger\Application\LookBot\StartHandler;
-use Raspberry\Messenger\Application\LookBot\TemperatureHandlers\InputTemperatureHandler;
-use Raspberry\Messenger\Application\LookBot\TemperatureHandlers\SaveTemperatureHandler;
-use Raspberry\Messenger\Application\LookBot\WardrobeHandlers\WardrobeHandler;
+use Raspberry\Messenger\Application\LookBot\Temperature\InputTemperatureHandler;
+use Raspberry\Messenger\Application\LookBot\Temperature\SaveTemperatureHandler;
+use Raspberry\Messenger\Application\LookBot\Temperature\TemperatureHandler;
+use Raspberry\Messenger\Application\LookBot\Temperature\TemperatureMenu;
+use Raspberry\Messenger\Application\LookBot\Temperature\WeatherGatewayHandler;
+use Raspberry\Messenger\Application\LookBot\Wardrobe\WardrobeHandler;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainerInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
@@ -65,12 +68,22 @@ class TelegramLookBotController extends Controller
             ->addHandler(
                 Menu::SelectionLook->getText(),
                 HandlerType::Text,
-                app(InputTemperatureHandler::class)
+                $this->makeTemperatureHandler()
             )
             ->addHandler(
                 TextAction::SaveTemperature->value,
                 HandlerType::Message,
                 $this->makeSaveTemperatureHandler()
+            )
+            ->addHandler(
+                TemperatureMenu::Input->getText(),
+                HandlerType::Text,
+                app(InputTemperatureHandler::class)
+            )
+            ->addHandler(
+                TextAction::GatewayTemperature->value,
+                HandlerType::Message,
+                $this->makeWeatherGatewayHandler()
             )
             ->addHandler(
                 Action::EventList->value,
@@ -112,6 +125,21 @@ class TelegramLookBotController extends Controller
                 HandlerType::Text,
                 $this->makeWardrobeHandler()
             );
+    }
+
+    protected function makeTemperatureHandler(): HandlerInterface
+    {
+        return app(TemperatureHandler::class, [
+            'weatherGatewayHandler' => $this->makeWeatherGatewayHandler()
+        ]);
+    }
+
+    protected function makeWeatherGatewayHandler(): HandlerInterface
+    {
+        return app(WeatherGatewayHandler::class, [
+            'messengerAuthorization' => $this->messengerAuthorization,
+            'messengerRegister' => $this->messengerRegister
+        ]);
     }
 
     protected function makeWardrobeHandler(): HandlerInterface

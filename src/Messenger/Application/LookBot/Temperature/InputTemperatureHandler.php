@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Application\LookBot\TemperatureHandlers;
+namespace Raspberry\Messenger\Application\LookBot\Temperature;
 
 use Raspberry\Messenger\Application\AbstractHandler;
 use Raspberry\Messenger\Application\LookBot\Enums\TextAction;
@@ -19,7 +19,8 @@ class InputTemperatureHandler extends AbstractHandler
 
         if ($context->getUser()) {
             $context->getUser()->setMessageHandler(TextAction::SaveTemperature->value);
-            $gui->sendMessage('Введите температуру, для которой нужно найти образ');
+            $gui->sendMessage('Введите температуру, для которой нужно найти образ')
+                ->removeKeyboard();
         } else {
             $gui->sendMessage('Произошла ошибка, попробуйте позднее');
         }

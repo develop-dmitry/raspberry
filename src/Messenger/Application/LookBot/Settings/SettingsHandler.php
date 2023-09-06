@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Application\LookBot\SettingsHandlers;
+namespace Raspberry\Messenger\Application\LookBot\Settings;
 
 use Raspberry\Messenger\Application\AbstractHandler;
-use Raspberry\Messenger\Application\LookBot\Enums\SettingsMenu;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButtonInterface;
 use Raspberry\Messenger\Domain\Gui\GuiInterface;

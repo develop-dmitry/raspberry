@@ -40,4 +40,25 @@ class TemperatureTest extends TestCase
         $this->expectNotToPerformAssertions();
         new Temperature('0');
     }
+
+    public function testCelsiusValue(): void
+    {
+        $temperature = new Temperature(9);
+
+        $this->assertEquals('+9°C', $temperature->getCelsius());
+    }
+
+    public function testMinusCelsiusValue(): void
+    {
+        $temperature = new Temperature(-9);
+
+        $this->assertEquals('-9°C', $temperature->getCelsius());
+    }
+
+    public function testZeroCelsiusValue(): void
+    {
+        $temperature = new Temperature(0);
+
+        $this->assertEquals('0°C', $temperature->getCelsius());
+    }
 }

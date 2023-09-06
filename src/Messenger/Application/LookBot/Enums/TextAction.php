@@ -8,4 +8,6 @@ enum TextAction: string
 {
 
     case SaveTemperature = 'save_temperature';
+
+    case GatewayTemperature = 'gateway_temperature';
 }

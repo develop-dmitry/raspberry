@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Application\LookBot\TemperatureHandlers;
+namespace Raspberry\Messenger\Application\LookBot\Temperature;
 
 use Raspberry\Authorization\Application\MessengerAuthorization\MessengerAuthorizationInterface;
 use Raspberry\Authorization\Application\MessengerRegister\MessengerRegisterInterface;

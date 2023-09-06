@@ -32,6 +32,24 @@ class Temperature implements TemperatureInterface
         return $this->value;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function getCelsius(): string
+    {
+        $sign = '';
+
+        if ($this->getValue() < 0) {
+            $sign = '-';
+        } else if ($this->getValue() > 0) {
+            $sign = '+';
+        }
+
+        $value = abs($this->getValue());
+
+        return "$sign{$value}°C";
+    }
+
     protected function validate(int|string $value): bool
     {
         if (!is_numeric($value)) {

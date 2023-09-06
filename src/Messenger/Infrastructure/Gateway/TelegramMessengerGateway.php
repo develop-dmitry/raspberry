@@ -8,7 +8,11 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 use Raspberry\Common\Exceptions\RepositoryException;
+use Raspberry\Common\Values\Exceptions\InvalidValueException;
+use Raspberry\Common\Values\Geolocation\Geolocation;
+use Raspberry\Common\Values\Geolocation\GeolocationInterface;
 use Raspberry\Messenger\Domain\Context\Request\CallbackData\CallbackData;
+use Raspberry\Messenger\Domain\Context\Request\CallbackData\CallbackDataInterface;
 use Raspberry\Messenger\Domain\Context\Request\CallbackData\NullCallbackData;
 use Raspberry\Messenger\Domain\Context\Request\Request;
 use Raspberry\Messenger\Domain\Context\Request\RequestInterface;
@@ -93,6 +97,9 @@ class TelegramMessengerGateway extends AbstractMessengerGateway
         return $this->bot->sendMessage($message, reply_markup: $keyboard);
     }
 
+    /**
+     * @return GuiInterface
+     */
     protected function gui(): GuiInterface
     {
         return $this->gui;
@@ -103,22 +110,57 @@ class TelegramMessengerGateway extends AbstractMessengerGateway
      */
     protected function getRequest(): RequestInterface
     {
-        if ($callbackData = $this->bot->callbackQuery()?->data) {
-            $callbackData = CallbackData::fromJson($callbackData);
-        } else {
-            $callbackData = new NullCallbackData();
-        }
-
-        $requestType = $this->getRequestType();
-        $message = $this->bot->message()?->getText();
-
-        if ($message === null) {
-            $message = '';
-        }
-
-        return new Request($message, $callbackData, $requestType);
+        return new Request(
+            $this->getMessage(),
+            $this->getCallbackData(),
+            $this->getRequestType(),
+            $this->getGeolocation()
+        );
     }
 
+    /**
+     * @return string
+     */
+    protected function getMessage(): string
+    {
+        if (!is_null($this->bot->message()?->getText())) {
+            return $this->bot->message()?->getText();
+        }
+
+        return '';
+    }
+
+    /**
+     * @return GeolocationInterface|null
+     */
+    protected function getGeolocation(): ?GeolocationInterface
+    {
+        if ($location = $this->bot->message()->location) {
+            try {
+                return new Geolocation($location->latitude, $location->longitude);
+            } catch (InvalidValueException) {
+                return null;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return CallbackDataInterface
+     */
+    protected function getCallbackData(): CallbackDataInterface
+    {
+        if ($callbackData = $this->bot->callbackQuery()?->data) {
+            return CallbackData::fromJson($callbackData);
+        }
+
+        return new NullCallbackData();
+    }
+
+    /**
+     * @return HandlerType
+     */
     protected function getRequestType(): HandlerType
     {
         if ($this->bot->isCommand()) {

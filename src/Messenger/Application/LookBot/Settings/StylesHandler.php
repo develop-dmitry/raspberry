@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Application\LookBot\SettingsHandlers;
+namespace Raspberry\Messenger\Application\LookBot\Settings;
 
 use Exception;
 use Psr\Log\LoggerInterface;

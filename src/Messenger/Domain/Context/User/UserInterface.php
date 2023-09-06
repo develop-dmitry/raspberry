@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Domain\Context\User;
 
+use Raspberry\Common\Values\Geolocation\GeolocationInterface;
+
 interface UserInterface
 {
 
@@ -22,4 +24,15 @@ interface UserInterface
      * @return void
      */
     public function setMessageHandler(string $messageHandler): void;
+
+    /**
+     * @return GeolocationInterface|null
+     */
+    public function getGeolocation(): ?GeolocationInterface;
+
+    /**
+     * @param GeolocationInterface $geolocation
+     * @return void
+     */
+    public function setGeolocation(GeolocationInterface $geolocation): void;
 }

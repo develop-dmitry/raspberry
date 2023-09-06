@@ -37,4 +37,9 @@ interface GuiInterface
      * @return GuiFactoryInterface
      */
     public function getGuiFactory(): GuiFactoryInterface;
+
+    /**
+     * @return self
+     */
+    public function removeKeyboard(): self;
 }

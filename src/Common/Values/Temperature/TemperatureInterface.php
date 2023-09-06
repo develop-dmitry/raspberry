@@ -11,4 +11,9 @@ interface TemperatureInterface
      * @return int
      */
     public function getValue(): int;
+
+    /**
+     * @return string
+     */
+    public function getCelsius(): string;
 }
