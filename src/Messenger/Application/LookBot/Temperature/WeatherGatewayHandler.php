@@ -50,10 +50,12 @@ class WeatherGatewayHandler extends AbstractHandler
         $geolocation = $this->contextUser->getGeolocation();
 
         try {
-            $temperature = $this->getTemperature($geolocation);
-            (new SelectionLookRepository($this->userId))->setTemperature($temperature);
+            $temperature = new Temperature($this->getTemperature($geolocation));
+            (new SelectionLookRepository($this->userId))->setTemperature($temperature->getValue());
 
-            $gui->sendMessage("Ваше местоположение {$geolocation->getDecimal()}\nТемпература {$temperature}")
+            $celsius = $temperature->getCelsius();
+
+            $gui->sendMessage("Ваше местоположение {$geolocation->getDecimal()}\nТемпература $celsius")
                 ->sendInlineKeyboard($this->makeKeyboard());
         } catch (Exception) {
             $gui->sendMessage('Не удалось получить текущую температуру, введите температуру вручную');
