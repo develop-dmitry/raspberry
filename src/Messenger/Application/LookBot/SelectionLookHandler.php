@@ -8,6 +8,9 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use Raspberry\Authorization\Application\MessengerAuthorization\MessengerAuthorizationInterface;
 use Raspberry\Authorization\Application\MessengerRegister\MessengerRegisterInterface;
+use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
+use Raspberry\Common\Exceptions\UserExceptions\UserNotFoundException;
+use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Look\Application\DetailLookUrl\DetailLookUrlInterface;
 use Raspberry\Look\Application\DetailLookUrl\DTO\DetailLookUrlRequest;
 use Raspberry\Look\Application\SelectionLook\DTO\LookItem;
@@ -16,32 +19,45 @@ use Raspberry\Look\Application\SelectionLook\SelectionLookInterface;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;
 use Raspberry\Look\Domain\Look\Services\LookUrlGenerator\Exceptions\FailedUrlGenerateException;
 use Raspberry\Messenger\Application\AbstractHandler;
-use Raspberry\Messenger\Application\AuthorizeTrait;
+use Raspberry\Messenger\Application\HasAuthorize;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
-use Raspberry\Messenger\Domain\Gui\GuiInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\InlineKeyboardInterface;
+use Raspberry\Messenger\Domain\Gui\Message\Message;
+use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
 use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\WebAppOption;
-use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
+use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
 use Raspberry\Messenger\Domain\Handlers\HandlerType;
 
 class SelectionLookHandler extends AbstractHandler
 {
 
-    use AuthorizeTrait;
+    use HasAuthorize;
 
     public function __construct(
         protected SelectionLookInterface $selectionLook,
         protected DetailLookUrlInterface $detailLookUrl,
         protected LoggerInterface $logger,
         protected MessengerAuthorizationInterface $messengerAuthorization,
-        protected MessengerRegisterInterface $messengerRegister
+        protected MessengerRegisterInterface $messengerRegister,
+        GuiFactoryInterface $guiFactory
     ) {
+        parent::__construct($guiFactory);
     }
 
-    public function handle(ContextInterface $context, GuiInterface $gui, ?HandlerArgumentsInterface $args = null): void
+    /**
+     * @param ContextInterface $context
+     * @param MessengerGatewayInterface $messenger
+     * @return void
+     * @throws FailedSaveUserException
+     * @throws UserNotFoundException
+     * @throws InvalidValueException
+     * @throws FailedAuthorizeException
+     */
+    public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {
-        parent::handle($context, $gui, $args);
+        parent::handle($context, $messenger);
 
         $this->identifyUser($context->getUser()?->getMessengerId());
 
@@ -50,16 +66,19 @@ class SelectionLookHandler extends AbstractHandler
         $selectionResponse = $this->selectionLook->execute($selectionRequest);
         $looks = $selectionResponse->getLooks();
 
-        if ($context->getRequest()->getRequestType() === HandlerType::CallbackQuery) {
-            $gui->editMessage();
+        if (empty($looks)) {
+            $message = Message::text('К сожалению, мы не смогли подобрать для вас образ :(');
+        } else {
+            $message = Message::withInlineKeyboard(
+                'Для вас подобраны следующие образы',
+                $this->makeKeyboard($looks)
+            );
         }
 
-        if (empty($looks)) {
-            $gui->sendMessage('К сожалению, мы не смогли подобрать для вас образ :(');
+        if ($this->getRequestType() === HandlerType::CallbackQuery) {
+            $messenger->editMessage($message);
         } else {
-            $gui
-                ->sendMessage('Для вас подобраны следующие образы')
-                ->sendInlineKeyboard($this->makeKeyboard($looks));
+            $messenger->sendMessage($message);
         }
     }
 

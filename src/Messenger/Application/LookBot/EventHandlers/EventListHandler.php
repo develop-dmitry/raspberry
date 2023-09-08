@@ -11,11 +11,12 @@ use Raspberry\Messenger\Application\AbstractPaginationHandler;
 use Raspberry\Messenger\Application\LookBot\Enums\Action;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
-use Raspberry\Messenger\Domain\Gui\GuiInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Message\Message;
+use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
 use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\InlineButton\CallbackDataOption;
 use Raspberry\Messenger\Domain\Gui\Options\OptionInterface;
-use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
-use Raspberry\Messenger\Domain\Handlers\HandlerType;
+use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
 
 class EventListHandler extends AbstractPaginationHandler
 {
@@ -24,32 +25,52 @@ class EventListHandler extends AbstractPaginationHandler
 
     public function __construct(
         protected EventRepositoryInterface $eventRepository,
-        protected LoggerInterface $logger
+        protected LoggerInterface $logger,
+        GuiFactoryInterface $guiFactory
     ) {
+        parent::__construct($guiFactory);
     }
 
-    public function handle(ContextInterface $context, GuiInterface $gui, ?HandlerArgumentsInterface $args = null): void
+    /**
+     * @param ContextInterface $context
+     * @param MessengerGatewayInterface $messenger
+     * @return void
+     * @throws FailedAuthorizeException
+     */
+    public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {
-        parent::handle($context, $gui, $args);
+        parent::handle($context, $messenger);
 
         $this->pagination = $this->eventRepository->withLooks($this->page(), $this->perPage);
 
-        if ($this->contextRequest->getRequestType() === HandlerType::CallbackQuery) {
-            $gui->editMessage();
+        if (!$this->requestFromCurrentHandler()) {
+            $messenger->sendMessage(Message::removeKeyboard(
+                'Выберите мероприятие, для которого хотите подобрать образ'
+            ));
         }
 
-        $gui->sendMessage($this->message());
-        $gui->sendInlineKeyboard($this->makePaginationKeyboard());
-    }
+        $message = Message::withInlineKeyboard(
+            'Список мероприятий',
+            $this->makePaginationKeyboard()
+        );
 
-    protected function message(): string {
-        if ($this->args && $this->args->getMessage()) {
-            return $this->args->getMessage();
+        if ($this->requestFromCurrentHandler()) {
+            $messenger->editMessage($message);
+        } else {
+            $messenger->sendMessage($message);
         }
-
-        return 'Выберите мероприятие, для которого хотите подобрать образ';
     }
 
+    protected function requestFromCurrentHandler(): bool
+    {
+        return  $this->getCallbackData()->getAction() === Action::EventChoose->value
+            || $this->getCallbackData()->get('pagination', false);
+    }
+
+    /**
+     * @param mixed $item
+     * @return InlineButtonInterface
+     */
     protected function makeItemButton(mixed $item): InlineButtonInterface
     {
         return $this->inlineButtonFactory
@@ -58,12 +79,13 @@ class EventListHandler extends AbstractPaginationHandler
             ->make();
     }
 
+    /**
+     * @param EventInterface $event
+     * @return OptionInterface
+     */
     protected function makeCallbackData(EventInterface $event): OptionInterface
     {
-        return new CallbackDataOption(
-            Action::EventChoose->value,
-            ['id' => $event->getId()->getValue()]
-        );
+        return new CallbackDataOption(Action::EventChoose->value, ['id' => $event->getId()->getValue()]);
     }
 
     /**

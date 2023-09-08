@@ -6,22 +6,25 @@ namespace Raspberry\Messenger\Application\LookBot\Temperature;
 
 use Raspberry\Authorization\Application\MessengerAuthorization\MessengerAuthorizationInterface;
 use Raspberry\Authorization\Application\MessengerRegister\MessengerRegisterInterface;
+use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Common\Values\Temperature\Temperature;
 use Raspberry\Look\Domain\Look\Services\SelectionLook\Exceptions\FailedSavePropertyException;
 use Raspberry\Look\Domain\Look\Services\SelectionLook\SelectionLookRepositoryInterface;
 use Raspberry\Look\Infrastructure\Repositories\SelectionLookRepository;
 use Raspberry\Messenger\Application\AbstractHandler;
-use Raspberry\Messenger\Application\AuthorizeTrait;
+use Raspberry\Messenger\Application\HasAuthorize;
 use Raspberry\Messenger\Application\LookBot\Enums\TextAction;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
-use Raspberry\Messenger\Domain\Gui\GuiInterface;
-use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Message\Message;
+use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
+use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
 use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
 
 class SaveTemperatureHandler extends AbstractHandler
 {
-    use AuthorizeTrait;
+    use HasAuthorize;
 
     protected SelectionLookRepositoryInterface $selectionLookRepository;
 
@@ -29,12 +32,22 @@ class SaveTemperatureHandler extends AbstractHandler
         protected MessengerAuthorizationInterface $messengerAuthorization,
         protected MessengerRegisterInterface $messengerRegister,
         protected HandlerInterface $next,
+        GuiFactoryInterface $guiFactory
     ) {
+        parent::__construct($guiFactory);
     }
 
-    public function handle(ContextInterface $context, GuiInterface $gui, ?HandlerArgumentsInterface $args = null): void
+    /**
+     * @param ContextInterface $context
+     * @param MessengerGatewayInterface $messenger
+     * @return void
+     * @throws InvalidValueException
+     * @throws FailedSaveUserException
+     * @throws FailedAuthorizeException
+     */
+    public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {
-        parent::handle($context, $gui, $args);
+        parent::handle($context, $messenger);
 
         $this->identifyUser($this->contextUser?->getMessengerId());
         $this->selectionLookRepository = new SelectionLookRepository($this->userId);
@@ -43,12 +56,12 @@ class SaveTemperatureHandler extends AbstractHandler
             $temperature = new Temperature($this->contextRequest->getMessage());
             $this->selectionLookRepository->setTemperature($temperature->getValue());
 
-            $this->next->handle($context, $gui, $args);
+            $this->next->handle($context, $messenger);
         } catch (InvalidValueException) {
-            $gui->sendMessage('Введена некорректная температура, попробуйте еще раз');
+            $messenger->sendMessage(Message::text('Введена некорректная температура, попробуйте еще раз'));
             $this->contextUser->setMessageHandler(TextAction::SaveTemperature->value);
         } catch (FailedSavePropertyException) {
-            $gui->sendMessage('Произошла ошбика, попробуйте позднее');
+            $messenger->sendMessage(Message::text('Произошла ошбика, попробуйте позднее'));
         }
     }
 }
