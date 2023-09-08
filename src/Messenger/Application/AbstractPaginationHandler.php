@@ -74,7 +74,7 @@ abstract class AbstractPaginationHandler extends AbstractHandler
     {
         return $this->inlineButtonFactory
             ->setText($text)
-            ->setCallbackData(new CallbackDataOption($action, ['page' => $page]))
+            ->setCallbackData(new CallbackDataOption($action, ['page' => $page, 'pagination' => true]))
             ->make();
     }
 

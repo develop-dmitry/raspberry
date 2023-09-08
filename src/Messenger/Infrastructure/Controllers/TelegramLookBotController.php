@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Raspberry\Messenger\Infrastructure\Controllers;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 use Psr\Log\LoggerInterface;
 use Raspberry\Authorization\Application\MessengerAuthorization\TelegramMessengerAuthorizationUseCase;
@@ -29,8 +30,7 @@ use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainerInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerType;
-use Raspberry\Messenger\Infrastructure\Gateway\Exceptions\MessengerException;
-use Raspberry\Messenger\Infrastructure\Gateway\TelegramMessengerGateway;
+use Raspberry\Messenger\Infrastructure\Gui\Telegram\TelegramMessenger;
 
 class TelegramLookBotController extends Controller
 {
@@ -45,11 +45,11 @@ class TelegramLookBotController extends Controller
     {
         $this->logger->debug('Request from telegram', $request->toArray());
 
-        $telegram = app(TelegramMessengerGateway::class, ['handlers' => $this->getHandlers()]);
+        $telegram = app(TelegramMessenger::class, ['handlers' => $this->getHandlers()]);
 
         try {
-            $telegram->handleRequest();
-        } catch (MessengerException $exception) {
+            $telegram->handle();
+        } catch (Exception $exception) {
             $this->logger->emergency(
                 'Error while performing telegram request',
                 ['exception' => $exception->getMessage()]
@@ -59,12 +59,30 @@ class TelegramLookBotController extends Controller
 
     protected function getHandlers(): HandlerContainerInterface
     {
-        return (new HandlerContainer())
+        $container = new HandlerContainer();
+
+        $this->addCommonHandlers($container);
+        $this->addTemperatureHandlers($container);
+        $this->addSettingsHandlers($container);
+        $this->addWardrobeHandlers($container);
+        $this->addEventHandlers($container);
+
+        return $container;
+    }
+
+    public function addCommonHandlers(HandlerContainerInterface $container): void
+    {
+        $container
             ->addHandler(
                 'start',
                 HandlerType::Command,
                 app(StartHandler::class)
-            )
+            );
+    }
+
+    public function addTemperatureHandlers(HandlerContainerInterface $container): void
+    {
+        $container
             ->addHandler(
                 Menu::SelectionLook->getText(),
                 HandlerType::Text,
@@ -86,15 +104,15 @@ class TelegramLookBotController extends Controller
                 $this->makeWeatherGatewayHandler()
             )
             ->addHandler(
-                Action::EventList->value,
-                HandlerType::CallbackQuery,
+                TemperatureMenu::Accept->getText(),
+                HandlerType::Text,
                 $this->makeEventListHandler()
-            )
-            ->addHandler(
-                Action::EventChoose->value,
-                HandlerType::CallbackQuery,
-                $this->makeEventChooseHandler()
-            )
+            );
+    }
+
+    public function addSettingsHandlers(HandlerContainerInterface $container): void
+    {
+        $container
             ->addHandler(
                 Menu::Settings->getText(),
                 HandlerType::Text,
@@ -119,11 +137,31 @@ class TelegramLookBotController extends Controller
                 SettingsMenu::Back->getText(),
                 HandlerType::Text,
                 app(StartHandler::class)
-            )
+            );
+    }
+
+    public function addWardrobeHandlers(HandlerContainerInterface $container): void
+    {
+        $container
             ->addHandler(
                 Menu::Wardrobe->getText(),
                 HandlerType::Text,
                 $this->makeWardrobeHandler()
+            );
+    }
+
+    public function addEventHandlers(HandlerContainerInterface $container): void
+    {
+        $container
+            ->addHandler(
+                Action::EventList->value,
+                HandlerType::CallbackQuery,
+                $this->makeEventListHandler()
+            )
+            ->addHandler(
+                Action::EventChoose->value,
+                HandlerType::CallbackQuery,
+                $this->makeEventChooseHandler()
             );
     }
 

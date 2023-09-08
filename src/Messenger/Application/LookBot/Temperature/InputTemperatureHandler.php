@@ -7,22 +7,30 @@ namespace Raspberry\Messenger\Application\LookBot\Temperature;
 use Raspberry\Messenger\Application\AbstractHandler;
 use Raspberry\Messenger\Application\LookBot\Enums\TextAction;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
-use Raspberry\Messenger\Domain\Gui\GuiInterface;
-use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
+use Raspberry\Messenger\Domain\Gui\Message\Message;
+use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
+use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
 
 class InputTemperatureHandler extends AbstractHandler
 {
 
-    public function handle(ContextInterface $context, GuiInterface $gui, ?HandlerArgumentsInterface $args = null): void
+    /**
+     * @param ContextInterface $context
+     * @param MessengerGatewayInterface $messenger
+     * @return void
+     * @throws FailedAuthorizeException
+     */
+    public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {
-        parent::handle($context, $gui, $args);
+        parent::handle($context, $messenger);
 
         if ($context->getUser()) {
             $context->getUser()->setMessageHandler(TextAction::SaveTemperature->value);
-            $gui->sendMessage('Введите температуру, для которой нужно найти образ')
-                ->removeKeyboard();
+            $message = Message::text('Введите температуру, для которой нужно найти образ');
         } else {
-            $gui->sendMessage('Произошла ошибка, попробуйте позднее');
+            $message = 'Произошла ошибка, попробуйте позднее';
         }
+
+        $messenger->sendMessage($message);
     }
 }

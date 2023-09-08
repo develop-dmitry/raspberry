@@ -4,50 +4,56 @@ namespace Raspberry\Messenger\Application\LookBot\Wardrobe;
 
 use Raspberry\Authorization\Application\MessengerAuthorization\MessengerAuthorizationInterface;
 use Raspberry\Authorization\Application\MessengerRegister\MessengerRegisterInterface;
+use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
+use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Messenger\Application\AbstractHandler;
-use Raspberry\Messenger\Application\AuthorizeTrait;
+use Raspberry\Messenger\Application\HasAuthorize;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButtonInterface;
-use Raspberry\Messenger\Domain\Gui\GuiInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboardInterface;
+use Raspberry\Messenger\Domain\Gui\Message\Message;
+use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
 use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\WebAppOption;
 use Raspberry\Messenger\Domain\Gui\Options\ReplyKeyboard\ResizeOption;
-use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
 use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
 use Raspberry\Wardrobe\Application\UrlGenerator\DTO\UrlGeneratorRequest;
 use Raspberry\Wardrobe\Application\UrlGenerator\UrlGeneratorInterface;
 
 class WardrobeHandler extends AbstractHandler
 {
-    use AuthorizeTrait;
+    use HasAuthorize;
 
     /**
      * @param UrlGeneratorInterface $urlGenerator
      * @param MessengerAuthorizationInterface $messengerAuthorization
      * @param MessengerRegisterInterface $messengerRegister
+     * @param GuiFactoryInterface $guiFactory
      */
     public function __construct(
         protected UrlGeneratorInterface $urlGenerator,
         protected MessengerAuthorizationInterface $messengerAuthorization,
-        protected MessengerRegisterInterface $messengerRegister
+        protected MessengerRegisterInterface $messengerRegister,
+        GuiFactoryInterface $guiFactory
     ) {
+        parent::__construct($guiFactory);
     }
 
     /**
-     * @inheritDoc
+     * @param ContextInterface $context
+     * @param MessengerGatewayInterface $messenger
+     * @return void
+     * @throws FailedAuthorizeException
+     * @throws FailedSaveUserException
+     * @throws InvalidValueException
      */
-    public function handle(ContextInterface $context, GuiInterface $gui, ?HandlerArgumentsInterface $args = null): void
+    public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {
-        parent::handle($context, $gui, $args);
-
-        if (!$context->getUser()) {
-            throw new FailedAuthorizeException();
-        }
+        parent::handle($context, $messenger);
 
         $this->identifyUser($context->getUser()->getMessengerId());
 
-        $gui->sendMessage('Ваш гардероб');
-        $gui->sendReplyKeyboard($this->makeKeyboard());
+        $messenger->sendMessage(Message::withReplyKeyboard('Ваш гардероб', $this->makeKeyboard()));
     }
 
     /**

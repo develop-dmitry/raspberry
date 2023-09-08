@@ -3,35 +3,47 @@
 namespace Raspberry\Messenger\Application\LookBot\Temperature;
 
 use Raspberry\Messenger\Application\AbstractHandler;
-use Raspberry\Messenger\Application\AuthorizeTrait;
+use Raspberry\Messenger\Application\HasAuthorize;
 use Raspberry\Messenger\Application\LookBot\Enums\TextAction;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
-use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButtonInterface;
-use Raspberry\Messenger\Domain\Gui\GuiInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboardInterface;
+use Raspberry\Messenger\Domain\Gui\Message\Message;
+use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
 use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\ReplyButton\SendLocationOption;
 use Raspberry\Messenger\Domain\Gui\Options\ReplyKeyboard\ResizeOption;
-use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
+use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
 use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
 
 class TemperatureHandler extends AbstractHandler
 {
-    use AuthorizeTrait;
+    use HasAuthorize;
 
     public function __construct(
-        protected HandlerInterface $weatherGatewayHandler
+        protected HandlerInterface $weatherGatewayHandler,
+        GuiFactoryInterface $guiFactory
     ) {
+        parent::__construct($guiFactory);
     }
 
-    public function handle(ContextInterface $context, GuiInterface $gui, ?HandlerArgumentsInterface $args = null): void
+    /**
+     * @param ContextInterface $context
+     * @param MessengerGatewayInterface $messenger
+     * @return void
+     * @throws FailedAuthorizeException
+     */
+    public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {
-        parent::handle($context, $gui, $args);
+        parent::handle($context, $messenger);
 
         if ($this->contextUser?->getGeolocation()) {
-            $this->weatherGatewayHandler->handle($context, $gui);
+            $this->weatherGatewayHandler->handle($context, $messenger);
         } else {
-            $gui->sendMessage('Отправьте ваше местопололожения для получения погоды, либо введите вручную')
-                ->sendReplyKeyboard($this->makeKeyboard());
+            $message = Message::withReplyKeyboard(
+                'Отправьте ваше местоположения для получения погоды, либо введите вручную',
+                $this->makeTemperatureMenu()
+            );
+            $messenger->sendMessage($message);
             $this->contextUser?->setMessageHandler(TextAction::GatewayTemperature->value);
         }
     }
@@ -39,7 +51,7 @@ class TemperatureHandler extends AbstractHandler
     /**
      * @return ReplyKeyboardInterface
      */
-    protected function makeKeyboard(): ReplyKeyboardInterface
+    protected function makeTemperatureMenu(): ReplyKeyboardInterface
     {
         return $this->replyKeyboardFactory
             ->setResize(new ResizeOption(true))
@@ -55,12 +67,5 @@ class TemperatureHandler extends AbstractHandler
                     ->setSendLocation(new SendLocationOption(true))
                     ->make()
             );
-    }
-
-    protected function makeButton(string $text): ReplyButtonInterface
-    {
-        return $this->replyButtonFactory
-            ->setText($text)
-            ->make();
     }
 }

@@ -12,7 +12,7 @@ use Raspberry\Common\Exceptions\UserExceptions\UserNotFoundException;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
 
-trait AuthorizeTrait
+trait HasAuthorize
 {
     protected int $userId;
 

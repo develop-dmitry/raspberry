@@ -8,26 +8,23 @@ use Raspberry\Messenger\Application\AbstractHandler;
 use Raspberry\Messenger\Application\LookBot\Enums\Menu;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButtonInterface;
-use Raspberry\Messenger\Domain\Gui\GuiInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboardInterface;
+use Raspberry\Messenger\Domain\Gui\Message\Message;
+use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
 use Raspberry\Messenger\Domain\Gui\Options\ReplyKeyboard\ResizeOption;
-use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
 
 class StartHandler extends AbstractHandler
 {
 
     /**
-     * @param ContextInterface $context
-     * @param GuiInterface $gui
-     * @param HandlerArgumentsInterface|null $args
      * @inheritDoc
      */
-    public function handle(ContextInterface $context, GuiInterface $gui, ?HandlerArgumentsInterface $args = null): void
+    public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {
-        parent::handle($context, $gui, $args);
+        parent::handle($context, $messenger);
 
-        $gui->sendMessage('Добро пожаловать в Raspberry!');
-        $gui->sendReplyKeyboard($this->makeMenu());
+        $message = Message::withReplyKeyboard('Добро пожаловать в Raspberry!', $this->makeMenu());
+        $messenger->sendMessage($message);
     }
 
     /**
@@ -46,6 +43,10 @@ class StartHandler extends AbstractHandler
         return $keyboard;
     }
 
+    /**
+     * @param string $text
+     * @return ReplyButtonInterface
+     */
     protected function makeMenuButton(string $text): ReplyButtonInterface
     {
         return $this->replyButtonFactory

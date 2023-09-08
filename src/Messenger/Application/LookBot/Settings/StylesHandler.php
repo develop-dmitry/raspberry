@@ -8,38 +8,59 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use Raspberry\Authorization\Application\MessengerAuthorization\MessengerAuthorizationInterface;
 use Raspberry\Authorization\Application\MessengerRegister\MessengerRegisterInterface;
+use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
+use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Look\Application\StylesUser\DTO\HasStyleRequest;
 use Raspberry\Look\Application\StylesUser\DTO\ToggleStyleRequest;
 use Raspberry\Look\Application\StylesUser\StylesUserInterface;
 use Raspberry\Look\Domain\Style\StyleInterface;
 use Raspberry\Look\Domain\Style\StyleRepositoryInterface;
 use Raspberry\Messenger\Application\AbstractPaginationHandler;
-use Raspberry\Messenger\Application\AuthorizeTrait;
+use Raspberry\Messenger\Application\HasAuthorize;
 use Raspberry\Messenger\Application\LookBot\Enums\Action;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
-use Raspberry\Messenger\Domain\Gui\GuiInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Message\Message;
+use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
 use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\InlineButton\CallbackDataOption;
-use Raspberry\Messenger\Domain\Handlers\Arguments\HandlerArgumentsInterface;
 use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
 use Raspberry\Messenger\Domain\Handlers\HandlerType;
 
 class StylesHandler extends AbstractPaginationHandler
 {
-    use AuthorizeTrait;
+    use HasAuthorize;
 
+    /**
+     * @param MessengerAuthorizationInterface $messengerAuthorization
+     * @param MessengerRegisterInterface $messengerRegister
+     * @param StyleRepositoryInterface $styleRepository
+     * @param StylesUserInterface $stylesUser
+     * @param LoggerInterface $logger
+     * @param GuiFactoryInterface $guiFactory
+     */
     public function __construct(
         protected MessengerAuthorizationInterface $messengerAuthorization,
         protected MessengerRegisterInterface $messengerRegister,
         protected StyleRepositoryInterface $styleRepository,
         protected StylesUserInterface $stylesUser,
-        protected LoggerInterface $logger
+        protected LoggerInterface $logger,
+        GuiFactoryInterface $guiFactory
     ) {
+        parent::__construct($guiFactory);
     }
 
-    public function handle(ContextInterface $context, GuiInterface $gui, ?HandlerArgumentsInterface $args = null): void
+    /**
+     * @param ContextInterface $context
+     * @param MessengerGatewayInterface $messenger
+     * @return void
+     * @throws FailedAuthorizeException
+     * @throws FailedSaveUserException
+     * @throws InvalidValueException
+     */
+    public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {
-        parent::handle($context, $gui, $args);
+        parent::handle($context, $messenger);
 
         if (!$context->getUser()) {
             throw new FailedAuthorizeException();
@@ -53,12 +74,16 @@ class StylesHandler extends AbstractPaginationHandler
 
         $this->pagination = $this->styleRepository->paginate($this->page(), 10);
 
-        if ($this->contextRequest->getRequestType() === HandlerType::CallbackQuery) {
-            $gui->editMessage();
-        }
+        $message = Message::withInlineKeyboard(
+            'Выберите стили в одежде, которые вы предпочитаете',
+            $this->makePaginationKeyboard()
+        );
 
-        $gui->sendMessage('Выберите стили в одежде, которые вы предпочитаете');
-        $gui->sendInlineKeyboard($this->makePaginationKeyboard());
+        if ($this->getRequestType() === HandlerType::CallbackQuery) {
+            $messenger->editMessage($message);
+        } else {
+            $messenger->sendMessage($message);
+        }
     }
 
     /**
@@ -111,6 +136,9 @@ class StylesHandler extends AbstractPaginationHandler
         }
     }
 
+    /**
+     * @return void
+     */
     protected function toggleStyle(): void
     {
         $callbackData = $this->getCallbackData();
