@@ -21,11 +21,11 @@ use Raspberry\Messenger\Application\LookBot\Temperature\WeatherGatewayHandler;
 use Raspberry\Messenger\Application\LookBot\Wardrobe\WardrobeHandler;
 use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
 use Raspberry\Messenger\Domain\Handlers\HandlerType;
-use Raspberry\Messenger\Domain\Messenger\BotInterface;
+use Raspberry\Messenger\Domain\Messenger\Exceptions\MessengerException;
 use Raspberry\Messenger\Domain\Messenger\MessengerInterface;
 use Raspberry\Messenger\Domain\Messenger\RunningMode;
 
-class LookBot implements BotInterface
+class LookBot
 {
 
     public function __construct(
@@ -61,7 +61,9 @@ class LookBot implements BotInterface
     }
 
     /**
-     * @inheritDoc
+     * @param RunningMode $runningMode
+     * @return void
+     * @throws MessengerException
      */
     public function handle(RunningMode $runningMode): void
     {
