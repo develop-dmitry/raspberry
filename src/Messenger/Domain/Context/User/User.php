@@ -5,9 +5,15 @@ declare(strict_types=1);
 namespace Raspberry\Messenger\Domain\Context\User;
 
 use Raspberry\Common\Values\Geolocation\GeolocationInterface;
+use Raspberry\Common\Values\Id\IdInterface;
+use Raspberry\Common\Values\Token\TokenInterface;
 
 class User implements UserInterface
 {
+
+    protected IdInterface $id;
+
+    protected TokenInterface $apiToken;
 
     /**
      * @param int $messengerId
@@ -59,5 +65,30 @@ class User implements UserInterface
     public function setGeolocation(GeolocationInterface $geolocation): void
     {
         $this->geolocation = $geolocation;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getId(): IdInterface
+    {
+        return $this->id;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getApiToken(): TokenInterface
+    {
+        return $this->apiToken;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function authorize(IdInterface $id, TokenInterface $apiToken): void
+    {
+        $this->id = $id;
+        $this->apiToken = $apiToken;
     }
 }

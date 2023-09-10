@@ -9,18 +9,14 @@ use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButtonInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboardInterface;
 use Raspberry\Messenger\Domain\Gui\Message\Message;
-use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
 use Raspberry\Messenger\Domain\Gui\Options\ReplyKeyboard\ResizeOption;
-use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
+use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 
 class SettingsHandler extends AbstractHandler
 {
 
     /**
-     * @param ContextInterface $context
-     * @param MessengerGatewayInterface $messenger
-     * @return void
-     * @throws FailedAuthorizeException
+     * @inheritDoc
      */
     public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {

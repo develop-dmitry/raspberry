@@ -8,7 +8,11 @@ use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
+use Raspberry\Authorization\Application\MessengerAuthorization\TelegramMessengerAuthorizationUseCase;
+use Raspberry\Authorization\Application\MessengerRegister\TelegramMessengerRegisterUseCase;
 use Raspberry\Common\Exceptions\RepositoryException;
+use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
+use Raspberry\Common\Exceptions\UserExceptions\UserNotFoundException;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Common\Values\Geolocation\Geolocation;
 use Raspberry\Common\Values\Geolocation\GeolocationInterface;
@@ -19,9 +23,11 @@ use Raspberry\Messenger\Domain\Context\Request\Request;
 use Raspberry\Messenger\Domain\Context\Request\RequestInterface;
 use Raspberry\Messenger\Domain\Context\User\UserInterface;
 use Raspberry\Messenger\Domain\Context\User\UserRepositoryInterface;
-use Raspberry\Messenger\Domain\Gui\Messenger\Exceptions\MessengerException;
-use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainer;
+use Raspberry\Messenger\Domain\Handlers\Container\HandlerContainerInterface;
+use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
 use Raspberry\Messenger\Domain\Handlers\HandlerType;
+use Raspberry\Messenger\Domain\Messenger\Exceptions\MessengerException;
+use Raspberry\Messenger\Domain\Messenger\RunningMode;
 use Raspberry\Messenger\Infrastructure\Gateway\TelegramMessengerGateway;
 use Raspberry\Messenger\Infrastructure\Gui\Base\Messenger\AbstractMessenger;
 use SergiX44\Nutgram\Nutgram;
@@ -32,27 +38,51 @@ class TelegramMessenger extends AbstractMessenger
 
     /**
      * @param Nutgram $bot
-     * @param HandlerContainer $handlers
      * @param UserRepositoryInterface $userRepository
+     * @param TelegramMessengerAuthorizationUseCase $messengerAuthorization
+     * @param TelegramMessengerRegisterUseCase $messengerRegister
      * @param LoggerInterface $logger
      */
     public function __construct(
         protected Nutgram $bot,
-        HandlerContainer $handlers,
         UserRepositoryInterface $userRepository,
+        TelegramMessengerAuthorizationUseCase $messengerAuthorization,
+        TelegramMessengerRegisterUseCase $messengerRegister,
         LoggerInterface $logger,
     ) {
         $gateway = new TelegramMessengerGateway($this->bot);
 
-        parent::__construct($handlers, $userRepository, $logger, $gateway);
+        parent::__construct(
+            $userRepository,
+            $logger,
+            $gateway,
+            $messengerAuthorization,
+            $messengerRegister
+        );
     }
 
     /**
      * @inheritDoc
      */
-    public function handle(): void
+    public function handle(RunningMode $mode): void
     {
-        $this->bot->setRunningMode(Webhook::class);
+        if ($mode === RunningMode::Webhook) {
+            $this->bot->setRunningMode(Webhook::class);
+
+            try {
+                $this->bot->run();
+            } catch (NotFoundExceptionInterface|ContainerExceptionInterface|Exception $exception) {
+                throw new MessengerException($exception->getMessage());
+            }
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setHandlers(HandlerContainerInterface $handlers): void
+    {
+        $this->handlers = $handlers;
 
         foreach ($this->handlers->filterByType(HandlerType::Command) as $command => $handler) {
             $commandHandler = fn() => $this->executeHandler($handler);
@@ -67,11 +97,23 @@ class TelegramMessenger extends AbstractMessenger
         $this->bot->onCallbackQuery(fn() => $this->execute([$this, 'executeCallbackQueryHandler']));
 
         $this->bot->onMessage(fn() => $this->execute([$this, 'executeMessageHandler']));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function identifyUser(): void
+    {
+        if (!$this->bot->userId()) {
+            throw new FailedAuthorizeException();
+        }
 
         try {
-            $this->bot->run();
-        } catch (NotFoundExceptionInterface|ContainerExceptionInterface|Exception $exception) {
-            throw new MessengerException($exception->getMessage());
+            $this->authorizeUser($this->bot->userId());
+        } catch (UserNotFoundException) {
+            $this->registerUser($this->bot->userId());
+        } catch (InvalidValueException|FailedSaveUserException) {
+            throw new FailedAuthorizeException();
         }
     }
 

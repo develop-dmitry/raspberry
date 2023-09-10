@@ -8,17 +8,13 @@ use Raspberry\Messenger\Application\AbstractHandler;
 use Raspberry\Messenger\Application\LookBot\Enums\TextAction;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Message\Message;
-use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
-use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
+use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 
 class InputTemperatureHandler extends AbstractHandler
 {
 
     /**
-     * @param ContextInterface $context
-     * @param MessengerGatewayInterface $messenger
-     * @return void
-     * @throws FailedAuthorizeException
+     * @inheritDoc
      */
     public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {

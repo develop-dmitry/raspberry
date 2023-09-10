@@ -6,42 +6,31 @@ namespace Raspberry\Messenger\Application\LookBot\Settings;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use Raspberry\Authorization\Application\MessengerAuthorization\MessengerAuthorizationInterface;
-use Raspberry\Authorization\Application\MessengerRegister\MessengerRegisterInterface;
-use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Look\Application\StylesUser\DTO\HasStyleRequest;
 use Raspberry\Look\Application\StylesUser\DTO\ToggleStyleRequest;
 use Raspberry\Look\Application\StylesUser\StylesUserInterface;
 use Raspberry\Look\Domain\Style\StyleInterface;
 use Raspberry\Look\Domain\Style\StyleRepositoryInterface;
 use Raspberry\Messenger\Application\AbstractPaginationHandler;
-use Raspberry\Messenger\Application\HasAuthorize;
 use Raspberry\Messenger\Application\LookBot\Enums\Action;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Message\Message;
-use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
 use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\InlineButton\CallbackDataOption;
-use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
 use Raspberry\Messenger\Domain\Handlers\HandlerType;
+use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 
 class StylesHandler extends AbstractPaginationHandler
 {
-    use HasAuthorize;
 
     /**
-     * @param MessengerAuthorizationInterface $messengerAuthorization
-     * @param MessengerRegisterInterface $messengerRegister
      * @param StyleRepositoryInterface $styleRepository
      * @param StylesUserInterface $stylesUser
      * @param LoggerInterface $logger
      * @param GuiFactoryInterface $guiFactory
      */
     public function __construct(
-        protected MessengerAuthorizationInterface $messengerAuthorization,
-        protected MessengerRegisterInterface $messengerRegister,
         protected StyleRepositoryInterface $styleRepository,
         protected StylesUserInterface $stylesUser,
         protected LoggerInterface $logger,
@@ -51,22 +40,19 @@ class StylesHandler extends AbstractPaginationHandler
     }
 
     /**
-     * @param ContextInterface $context
-     * @param MessengerGatewayInterface $messenger
-     * @return void
-     * @throws FailedAuthorizeException
-     * @throws FailedSaveUserException
-     * @throws InvalidValueException
+     * @inheritDoc
+     */
+    public function isNeedAuthorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
      */
     public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {
         parent::handle($context, $messenger);
-
-        if (!$context->getUser()) {
-            throw new FailedAuthorizeException();
-        }
-
-        $this->identifyUser($context->getUser()->getMessengerId());
 
         if ($this->getCallbackData()->getAction() === Action::StylesChoose->value) {
             $this->toggleStyle();
@@ -127,7 +113,7 @@ class StylesHandler extends AbstractPaginationHandler
      */
     protected function hasStyle(int $styleId): bool
     {
-        $hasStyleRequest = new HasStyleRequest($this->userId, $styleId);
+        $hasStyleRequest = new HasStyleRequest($this->contextUser->getId()->getValue(), $styleId);
 
         try {
             return $this->stylesUser->hasStyle($hasStyleRequest)->hasStyle();
@@ -148,14 +134,14 @@ class StylesHandler extends AbstractPaginationHandler
         }
 
         $styleId = $callbackData->get('id');
-        $toggleStyleRequest = new ToggleStyleRequest($this->userId, $styleId);
+        $toggleStyleRequest = new ToggleStyleRequest($this->contextUser->getId()->getValue(), $styleId);
 
         try {
             $this->stylesUser->toggleStyle($toggleStyleRequest);
         } catch (Exception $exception) {
             $this->logger->error('Failed toggle styles user', [
                 'style_id' => $styleId,
-                'user_id' => $this->userId,
+                'user_id' => $this->contextUser->getId()->getValue(),
                 'exception' => $exception->getMessage()
             ]);
         }

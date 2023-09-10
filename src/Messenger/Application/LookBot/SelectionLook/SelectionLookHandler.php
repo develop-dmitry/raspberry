@@ -2,15 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Application\LookBot;
+namespace Raspberry\Messenger\Application\LookBot\SelectionLook;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use Raspberry\Authorization\Application\MessengerAuthorization\MessengerAuthorizationInterface;
-use Raspberry\Authorization\Application\MessengerRegister\MessengerRegisterInterface;
-use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
-use Raspberry\Common\Exceptions\UserExceptions\UserNotFoundException;
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Look\Application\DetailLookUrl\DetailLookUrlInterface;
 use Raspberry\Look\Application\DetailLookUrl\DTO\DetailLookUrlRequest;
 use Raspberry\Look\Application\SelectionLook\DTO\LookItem;
@@ -19,49 +14,49 @@ use Raspberry\Look\Application\SelectionLook\SelectionLookInterface;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;
 use Raspberry\Look\Domain\Look\Services\LookUrlGenerator\Exceptions\FailedUrlGenerateException;
 use Raspberry\Messenger\Application\AbstractHandler;
-use Raspberry\Messenger\Application\HasAuthorize;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\InlineKeyboard\InlineKeyboardInterface;
 use Raspberry\Messenger\Domain\Gui\Message\Message;
-use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
 use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\WebAppOption;
-use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
 use Raspberry\Messenger\Domain\Handlers\HandlerType;
+use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 
 class SelectionLookHandler extends AbstractHandler
 {
 
-    use HasAuthorize;
-
+    /**
+     * @param SelectionLookInterface $selectionLook
+     * @param DetailLookUrlInterface $detailLookUrl
+     * @param LoggerInterface $logger
+     * @param GuiFactoryInterface $guiFactory
+     */
     public function __construct(
         protected SelectionLookInterface $selectionLook,
         protected DetailLookUrlInterface $detailLookUrl,
         protected LoggerInterface $logger,
-        protected MessengerAuthorizationInterface $messengerAuthorization,
-        protected MessengerRegisterInterface $messengerRegister,
         GuiFactoryInterface $guiFactory
     ) {
         parent::__construct($guiFactory);
     }
 
     /**
-     * @param ContextInterface $context
-     * @param MessengerGatewayInterface $messenger
-     * @return void
-     * @throws FailedSaveUserException
-     * @throws UserNotFoundException
-     * @throws InvalidValueException
-     * @throws FailedAuthorizeException
+     * @inheritDoc
+     */
+    public function isNeedAuthorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
      */
     public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {
         parent::handle($context, $messenger);
 
-        $this->identifyUser($context->getUser()?->getMessengerId());
-
-        $selectionRequest = new SelectionLookRequest($this->userId);
+        $selectionRequest = new SelectionLookRequest($this->contextUser->getId()->getValue());
 
         $selectionResponse = $this->selectionLook->execute($selectionRequest);
         $looks = $selectionResponse->getLooks();
@@ -126,7 +121,9 @@ class SelectionLookHandler extends AbstractHandler
      */
     protected function makeUrl(LookItem $item): string
     {
-        $request = new DetailLookUrlRequest($item->getId(), ['api_token' => $this->apiToken]);
+        $request = new DetailLookUrlRequest($item->getId(), [
+            'api_token' => $this->contextUser->getApiToken()->getValue()
+        ]);
 
         return $this->detailLookUrl->execute($request)->getUrl();
     }
