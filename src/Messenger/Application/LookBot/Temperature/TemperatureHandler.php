@@ -3,34 +3,39 @@
 namespace Raspberry\Messenger\Application\LookBot\Temperature;
 
 use Raspberry\Messenger\Application\AbstractHandler;
-use Raspberry\Messenger\Application\HasAuthorize;
 use Raspberry\Messenger\Application\LookBot\Enums\TextAction;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboardInterface;
 use Raspberry\Messenger\Domain\Gui\Message\Message;
-use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
 use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\ReplyButton\SendLocationOption;
 use Raspberry\Messenger\Domain\Gui\Options\ReplyKeyboard\ResizeOption;
-use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
-use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
+use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 
 class TemperatureHandler extends AbstractHandler
 {
-    use HasAuthorize;
 
+    /**
+     * @param WeatherGatewayHandler $weatherGatewayHandler
+     * @param GuiFactoryInterface $guiFactory
+     */
     public function __construct(
-        protected HandlerInterface $weatherGatewayHandler,
+        protected WeatherGatewayHandler $weatherGatewayHandler,
         GuiFactoryInterface $guiFactory
     ) {
         parent::__construct($guiFactory);
     }
 
     /**
-     * @param ContextInterface $context
-     * @param MessengerGatewayInterface $messenger
-     * @return void
-     * @throws FailedAuthorizeException
+     * @return bool
+     */
+    public function isNeedAuthorize(): bool
+    {
+        return $this->weatherGatewayHandler->isNeedAuthorize();
+    }
+
+    /**
+     * @inheritDoc
      */
     public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {

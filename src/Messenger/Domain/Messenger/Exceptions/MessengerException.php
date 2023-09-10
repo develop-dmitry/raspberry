@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Domain\Gui\Messenger\Exceptions;
+namespace Raspberry\Messenger\Domain\Messenger\Exceptions;
 
 use Exception;
 

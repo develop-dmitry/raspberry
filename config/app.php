@@ -170,8 +170,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         \App\Providers\WardrobeServiceProvider::class,
         \App\Providers\LookServiceProvider::class,
+        \App\Providers\WeatherServiceProvider::class,
         \App\Providers\MessengerServiceProvider::class,
-        \App\Providers\WeatherServiceProvider::class
     ])->toArray(),
 
     /*

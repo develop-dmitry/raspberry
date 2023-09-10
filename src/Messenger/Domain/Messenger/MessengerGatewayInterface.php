@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Domain\Gui\Messenger;
+namespace Raspberry\Messenger\Domain\Messenger;
 
 use Raspberry\Messenger\Domain\Gui\Message\MessageInterface;
 

@@ -13,9 +13,9 @@ use Raspberry\Messenger\Domain\Gui\Factory\InlineButtonFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\InlineKeyboardFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\ReplyButtonFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\ReplyKeyboardFactoryInterface;
-use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerType;
+use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 
 abstract class AbstractHandler implements HandlerInterface
 {
@@ -31,6 +31,9 @@ abstract class AbstractHandler implements HandlerInterface
 
     protected ReplyKeyboardFactoryInterface $replyKeyboardFactory;
 
+    /**
+     * @param GuiFactoryInterface $guiFactory
+     */
     public function __construct(
         private readonly GuiFactoryInterface $guiFactory
     ) {
@@ -41,10 +44,18 @@ abstract class AbstractHandler implements HandlerInterface
      */
     public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {
-        $this->contextRequest = $context->getRequest();
         $this->contextUser = $context->getUser();
+        $this->contextRequest = $context->getRequest();
 
-       $this->initFactories();
+        $this->initFactories();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isNeedAuthorize(): bool
+    {
+        return false;
     }
 
     /**

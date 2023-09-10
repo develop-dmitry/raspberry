@@ -4,53 +4,49 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Application\LookBot\Temperature;
 
-use Raspberry\Authorization\Application\MessengerAuthorization\MessengerAuthorizationInterface;
-use Raspberry\Authorization\Application\MessengerRegister\MessengerRegisterInterface;
-use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Common\Values\Temperature\Temperature;
 use Raspberry\Look\Domain\Look\Services\SelectionLook\Exceptions\FailedSavePropertyException;
 use Raspberry\Look\Domain\Look\Services\SelectionLook\SelectionLookRepositoryInterface;
 use Raspberry\Look\Infrastructure\Repositories\SelectionLookRepository;
 use Raspberry\Messenger\Application\AbstractHandler;
-use Raspberry\Messenger\Application\HasAuthorize;
 use Raspberry\Messenger\Application\LookBot\Enums\TextAction;
+use Raspberry\Messenger\Application\LookBot\Event\EventListHandler;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Message\Message;
-use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
-use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
 use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
+use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 
 class SaveTemperatureHandler extends AbstractHandler
 {
-    use HasAuthorize;
 
     protected SelectionLookRepositoryInterface $selectionLookRepository;
 
+    /**
+     * @param EventListHandler $next
+     * @param GuiFactoryInterface $guiFactory
+     */
     public function __construct(
-        protected MessengerAuthorizationInterface $messengerAuthorization,
-        protected MessengerRegisterInterface $messengerRegister,
-        protected HandlerInterface $next,
+        protected EventListHandler $next,
         GuiFactoryInterface $guiFactory
     ) {
         parent::__construct($guiFactory);
     }
 
+    public function isNeedAuthorize(): bool
+    {
+        return true;
+    }
+
     /**
-     * @param ContextInterface $context
-     * @param MessengerGatewayInterface $messenger
-     * @return void
-     * @throws InvalidValueException
-     * @throws FailedSaveUserException
-     * @throws FailedAuthorizeException
+     * @inheritDoc
      */
     public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {
         parent::handle($context, $messenger);
 
-        $this->identifyUser($this->contextUser?->getMessengerId());
-        $this->selectionLookRepository = new SelectionLookRepository($this->userId);
+        $this->selectionLookRepository = new SelectionLookRepository($this->contextUser->getId()->getValue());
 
         try {
             $temperature = new Temperature($this->contextRequest->getMessage());

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Application\LookBot;
+namespace Raspberry\Messenger\Application\LookBot\Common;
 
 use Raspberry\Messenger\Application\AbstractHandler;
 use Raspberry\Messenger\Application\LookBot\Enums\Menu;
@@ -10,8 +10,8 @@ use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButtonInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboardInterface;
 use Raspberry\Messenger\Domain\Gui\Message\Message;
-use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
 use Raspberry\Messenger\Domain\Gui\Options\ReplyKeyboard\ResizeOption;
+use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 
 class StartHandler extends AbstractHandler
 {

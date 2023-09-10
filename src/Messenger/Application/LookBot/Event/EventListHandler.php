@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Application\LookBot\EventHandlers;
+namespace Raspberry\Messenger\Application\LookBot\Event;
 
 use Psr\Log\LoggerInterface;
 use Raspberry\Look\Domain\Event\EventInterface;
@@ -13,16 +13,21 @@ use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Message\Message;
-use Raspberry\Messenger\Domain\Gui\Messenger\MessengerGatewayInterface;
 use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\InlineButton\CallbackDataOption;
 use Raspberry\Messenger\Domain\Gui\Options\OptionInterface;
 use Raspberry\Messenger\Domain\Handlers\Exceptions\FailedAuthorizeException;
+use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 
 class EventListHandler extends AbstractPaginationHandler
 {
 
     protected int $perPage = 10;
 
+    /**
+     * @param EventRepositoryInterface $eventRepository
+     * @param LoggerInterface $logger
+     * @param GuiFactoryInterface $guiFactory
+     */
     public function __construct(
         protected EventRepositoryInterface $eventRepository,
         protected LoggerInterface $logger,
@@ -32,10 +37,7 @@ class EventListHandler extends AbstractPaginationHandler
     }
 
     /**
-     * @param ContextInterface $context
-     * @param MessengerGatewayInterface $messenger
-     * @return void
-     * @throws FailedAuthorizeException
+     * @inheritDoc
      */
     public function handle(ContextInterface $context, MessengerGatewayInterface $messenger): void
     {
@@ -61,6 +63,9 @@ class EventListHandler extends AbstractPaginationHandler
         }
     }
 
+    /**
+     * @return bool
+     */
     protected function requestFromCurrentHandler(): bool
     {
         return  $this->getCallbackData()->getAction() === Action::EventChoose->value
