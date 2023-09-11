@@ -8,13 +8,13 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Exceptions\UserNotFoundException;
-use Raspberry\Look\Application\DetailLookUrl\DetailLookUrlInterface;
-use Raspberry\Look\Application\DetailLookUrl\DTO\DetailLookUrlRequest;
+use Raspberry\Look\Application\LookUrlGenerator\LookUrlGeneratorInterface;
+use Raspberry\Look\Application\LookUrlGenerator\DTO\DetailLookUrlRequest;
 use Raspberry\Look\Application\SelectionLook\DTO\LookData;
 use Raspberry\Look\Application\SelectionLook\DTO\SelectionLookRequest;
 use Raspberry\Look\Application\SelectionLook\SelectionLookInterface;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;
-use Raspberry\Look\Domain\Look\Services\LookUrlGenerator\Exceptions\FailedUrlGenerateException;
+use Raspberry\Look\Domain\Look\Services\UrlGenerator\Exceptions\FailedUrlGenerateException;
 use Raspberry\Messenger\Application\AbstractHandler;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
@@ -31,15 +31,15 @@ class SelectionLookHandler extends AbstractHandler
 
     /**
      * @param SelectionLookInterface $selectionLook
-     * @param DetailLookUrlInterface $detailLookUrl
+     * @param LookUrlGeneratorInterface $detailLookUrl
      * @param LoggerInterface $logger
      * @param GuiFactoryInterface $guiFactory
      */
     public function __construct(
-        protected SelectionLookInterface $selectionLook,
-        protected DetailLookUrlInterface $detailLookUrl,
-        protected LoggerInterface $logger,
-        GuiFactoryInterface $guiFactory
+        protected SelectionLookInterface    $selectionLook,
+        protected LookUrlGeneratorInterface $detailLookUrl,
+        protected LoggerInterface           $logger,
+        GuiFactoryInterface                 $guiFactory
     ) {
         parent::__construct($guiFactory);
     }
