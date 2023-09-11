@@ -3,7 +3,7 @@
 namespace Tests\Unit\Common\Values;
 
 use Raspberry\Core\Enums\CompareResult;
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Values\Percent\Percent;
 use Tests\TestCase;
 

@@ -8,7 +8,7 @@ use App\Models\User as UserModel;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Raspberry\Authorization\Domain\User\User;
 use Raspberry\Authorization\Infrastructure\Repositories\UserRepository;
-use Raspberry\Core\Exceptions\UserExceptions\UserNotFoundException;
+use Raspberry\Core\Exceptions\UserNotFoundException;
 use Raspberry\Core\Values\Id\Id;
 use Tests\TestCase;
 

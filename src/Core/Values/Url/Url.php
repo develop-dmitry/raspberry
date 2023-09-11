@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Core\Values\Url;
 
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\InvalidValueException;
 
 class Url implements UrlInterface
 {

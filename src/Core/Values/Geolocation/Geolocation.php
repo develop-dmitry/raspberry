@@ -2,8 +2,7 @@
 
 namespace Raspberry\Core\Values\Geolocation;
 
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
-use Raspberry\Core\Values\Geolocation\GeolocationInterface;
+use Raspberry\Core\Exceptions\InvalidValueException;
 
 class Geolocation implements GeolocationInterface
 {

@@ -3,7 +3,7 @@
 namespace Raspberry\Core\Values\Percent;
 
 use Raspberry\Core\Enums\CompareResult;
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\InvalidValueException;
 
 class Percent implements PercentInterface
 {

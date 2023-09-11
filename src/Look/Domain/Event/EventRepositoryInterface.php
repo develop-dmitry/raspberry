@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Domain\Event;
 
+use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Pagination\PaginationInterface;
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
 use Raspberry\Look\Domain\Event\Exceptions\EventNotFoundException;
 
 interface EventRepositoryInterface

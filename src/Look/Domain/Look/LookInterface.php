@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Domain\Look;
 
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Values\Id\IdInterface;
 use Raspberry\Core\Values\Name\NameInterface;
 use Raspberry\Core\Values\Percent\PercentInterface;

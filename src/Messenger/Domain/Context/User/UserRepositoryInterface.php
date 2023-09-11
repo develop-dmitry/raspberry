@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Domain\Context\User;
 
-use Raspberry\Core\Exceptions\RepositoryExceptions\RepositoryException;
+use Raspberry\Core\Exceptions\RepositoryException;
 
 interface UserRepositoryInterface
 {

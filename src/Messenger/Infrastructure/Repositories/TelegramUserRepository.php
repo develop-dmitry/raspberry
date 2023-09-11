@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Infrastructure\Repositories;
 
+use Raspberry\Core\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\RepositoryException;
 use Raspberry\Core\Repositories\AbstractRedisRepository;
-use Raspberry\Core\Exceptions\RepositoryExceptions\RepositoryException;
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
 use Raspberry\Core\Values\Geolocation\Geolocation;
 use Raspberry\Core\Values\Geolocation\GeolocationInterface;
 use Raspberry\Messenger\Domain\Context\User\User;

@@ -4,7 +4,7 @@ namespace Raspberry\Messenger\Application\LookBot\Temperature;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Values\Geolocation\GeolocationInterface;
 use Raspberry\Core\Values\Temperature\Temperature;
 use Raspberry\Look\Infrastructure\Repositories\SelectionLookRepository;

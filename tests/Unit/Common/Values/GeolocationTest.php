@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Common\Values;
 
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Values\Geolocation\Geolocation;
 use Tests\TestCase;
 

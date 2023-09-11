@@ -3,8 +3,8 @@
 namespace Raspberry\Look\Infrastructure\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use Raspberry\Core\Exceptions\UserExceptions\UserNotFoundException;
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\UserNotFoundException;
 use Raspberry\Look\Application\HowFit\DTO\HowFitRequest;
 use Raspberry\Look\Application\HowFit\HowFitInterface;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;

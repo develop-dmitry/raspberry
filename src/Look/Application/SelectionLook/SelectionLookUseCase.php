@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Application\SelectionLook;
 
-use Raspberry\Core\Exceptions\UserExceptions\UserNotFoundException;
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\UserNotFoundException;
 use Raspberry\Look\Application\SelectionLook\DTO\LookData;
 use Raspberry\Look\Application\SelectionLook\DTO\SelectionLookRequest;
 use Raspberry\Look\Application\SelectionLook\DTO\SelectionLookResponse;

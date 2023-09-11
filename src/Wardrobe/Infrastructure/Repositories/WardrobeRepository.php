@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Raspberry\Wardrobe\Infrastructure\Repositories;
 
-use App\Models\User;
 use App\Models\Clothes as ClothesModel;
+use App\Models\User;
 use Psr\Log\LoggerInterface;
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Values\Id\Id;
 use Raspberry\Core\Values\Name\Name;
 use Raspberry\Core\Values\Photo\Photo;

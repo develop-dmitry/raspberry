@@ -8,9 +8,9 @@ use App\Models\User as UserModel;
 use Raspberry\Authorization\Domain\User\User;
 use Raspberry\Authorization\Domain\User\UserInterface;
 use Raspberry\Authorization\Domain\User\UserRepositoryInterface;
-use Raspberry\Core\Exceptions\UserExceptions\FailedSaveUserException;
-use Raspberry\Core\Exceptions\UserExceptions\UserNotFoundException;
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\FailedSaveUserException;
+use Raspberry\Core\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\UserNotFoundException;
 use Raspberry\Core\Values\Id\Id;
 use Raspberry\Core\Values\Token\Token;
 

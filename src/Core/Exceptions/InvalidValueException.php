@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Core\Values\Exceptions;
+namespace Raspberry\Core\Exceptions;
 
 use Exception;
 

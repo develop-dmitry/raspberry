@@ -6,8 +6,8 @@ namespace Raspberry\Messenger\Application\LookBot\SelectionLook;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use Raspberry\Core\Exceptions\UserExceptions\UserNotFoundException;
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\UserNotFoundException;
 use Raspberry\Look\Application\DetailLookUrl\DetailLookUrlInterface;
 use Raspberry\Look\Application\DetailLookUrl\DTO\DetailLookUrlRequest;
 use Raspberry\Look\Application\SelectionLook\DTO\LookData;

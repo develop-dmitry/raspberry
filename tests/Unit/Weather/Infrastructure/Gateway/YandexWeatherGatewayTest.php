@@ -3,7 +3,7 @@
 namespace Tests\Unit\Weather\Infrastructure\Gateway;
 
 use Psr\Log\LoggerInterface;
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Weather\Infrastructure\Gateway\YandexWeatherGateway;
 use Tests\TestCase;
 

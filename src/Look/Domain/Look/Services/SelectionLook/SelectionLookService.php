@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Raspberry\Look\Domain\Look\Services\SelectionLook;
 
 use Raspberry\Core\Enums\CompareResult;
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Look\Domain\Look\LookInterface;
 use Raspberry\Look\Domain\Look\LookRepositoryInterface;
 use Raspberry\Look\Domain\User\UserInterface;

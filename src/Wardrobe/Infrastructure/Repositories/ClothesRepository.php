@@ -6,7 +6,7 @@ namespace Raspberry\Wardrobe\Infrastructure\Repositories;
 
 use App\Models\Clothes as ClothesModel;
 use Psr\Log\LoggerInterface;
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Values\Id\Id;
 use Raspberry\Core\Values\Name\Name;
 use Raspberry\Core\Values\Photo\Photo;

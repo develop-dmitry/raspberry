@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Application\LookBot\Temperature;
 
-use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Values\Temperature\Temperature;
 use Raspberry\Look\Domain\Look\Services\SelectionLook\Exceptions\FailedSavePropertyException;
 use Raspberry\Look\Domain\Look\Services\SelectionLook\SelectionLookRepositoryInterface;
@@ -15,7 +15,6 @@ use Raspberry\Messenger\Application\LookBot\Event\EventListHandler;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Message\Message;
-use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
 use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 
 class SaveTemperatureHandler extends AbstractHandler
