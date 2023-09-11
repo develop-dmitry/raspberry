@@ -7,7 +7,7 @@ namespace Tests\Unit\Look\Infrastructure\Repositories;
 use Illuminate\Support\Facades\Redis;
 use Predis\Client;
 use Raspberry\Look\Domain\Event\EventRepositoryInterface;
-use Raspberry\Look\Infrastructure\Repositories\SelectionLookRepository;
+use Raspberry\Look\Infrastructure\Repositories\PickerRepository;
 use Tests\TestCase;
 
 class SelectionLookRepositoryTest extends TestCase
@@ -27,7 +27,7 @@ class SelectionLookRepositoryTest extends TestCase
         $this->redis->set('look_selection:1:temperature', 10);
         $this->redis->set('look_selection:1:event_id', 1);
 
-        $selectionLookRepository = new SelectionLookRepository(1);
+        $selectionLookRepository = new PickerRepository(1);
 
         $this->assertEquals(10, $selectionLookRepository->getTemperature());
         $this->assertEquals(1, $selectionLookRepository->getEventId());
@@ -35,7 +35,7 @@ class SelectionLookRepositoryTest extends TestCase
 
     public function testSetTemperature(): void
     {
-        $selectionLookRepository = new SelectionLookRepository(1);
+        $selectionLookRepository = new PickerRepository(1);
         $selectionLookRepository->setTemperature(-20);
 
         $this->assertEquals(-20, $this->redis->get('look_selection:1:temperature'));
@@ -43,7 +43,7 @@ class SelectionLookRepositoryTest extends TestCase
 
     public function testSetEvent(): void
     {
-        $selectionLookRepository = new SelectionLookRepository(1);
+        $selectionLookRepository = new PickerRepository(1);
         $selectionLookRepository->setEventId(5);
 
         $this->assertEquals(5, $this->redis->get('look_selection:1:event_id'));

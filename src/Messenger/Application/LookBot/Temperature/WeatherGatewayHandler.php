@@ -7,7 +7,7 @@ use Psr\Log\LoggerInterface;
 use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Values\Geolocation\GeolocationInterface;
 use Raspberry\Core\Values\Temperature\Temperature;
-use Raspberry\Look\Infrastructure\Repositories\SelectionLookRepository;
+use Raspberry\Look\Infrastructure\Repositories\PickerRepository;
 use Raspberry\Messenger\Application\AbstractHandler;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
@@ -59,7 +59,7 @@ class WeatherGatewayHandler extends AbstractHandler
         if ($geolocation = $this->contextUser->getGeolocation()) {
             try {
                 $temperature = new Temperature($this->getTemperature($geolocation));
-                (new SelectionLookRepository($this->contextUser->getId()->getValue()))
+                (new PickerRepository($this->contextUser->getId()->getValue()))
                     ->setTemperature($temperature->getValue());
 
                 $text = "Ваше местоположение {$geolocation->getDecimal()}\nТемпература {$temperature->getCelsius()}";

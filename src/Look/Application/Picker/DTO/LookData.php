@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Look\Application\SelectionLook\DTO;
+namespace Raspberry\Look\Application\Picker\DTO;
 
 use Raspberry\Look\Domain\Look\LookInterface;
 use Spatie\DataTransferObject\DataTransferObject;

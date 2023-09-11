@@ -2,22 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Look\Application\SelectionLook;
+namespace Raspberry\Look\Application\Picker;
 
 use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Exceptions\UserNotFoundException;
-use Raspberry\Look\Application\SelectionLook\DTO\LookData;
-use Raspberry\Look\Application\SelectionLook\DTO\SelectionLookRequest;
-use Raspberry\Look\Application\SelectionLook\DTO\SelectionLookResponse;
+use Raspberry\Look\Application\Picker\DTO\LookData;
+use Raspberry\Look\Application\Picker\DTO\PickerRequest;
+use Raspberry\Look\Application\Picker\DTO\PickerResponse;
 use Raspberry\Look\Domain\Event\EventRepositoryInterface;
 use Raspberry\Look\Domain\Look\LookInterface;
 use Raspberry\Look\Domain\Look\LookRepositoryInterface;
-use Raspberry\Look\Domain\Look\Services\SelectionLook\SelectionLookService;
+use Raspberry\Look\Domain\Look\Services\Picker\PickerService;
+use Raspberry\Look\Domain\Look\Services\Picker\PickerServiceInterface;
 use Raspberry\Look\Domain\User\UserInterface;
 use Raspberry\Look\Domain\User\UserRepositoryInterface;
-use Raspberry\Look\Infrastructure\Repositories\SelectionLookRepository;
+use Raspberry\Look\Infrastructure\Repositories\PickerRepository;
 
-class SelectionLookUseCase implements SelectionLookInterface
+class PickerUseCase implements PickerInterface
 {
 
     /**
@@ -35,29 +36,25 @@ class SelectionLookUseCase implements SelectionLookInterface
     /**
      * @inheritDoc
      */
-    public function execute(SelectionLookRequest $request): SelectionLookResponse
+    public function execute(PickerRequest $request): PickerResponse
     {
-
-        $selectionLookService = new SelectionLookService(
-            $this->lookRepository,
-            new SelectionLookRepository($request->userId),
-            $this->getUser($request->userId),
-        );
-
-        $looks = $selectionLookService->selection();
+        $looks = $this->buildPicker($request->userId)->pick();
         $looks = array_map(static fn (LookInterface $look) => LookData::fromDomain($look), $looks);
 
-        return new SelectionLookResponse(looks: $looks);
+        return new PickerResponse(looks: $looks);
     }
 
     /**
      * @param int $userId
-     * @return UserInterface
-     * @throws UserNotFoundException
+     * @return PickerServiceInterface
      * @throws InvalidValueException
+     * @throws UserNotFoundException
      */
-    protected function getUser(int $userId): UserInterface
+    protected function buildPicker(int $userId): PickerServiceInterface
     {
-        return $this->userRepository->getById($userId);
+        $pickerRepository = new PickerRepository($userId);
+        $user = $this->userRepository->getById($userId);
+
+        return new PickerService($this->lookRepository, $pickerRepository, $user);
     }
 }

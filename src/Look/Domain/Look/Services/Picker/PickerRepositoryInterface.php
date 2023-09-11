@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Look\Domain\Look\Services\SelectionLook;
+namespace Raspberry\Look\Domain\Look\Services\Picker;
 
 use Raspberry\Look\Domain\Event\Exceptions\EventNotFoundException;
-use Raspberry\Look\Domain\Look\Services\SelectionLook\Exceptions\FailedSavePropertyException;
+use Raspberry\Look\Domain\Look\Services\Picker\Exceptions\FailedSavePropertyException;
 
-interface SelectionLookRepositoryInterface
+interface PickerRepositoryInterface
 {
 
     /**

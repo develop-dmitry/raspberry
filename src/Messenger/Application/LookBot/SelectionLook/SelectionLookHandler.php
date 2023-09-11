@@ -10,9 +10,9 @@ use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Exceptions\UserNotFoundException;
 use Raspberry\Look\Application\LookUrlGenerator\LookUrlGeneratorInterface;
 use Raspberry\Look\Application\LookUrlGenerator\DTO\DetailLookUrlRequest;
-use Raspberry\Look\Application\SelectionLook\DTO\LookData;
-use Raspberry\Look\Application\SelectionLook\DTO\SelectionLookRequest;
-use Raspberry\Look\Application\SelectionLook\SelectionLookInterface;
+use Raspberry\Look\Application\Picker\DTO\LookData;
+use Raspberry\Look\Application\Picker\DTO\PickerRequest;
+use Raspberry\Look\Application\Picker\PickerInterface;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;
 use Raspberry\Look\Domain\Look\Services\UrlGenerator\Exceptions\FailedUrlGenerateException;
 use Raspberry\Messenger\Application\AbstractHandler;
@@ -30,13 +30,13 @@ class SelectionLookHandler extends AbstractHandler
 {
 
     /**
-     * @param SelectionLookInterface $selectionLook
+     * @param PickerInterface $picker
      * @param LookUrlGeneratorInterface $detailLookUrl
      * @param LoggerInterface $logger
      * @param GuiFactoryInterface $guiFactory
      */
     public function __construct(
-        protected SelectionLookInterface    $selectionLook,
+        protected PickerInterface           $picker,
         protected LookUrlGeneratorInterface $detailLookUrl,
         protected LoggerInterface           $logger,
         GuiFactoryInterface                 $guiFactory
@@ -60,16 +60,16 @@ class SelectionLookHandler extends AbstractHandler
         parent::handle($context, $messenger);
 
         try {
-            $selectionRequest = new SelectionLookRequest(userId: $this->contextUser->getId()->getValue());
+            $request = new PickerRequest(userId: $this->contextUser->getId()->getValue());
 
-            $selectionResponse = $this->selectionLook->execute($selectionRequest);
+            $response = $this->picker->execute($request);
 
-            if (empty($selectionResponse->looks)) {
+            if (empty($response->looks)) {
                 $message = Message::text('К сожалению, мы не смогли подобрать для вас образ :(');
             } else {
                 $message = Message::withInlineKeyboard(
                     'Для вас подобраны следующие образы',
-                    $this->makeKeyboard($selectionResponse->looks)
+                    $this->makeKeyboard($response->looks)
                 );
             }
 

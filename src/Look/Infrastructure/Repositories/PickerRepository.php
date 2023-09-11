@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Raspberry\Look\Infrastructure\Repositories;
 
 use Raspberry\Core\Repositories\AbstractRedisRepository;
-use Raspberry\Look\Domain\Look\Services\SelectionLook\Exceptions\FailedSavePropertyException;
-use Raspberry\Look\Domain\Look\Services\SelectionLook\SelectionLookRepositoryInterface;
+use Raspberry\Look\Domain\Look\Services\Picker\Exceptions\FailedSavePropertyException;
+use Raspberry\Look\Domain\Look\Services\Picker\PickerRepositoryInterface;
 use RedisException;
 
-final class SelectionLookRepository extends AbstractRedisRepository implements SelectionLookRepositoryInterface
+final class PickerRepository extends AbstractRedisRepository implements PickerRepositoryInterface
 {
 
     protected string $name = 'look_selection';

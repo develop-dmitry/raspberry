@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Look\Domain\Look\Services\SelectionLook;
+namespace Raspberry\Look\Domain\Look\Services\Picker;
 
 use Raspberry\Core\Enums\CompareResult;
 use Raspberry\Core\Exceptions\InvalidValueException;
@@ -10,25 +10,25 @@ use Raspberry\Look\Domain\Look\LookInterface;
 use Raspberry\Look\Domain\Look\LookRepositoryInterface;
 use Raspberry\Look\Domain\User\UserInterface;
 
-class SelectionLookService implements SelectionLookServiceInterface
+class PickerService implements PickerServiceInterface
 {
 
     /**
      * @param LookRepositoryInterface $lookRepository
-     * @param SelectionLookRepositoryInterface $selectionLookRepository
+     * @param PickerRepositoryInterface $selectionLookRepository
      * @param UserInterface $user
      */
     public function __construct(
-        protected LookRepositoryInterface $lookRepository,
-        protected SelectionLookRepositoryInterface $selectionLookRepository,
-        protected UserInterface $user
+        protected LookRepositoryInterface   $lookRepository,
+        protected PickerRepositoryInterface $selectionLookRepository,
+        protected UserInterface             $user
     ) {
     }
 
     /**
      * @inheritDoc
      */
-    public function selection(): array
+    public function pick(): array
     {
         $looks = $this->lookRepository->findForSelection(
             $this->minTemperature(),

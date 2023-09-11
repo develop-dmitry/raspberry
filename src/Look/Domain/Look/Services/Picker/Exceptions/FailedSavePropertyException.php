@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Look\Domain\Look\Services\SelectionLook\Exceptions;
+namespace Raspberry\Look\Domain\Look\Services\Picker\Exceptions;
 
 use Exception;
 

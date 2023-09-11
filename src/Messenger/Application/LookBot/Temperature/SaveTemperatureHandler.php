@@ -6,9 +6,9 @@ namespace Raspberry\Messenger\Application\LookBot\Temperature;
 
 use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Values\Temperature\Temperature;
-use Raspberry\Look\Domain\Look\Services\SelectionLook\Exceptions\FailedSavePropertyException;
-use Raspberry\Look\Domain\Look\Services\SelectionLook\SelectionLookRepositoryInterface;
-use Raspberry\Look\Infrastructure\Repositories\SelectionLookRepository;
+use Raspberry\Look\Domain\Look\Services\Picker\Exceptions\FailedSavePropertyException;
+use Raspberry\Look\Domain\Look\Services\Picker\PickerRepositoryInterface;
+use Raspberry\Look\Infrastructure\Repositories\PickerRepository;
 use Raspberry\Messenger\Application\AbstractHandler;
 use Raspberry\Messenger\Application\LookBot\Enums\TextAction;
 use Raspberry\Messenger\Application\LookBot\Event\EventListHandler;
@@ -20,7 +20,7 @@ use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 class SaveTemperatureHandler extends AbstractHandler
 {
 
-    protected SelectionLookRepositoryInterface $selectionLookRepository;
+    protected PickerRepositoryInterface $selectionLookRepository;
 
     /**
      * @param EventListHandler $next
@@ -45,7 +45,7 @@ class SaveTemperatureHandler extends AbstractHandler
     {
         parent::handle($context, $messenger);
 
-        $this->selectionLookRepository = new SelectionLookRepository($this->contextUser->getId()->getValue());
+        $this->selectionLookRepository = new PickerRepository($this->contextUser->getId()->getValue());
 
         try {
             $temperature = new Temperature($this->contextRequest->getMessage());

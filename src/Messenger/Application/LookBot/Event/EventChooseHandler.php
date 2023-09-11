@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Raspberry\Messenger\Application\LookBot\Event;
 
 use Raspberry\Look\Domain\Event\EventRepositoryInterface;
-use Raspberry\Look\Domain\Look\Services\SelectionLook\Exceptions\FailedSavePropertyException;
-use Raspberry\Look\Domain\Look\Services\SelectionLook\SelectionLookRepositoryInterface;
-use Raspberry\Look\Infrastructure\Repositories\SelectionLookRepository;
+use Raspberry\Look\Domain\Look\Services\Picker\Exceptions\FailedSavePropertyException;
+use Raspberry\Look\Domain\Look\Services\Picker\PickerRepositoryInterface;
+use Raspberry\Look\Infrastructure\Repositories\PickerRepository;
 use Raspberry\Messenger\Application\AbstractHandler;
 use Raspberry\Messenger\Application\LookBot\SelectionLook\SelectionLookHandler;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
@@ -17,7 +17,7 @@ use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 
 class EventChooseHandler extends AbstractHandler
 {
-    protected SelectionLookRepositoryInterface $selectionLookRepository;
+    protected PickerRepositoryInterface $selectionLookRepository;
 
     /**
      * @param SelectionLookHandler $next
@@ -46,7 +46,7 @@ class EventChooseHandler extends AbstractHandler
     {
         parent::handle($context, $messenger);
 
-        $this->selectionLookRepository = new SelectionLookRepository($this->contextUser->getId()->getValue());
+        $this->selectionLookRepository = new PickerRepository($this->contextUser->getId()->getValue());
 
         if (!$this->contextRequest->getCallbackData()->has('id')) {
             $this->back->handle($context, $messenger);
