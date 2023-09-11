@@ -2,8 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Raspberry\Look\Infrastructure\Http\Controllers\DetailLookController;
-use Raspberry\Look\Infrastructure\Http\Controllers\HowFitController;
+use Raspberry\Look\Infrastructure\Controllers\DetailLookController;
+use Raspberry\Look\Infrastructure\Controllers\HowFitController;
 use Raspberry\Messenger\Infrastructure\Controllers\TelegramLookBotController;
 use Raspberry\Wardrobe\Infrastructure\Http\Controllers\AddClothesController;
 use Raspberry\Wardrobe\Infrastructure\Http\Controllers\RemoveClothesController;

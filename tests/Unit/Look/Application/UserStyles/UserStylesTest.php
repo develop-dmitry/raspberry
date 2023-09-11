@@ -26,7 +26,10 @@ class UserStylesTest extends TestCase
             $this->app->make(UserRepositoryInterface::class)
         );
 
-        $userStyles->toggleStyle(new ToggleStyleRequest($user->id, $style->id));
+        $userStyles->toggleStyle(new ToggleStyleRequest(
+            userId: $user->id,
+            styleId: $style->id
+        ));
 
         $this->assertContains($style->id, $user->styles()->pluck('id'));
     }
@@ -41,7 +44,9 @@ class UserStylesTest extends TestCase
             $this->app->make(UserRepositoryInterface::class)
         );
 
-        $userStyles->toggleStyle(new ToggleStyleRequest($user->id, $style->id));
+        $request = new ToggleStyleRequest(userId: $user->id, styleId: $style->id);
+
+        $userStyles->toggleStyle($request);
 
         $this->assertNotContains($style->id, $user->styles()->pluck('id'));
     }

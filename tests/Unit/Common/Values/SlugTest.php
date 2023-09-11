@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Common\Values;
 
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
-use Raspberry\Common\Values\Slug\Slug;
+use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Values\Slug\Slug;
 use Tests\TestCase;
 
 class SlugTest extends TestCase

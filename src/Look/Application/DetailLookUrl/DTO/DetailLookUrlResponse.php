@@ -4,22 +4,10 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Application\DetailLookUrl\DTO;
 
-class DetailLookUrlResponse
+use Spatie\DataTransferObject\DataTransferObject;
+
+class DetailLookUrlResponse extends DataTransferObject
 {
 
-    /**
-     * @param string $url
-     */
-    public function __construct(
-        protected string $url
-    ) {
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrl(): string
-    {
-        return $this->url;
-    }
+    public string $url;
 }

@@ -24,9 +24,9 @@ class DetailLookUrlUseCase implements DetailLookUrlInterface
      */
     public function execute(DetailLookUrlRequest $request): DetailLookUrlResponse
     {
-        $look = $this->lookRepository->getById($request->getLookId());
-        $url = $this->lookUrlGeneratorService->makeDetailLookUrl($look, $request->getQuery());
+        $look = $this->lookRepository->getById($request->lookId);
+        $url = $this->lookUrlGeneratorService->makeDetailLookUrl($look, $request->query);
 
-        return new DetailLookUrlResponse($url->getValue());
+        return new DetailLookUrlResponse(url: $url->getValue());
     }
 }

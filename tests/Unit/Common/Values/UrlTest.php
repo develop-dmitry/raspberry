@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Common\Values;
 
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
-use Raspberry\Common\Values\Url\Url;
+use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Values\Url\Url;
 use Tests\TestCase;
 
 class UrlTest extends TestCase

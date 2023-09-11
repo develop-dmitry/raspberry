@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Common\Values;
 
-use Raspberry\Common\Base\Enums\CompareResult;
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
-use Raspberry\Common\Values\Percent\Percent;
+use Raspberry\Core\Enums\CompareResult;
+use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Values\Percent\Percent;
 use Tests\TestCase;
 
 class PercentTest extends TestCase

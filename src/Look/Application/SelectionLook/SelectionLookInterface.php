@@ -8,6 +8,7 @@ use Raspberry\Core\Exceptions\UserExceptions\UserNotFoundException;
 use Raspberry\Core\Values\Exceptions\InvalidValueException;
 use Raspberry\Look\Application\SelectionLook\DTO\SelectionLookRequest;
 use Raspberry\Look\Application\SelectionLook\DTO\SelectionLookResponse;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 interface SelectionLookInterface
 {
@@ -17,6 +18,7 @@ interface SelectionLookInterface
      * @return SelectionLookResponse
      * @throws UserNotFoundException
      * @throws InvalidValueException
+     * @throws UnknownProperties
      */
     public function execute(SelectionLookRequest $request): SelectionLookResponse;
 }

@@ -2,22 +2,10 @@
 
 namespace Raspberry\Look\Application\HowFit\DTO;
 
-class HowFitResponse
+use Spatie\DataTransferObject\DataTransferObject;
+
+class HowFitResponse extends DataTransferObject
 {
 
-    /**
-     * @param float $percent
-     */
-    public function __construct(
-        protected float $percent
-    ) {
-    }
-
-    /**
-     * @return int
-     */
-    public function getPercent(): float
-    {
-        return $this->percent;
-    }
+    public float $percent;
 }

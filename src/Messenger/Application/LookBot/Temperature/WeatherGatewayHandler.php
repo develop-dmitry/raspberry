@@ -19,6 +19,7 @@ use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 use Raspberry\Weather\Application\ActualWeather\ActualWeatherInterface;
 use Raspberry\Weather\Application\ActualWeather\DTO\ActualWeatherRequest;
 use Raspberry\Weather\Domain\Weather\Exceptions\WeatherGatewayException;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class WeatherGatewayHandler extends AbstractHandler
 {
@@ -82,13 +83,17 @@ class WeatherGatewayHandler extends AbstractHandler
      * @return int
      * @throws InvalidValueException
      * @throws WeatherGatewayException
+     * @throws UnknownProperties
      */
     protected function getTemperature(GeolocationInterface $geolocation): int
     {
-        $request = new ActualWeatherRequest($geolocation->getLat(), $geolocation->getLon());
+        $request = new ActualWeatherRequest(
+            lat: $geolocation->getLat(),
+            lon: $geolocation->getLon()
+        );
         $response = $this->actualWeather->execute($request);
 
-        return $response->getTemperature();
+        return $response->temperature;
     }
 
     /**

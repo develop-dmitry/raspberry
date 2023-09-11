@@ -4,22 +4,13 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Application\SelectionLook\DTO;
 
-class SelectionLookResponse
+use Spatie\DataTransferObject\DataTransferObject;
+
+class SelectionLookResponse extends DataTransferObject
 {
 
     /**
-     * @param LookItem[] $looks
+     * @var LookData[]
      */
-    public function __construct(
-        protected array $looks
-    ) {
-    }
-
-    /**
-     * @return array
-     */
-    public function getLooks(): array
-    {
-        return $this->looks;
-    }
+    public array $looks;
 }

@@ -4,7 +4,6 @@ namespace Raspberry\Wardrobe\Application\UrlGenerator;
 
 use Raspberry\Wardrobe\Application\UrlGenerator\DTO\UrlGeneratorRequest;
 use Raspberry\Wardrobe\Application\UrlGenerator\DTO\UrlGeneratorResponse;
-use Raspberry\Wardrobe\Application\UrlGenerator\UrlGeneratorInterface;
 use Raspberry\Wardrobe\Domain\Wardrobe\Services\UrlGeneratorService\UrlGeneratorServiceInterface;
 
 class UrlGeneratorUseCase implements UrlGeneratorInterface
@@ -23,9 +22,9 @@ class UrlGeneratorUseCase implements UrlGeneratorInterface
      */
     public function getWardrobeUrl(UrlGeneratorRequest $request): UrlGeneratorResponse
     {
-        $url = $this->urlGeneratorService->getWardrobeUrl($request->getQuery());
+        $url = $this->urlGeneratorService->getWardrobeUrl($request->query);
 
-        return new UrlGeneratorResponse($url);
+        return new UrlGeneratorResponse(url: $url);
     }
 
     /**
@@ -33,8 +32,8 @@ class UrlGeneratorUseCase implements UrlGeneratorInterface
      */
     public function getWardrobeOffersUrl(UrlGeneratorRequest $request): UrlGeneratorResponse
     {
-        $url = $this->urlGeneratorService->getOffersUrl($request->getQuery());
+        $url = $this->urlGeneratorService->getOffersUrl($request->query);
 
-        return new UrlGeneratorResponse($url);
+        return new UrlGeneratorResponse(url: $url);
     }
 }

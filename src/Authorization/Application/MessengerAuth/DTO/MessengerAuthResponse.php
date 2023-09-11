@@ -4,32 +4,12 @@ declare(strict_types=1);
 
 namespace Raspberry\Authorization\Application\MessengerAuth\DTO;
 
-class MessengerAuthResponse
+use Spatie\DataTransferObject\DataTransferObject;
+
+class MessengerAuthResponse extends DataTransferObject
 {
 
-    /**
-     * @param int $userId
-     * @param string $apiToken
-     */
-    public function __construct(
-        protected int $userId,
-        protected string $apiToken
-    ) {
-    }
+    public int $userId;
 
-    /**
-     * @return int
-     */
-    public function getUserId(): int
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getApiToken(): string
-    {
-        return $this->apiToken;
-    }
+    public string $apiToken;
 }

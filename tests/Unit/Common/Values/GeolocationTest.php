@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Common\Values;
 
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
-use Raspberry\Common\Values\Geolocation\Geolocation;
+use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Values\Geolocation\Geolocation;
 use Tests\TestCase;
 
 class GeolocationTest extends TestCase

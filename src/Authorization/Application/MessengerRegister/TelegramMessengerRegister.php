@@ -29,9 +29,12 @@ class TelegramMessengerRegister implements MessengerRegisterInterface
      */
     public function execute(MessengerRegisterRequest $request): MessengerRegisterResponse
     {
-        $user = $this->createUser($request->getMessengerId());
+        $user = $this->createUser($request->messengerId);
 
-        return new MessengerRegisterResponse($user->getId()->getValue(), $user->getApiToken()->getValue());
+        return new MessengerRegisterResponse(
+            userId: $user->getId()->getValue(),
+            apiToken: $user->getApiToken()->getValue()
+        );
     }
 
     /**

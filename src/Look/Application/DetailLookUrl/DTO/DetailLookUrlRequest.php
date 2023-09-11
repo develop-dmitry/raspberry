@@ -4,32 +4,12 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Application\DetailLookUrl\DTO;
 
-class DetailLookUrlRequest
+use Spatie\DataTransferObject\DataTransferObject;
+
+class DetailLookUrlRequest extends DataTransferObject
 {
 
-    /**
-     * @param int $lookId
-     * @param array $query
-     */
-    public function __construct(
-        protected int $lookId,
-        protected array $query = []
-    ) {
-    }
+    public int $lookId;
 
-    /**
-     * @return int
-     */
-    public function getLookId(): int
-    {
-        return $this->lookId;
-    }
-
-    /**
-     * @return array
-     */
-    public function getQuery(): array
-    {
-        return $this->query;
-    }
+    public array $query;
 }

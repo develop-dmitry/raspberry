@@ -3,11 +3,11 @@
 namespace Tests\Unit\Look\Domain\Look\Services;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Raspberry\Common\Values\Id\Id;
-use Raspberry\Common\Values\Name\Name;
-use Raspberry\Common\Values\Photo\Photo;
-use Raspberry\Common\Values\Slug\Slug;
-use Raspberry\Common\Values\Temperature\Temperature;
+use Raspberry\Core\Values\Id\Id;
+use Raspberry\Core\Values\Name\Name;
+use Raspberry\Core\Values\Photo\Photo;
+use Raspberry\Core\Values\Slug\Slug;
+use Raspberry\Core\Values\Temperature\Temperature;
 use Raspberry\Look\Domain\Clothes\Clothes;
 use Raspberry\Look\Domain\Clothes\ClothesInterface;
 use Raspberry\Look\Domain\Event\Event;

@@ -10,21 +10,22 @@ use Raspberry\Core\Values\Exceptions\InvalidValueException;
 use Raspberry\Look\Application\StylesUser\DTO\HasStyleRequest;
 use Raspberry\Look\Application\StylesUser\DTO\HasStyleResponse;
 use Raspberry\Look\Application\StylesUser\DTO\ToggleStyleRequest;
-use Raspberry\Look\Application\StylesUser\DTO\ToggleStyleResponse;
 use Raspberry\Look\Domain\Style\Exceptions\StyleNotFoundException;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 interface StylesUserInterface
 {
 
     /**
      * @param ToggleStyleRequest $request
-     * @return ToggleStyleResponse
+     * @return void
      * @throws UserNotFoundException
      * @throws InvalidValueException
      * @throws StyleNotFoundException
      * @throws FailedSaveUserException
+     * @throws UnknownProperties
      */
-    public function toggleStyle(ToggleStyleRequest $request): ToggleStyleResponse;
+    public function toggleStyle(ToggleStyleRequest $request): void;
 
     /**
      * @param HasStyleRequest $request
@@ -33,6 +34,7 @@ interface StylesUserInterface
      * @throws InvalidValueException
      * @throws StyleNotFoundException
      * @throws FailedSaveUserException
+     * @throws UnknownProperties
      */
     public function hasStyle(HasStyleRequest $request): HasStyleResponse;
 }

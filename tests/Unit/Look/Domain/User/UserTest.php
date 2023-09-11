@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\Unit\Look\Domain\User;
 
 use Illuminate\Support\Str;
-use Raspberry\Common\Values\Id\Id;
-use Raspberry\Common\Values\Name\Name;
+use Raspberry\Core\Values\Id\Id;
+use Raspberry\Core\Values\Name\Name;
 use Raspberry\Look\Domain\Style\Style;
 use Raspberry\Look\Domain\Style\StyleInterface;
 use Raspberry\Look\Domain\User\User;

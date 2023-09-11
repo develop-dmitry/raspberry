@@ -6,7 +6,7 @@ namespace Raspberry\Look\Application\SelectionLook;
 
 use Raspberry\Core\Exceptions\UserExceptions\UserNotFoundException;
 use Raspberry\Core\Values\Exceptions\InvalidValueException;
-use Raspberry\Look\Application\SelectionLook\DTO\LookItem;
+use Raspberry\Look\Application\SelectionLook\DTO\LookData;
 use Raspberry\Look\Application\SelectionLook\DTO\SelectionLookRequest;
 use Raspberry\Look\Application\SelectionLook\DTO\SelectionLookResponse;
 use Raspberry\Look\Domain\Event\EventRepositoryInterface;
@@ -40,26 +40,14 @@ class SelectionLookUseCase implements SelectionLookInterface
 
         $selectionLookService = new SelectionLookService(
             $this->lookRepository,
-            new SelectionLookRepository($request->getUserId()),
-            $this->getUser($request->getUserId()),
+            new SelectionLookRepository($request->userId),
+            $this->getUser($request->userId),
         );
 
-        $looks = array_map([$this, 'makeLookItem'], $selectionLookService->selection());
+        $looks = $selectionLookService->selection();
+        $looks = array_map(static fn (LookInterface $look) => LookData::fromDomain($look), $looks);
 
-        return new SelectionLookResponse($looks);
-    }
-
-    /**
-     * @param LookInterface $look
-     * @return LookItem
-     */
-    protected function makeLookItem(LookInterface $look): LookItem
-    {
-        return new LookItem(
-            $look->getId()->getValue(),
-            $look->getName()->getValue(),
-            $look->getPhoto()->getValue()
-        );
+        return new SelectionLookResponse(looks: $looks);
     }
 
     /**

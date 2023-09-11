@@ -3,6 +3,7 @@
 namespace Raspberry\Wardrobe\Infrastructure\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
+use Raspberry\Wardrobe\Application\WardrobeOffers\DTO\ClothesData;
 use Raspberry\Wardrobe\Application\WardrobeOffers\DTO\WardrobeOffersRequest;
 use Raspberry\Wardrobe\Application\WardrobeOffers\DTO\WardrobeOffersResponse;
 use Raspberry\Wardrobe\Application\WardrobeOffers\WardrobeOffersInterface;
@@ -20,38 +21,25 @@ class WardrobeOffersController extends AbstractController
     {
         $page = $request->validated('page');
         $count = $request->validated('count');
-        $wardrobeOffersRequest = new WardrobeOffersRequest(auth()->user()->id, $page, $count);
+
+        $wardrobeOffersRequest = new WardrobeOffersRequest(
+            userId: auth()->user()->id,
+            page: $page,
+            count: $count
+        );
 
         try {
-            $wardrobeOffersResponse = $this->wardrobeOffers->execute($wardrobeOffersRequest);
+            $response = $this->wardrobeOffers->execute($wardrobeOffersRequest);
 
-            return $this->handleOffersResponse($wardrobeOffersResponse);
+            return response()->json([
+                'success' => true,
+                'page' => $response->page,
+                'count' => $response->count,
+                'total' => $response->total,
+                'offers' => array_map(static fn (ClothesData $clothes) => $clothes->toArray(), $response->items)
+            ]);
         } catch (UserDoesNotExistsException) {
             return $this->userDoesNotExists();
         }
-    }
-
-    public function handleOffersResponse(WardrobeOffersResponse $response): JsonResponse
-    {
-        $offers = [];
-
-        foreach ($response->getOffers() as $offer) {
-            $offers[] = [
-                'id' => $offer->getId(),
-                'name' => $offer->getName(),
-                'slug' => $offer->getSlug(),
-                'photo' => $offer->getPhoto()
-            ];
-        }
-
-        $data = [
-            'success' => true,
-            'offers' => $offers,
-            'page' => $response->getPage(),
-            'count' => $response->getCount(),
-            'total' => $response->getTotal()
-        ];
-
-        return response()->json($data);
     }
 }

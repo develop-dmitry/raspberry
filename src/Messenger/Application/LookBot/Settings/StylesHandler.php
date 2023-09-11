@@ -20,6 +20,7 @@ use Raspberry\Messenger\Domain\Gui\Message\Message;
 use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\InlineButton\CallbackDataOption;
 use Raspberry\Messenger\Domain\Handlers\HandlerType;
 use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class StylesHandler extends AbstractPaginationHandler
 {
@@ -54,27 +55,32 @@ class StylesHandler extends AbstractPaginationHandler
     {
         parent::handle($context, $messenger);
 
-        if ($this->getCallbackData()->getAction() === Action::StylesChoose->value) {
-            $this->toggleStyle();
-        }
+        try {
+            if ($this->getCallbackData()->getAction() === Action::StylesChoose->value) {
+                $this->toggleStyle();
+            }
 
-        $this->pagination = $this->styleRepository->paginate($this->page(), 10);
+            $this->pagination = $this->styleRepository->paginate($this->page(), 10);
 
-        $message = Message::withInlineKeyboard(
-            'Выберите стили в одежде, которые вы предпочитаете',
-            $this->makePaginationKeyboard()
-        );
+            $message = Message::withInlineKeyboard(
+                'Выберите стили в одежде, которые вы предпочитаете',
+                $this->makePaginationKeyboard()
+            );
 
-        if ($this->getRequestType() === HandlerType::CallbackQuery) {
-            $messenger->editMessage($message);
-        } else {
-            $messenger->sendMessage($message);
+            if ($this->getRequestType() === HandlerType::CallbackQuery) {
+                $messenger->editMessage($message);
+            } else {
+                $messenger->sendMessage($message);
+            }
+        } catch (UnknownProperties) {
+            $messenger->sendMessage(Message::text('Произошла ошибка, попробуйте позднее'));
         }
     }
 
     /**
      * @param StyleInterface $item
      * @return InlineButtonInterface
+     * @throws UnknownProperties
      */
     protected function makeItemButton(mixed $item): InlineButtonInterface
     {
@@ -110,13 +116,17 @@ class StylesHandler extends AbstractPaginationHandler
     /**
      * @param int $styleId
      * @return bool
+     * @throws UnknownProperties
      */
     protected function hasStyle(int $styleId): bool
     {
-        $hasStyleRequest = new HasStyleRequest($this->contextUser->getId()->getValue(), $styleId);
+        $hasStyleRequest = new HasStyleRequest(
+            userId: $this->contextUser->getId()->getValue(),
+            styleId: $styleId
+        );
 
         try {
-            return $this->stylesUser->hasStyle($hasStyleRequest)->hasStyle();
+            return $this->stylesUser->hasStyle($hasStyleRequest)->hasStyle;
         } catch (Exception) {
             return false;
         }
@@ -124,6 +134,7 @@ class StylesHandler extends AbstractPaginationHandler
 
     /**
      * @return void
+     * @throws UnknownProperties
      */
     protected function toggleStyle(): void
     {
@@ -134,7 +145,10 @@ class StylesHandler extends AbstractPaginationHandler
         }
 
         $styleId = $callbackData->get('id');
-        $toggleStyleRequest = new ToggleStyleRequest($this->contextUser->getId()->getValue(), $styleId);
+        $toggleStyleRequest = new ToggleStyleRequest(
+            userId: $this->contextUser->getId()->getValue(),
+            styleId: $styleId
+        );
 
         try {
             $this->stylesUser->toggleStyle($toggleStyleRequest);

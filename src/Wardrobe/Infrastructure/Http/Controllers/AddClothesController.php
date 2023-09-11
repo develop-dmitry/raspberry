@@ -23,7 +23,10 @@ class AddClothesController extends AbstractController
     {
         $clothesId = (int) $request->validated('clothes_id');
 
-        $addClothesRequest = new AddClothesRequest(auth()->user()->id, $clothesId);
+        $addClothesRequest = new AddClothesRequest(
+            userId: auth()->user()->id,
+            clothesId: $clothesId
+        );
 
         try {
             $this->addClothes->execute($addClothesRequest);

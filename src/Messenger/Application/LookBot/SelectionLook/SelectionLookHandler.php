@@ -6,9 +6,11 @@ namespace Raspberry\Messenger\Application\LookBot\SelectionLook;
 
 use Exception;
 use Psr\Log\LoggerInterface;
+use Raspberry\Core\Exceptions\UserExceptions\UserNotFoundException;
+use Raspberry\Core\Values\Exceptions\InvalidValueException;
 use Raspberry\Look\Application\DetailLookUrl\DetailLookUrlInterface;
 use Raspberry\Look\Application\DetailLookUrl\DTO\DetailLookUrlRequest;
-use Raspberry\Look\Application\SelectionLook\DTO\LookItem;
+use Raspberry\Look\Application\SelectionLook\DTO\LookData;
 use Raspberry\Look\Application\SelectionLook\DTO\SelectionLookRequest;
 use Raspberry\Look\Application\SelectionLook\SelectionLookInterface;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;
@@ -22,6 +24,7 @@ use Raspberry\Messenger\Domain\Gui\Message\Message;
 use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\WebAppOption;
 use Raspberry\Messenger\Domain\Handlers\HandlerType;
 use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class SelectionLookHandler extends AbstractHandler
 {
@@ -56,29 +59,32 @@ class SelectionLookHandler extends AbstractHandler
     {
         parent::handle($context, $messenger);
 
-        $selectionRequest = new SelectionLookRequest($this->contextUser->getId()->getValue());
+        try {
+            $selectionRequest = new SelectionLookRequest(userId: $this->contextUser->getId()->getValue());
 
-        $selectionResponse = $this->selectionLook->execute($selectionRequest);
-        $looks = $selectionResponse->getLooks();
+            $selectionResponse = $this->selectionLook->execute($selectionRequest);
 
-        if (empty($looks)) {
-            $message = Message::text('К сожалению, мы не смогли подобрать для вас образ :(');
-        } else {
-            $message = Message::withInlineKeyboard(
-                'Для вас подобраны следующие образы',
-                $this->makeKeyboard($looks)
-            );
-        }
+            if (empty($selectionResponse->looks)) {
+                $message = Message::text('К сожалению, мы не смогли подобрать для вас образ :(');
+            } else {
+                $message = Message::withInlineKeyboard(
+                    'Для вас подобраны следующие образы',
+                    $this->makeKeyboard($selectionResponse->looks)
+                );
+            }
 
-        if ($this->getRequestType() === HandlerType::CallbackQuery) {
-            $messenger->editMessage($message);
-        } else {
-            $messenger->sendMessage($message);
+            if ($this->getRequestType() === HandlerType::CallbackQuery) {
+                $messenger->editMessage($message);
+            } else {
+                $messenger->sendMessage($message);
+            }
+        } catch (UserNotFoundException | InvalidValueException | UnknownProperties) {
+            $messenger->sendMessage(Message::text('Произошла ошибка, попробуйте позднее'));
         }
     }
 
     /**
-     * @param LookItem[] $looks
+     * @param LookData[] $looks
      * @return InlineKeyboardInterface
      */
     protected function makeKeyboard(array $looks): InlineKeyboardInterface
@@ -102,15 +108,16 @@ class SelectionLookHandler extends AbstractHandler
     }
 
     /**
-     * @param LookItem $item
+     * @param LookData $item
      * @return InlineButtonInterface
      * @throws FailedUrlGenerateException
      * @throws LookNotFoundException
+     * @throws UnknownProperties
      */
-    protected function makeButton(LookItem $item): InlineButtonInterface
+    protected function makeButton(LookData $item): InlineButtonInterface
     {
         return $this->inlineButtonFactory
-            ->setText($item->getName())
+            ->setText($item->name)
             ->setWebApp(new WebAppOption($this->makeUrl($item)))
             ->make();
     }
@@ -118,13 +125,15 @@ class SelectionLookHandler extends AbstractHandler
     /**
      * @throws FailedUrlGenerateException
      * @throws LookNotFoundException
+     * @throws UnknownProperties
      */
-    protected function makeUrl(LookItem $item): string
+    protected function makeUrl(LookData $item): string
     {
-        $request = new DetailLookUrlRequest($item->getId(), [
-            'api_token' => $this->contextUser->getApiToken()->getValue()
-        ]);
+        $request = new DetailLookUrlRequest(
+            lookId: $item->id,
+            query: ['api_token' => $this->contextUser->getApiToken()->getValue()]
+        );
 
-        return $this->detailLookUrl->execute($request)->getUrl();
+        return $this->detailLookUrl->execute($request)->url;
     }
 }

@@ -19,33 +19,15 @@ class WardrobeListController extends AbstractController
 
     public function __invoke(): JsonResponse
     {
-        $wardrobeListRequest = new WardrobeListRequest(auth()->user()->id);
+        $wardrobeListRequest = new WardrobeListRequest(userId: auth()->user()->id);
 
         try {
             $response = $this->wardrobeList->execute($wardrobeListRequest);
+            $response = array_merge(['success' => true], $response->toArray());
 
-            return $this->handleWardrobeListResponse($response);
+            return response()->json($response);
         } catch (UserDoesNotExistsException) {
             return $this->userDoesNotExists();
         }
-    }
-
-    protected function handleWardrobeListResponse(WardrobeListResponse $response): JsonResponse
-    {
-        $items = [];
-
-        foreach ($response->getItems() as $item) {
-            $items[] = [
-                'id' => $item->getId(),
-                'name' => $item->getName(),
-                'slug' => $item->getSlug(),
-                'photo' => $item->getPhoto()
-            ];
-        }
-
-        return response()->json([
-            'success' => true,
-            'items' => $items
-        ]);
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Wardrobe\Application\WardrobeList;
 
-use Raspberry\Wardrobe\Application\WardrobeList\DTO\WardrobeItem;
+use Raspberry\Wardrobe\Application\WardrobeList\DTO\ClothesData;
 use Raspberry\Wardrobe\Application\WardrobeList\DTO\WardrobeListRequest;
 use Raspberry\Wardrobe\Application\WardrobeList\DTO\WardrobeListResponse;
 use Raspberry\Wardrobe\Domain\Clothes\ClothesInterface;
@@ -22,27 +22,10 @@ class WardrobeListUseCase implements WardrobeListInterface
      */
     public function execute(WardrobeListRequest $request): WardrobeListResponse
     {
-        $wardrobe = $this->wardrobeRepository->getWardrobe($request->getUserId());
-        $items = [];
+        $wardrobe = $this->wardrobeRepository->getWardrobe($request->userId);
+        $items = $wardrobe->getClothes();
+        $items = array_map(static fn (ClothesInterface $clothes) => ClothesData::fromDomain($clothes), $items);
 
-        foreach ($wardrobe->getClothes() as $clothes) {
-            $items[] = $this->convertClothes($clothes);
-        }
-
-        return new WardrobeListResponse($items);
-    }
-
-    /**
-     * @param ClothesInterface $clothes
-     * @return WardrobeItem
-     */
-    protected function convertClothes(ClothesInterface $clothes): WardrobeItem
-    {
-        return new WardrobeItem(
-            $clothes->getId()->getValue(),
-            $clothes->getName()->getValue(),
-            $clothes->getSlug()->getValue(),
-            $clothes->getPhoto()->getValue()
-        );
+        return new WardrobeListResponse(items: $items);
     }
 }

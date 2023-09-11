@@ -24,8 +24,11 @@ class TelegramMessengerAuth implements MessengerAuthInterface
      */
     public function execute(MessengerAuthRequest $request): MessengerAuthResponse
     {
-        $user = $this->userRepository->getUserByTelegram($request->getMessengerId());
+        $user = $this->userRepository->getUserByTelegram($request->messengerId);
 
-        return new MessengerAuthResponse($user->getId()->getValue(), $user->getApiToken()->getValue());
+        return new MessengerAuthResponse(
+            userId: $user->getId()->getValue(),
+            apiToken: $user->getApiToken()->getValue()
+        );
     }
 }

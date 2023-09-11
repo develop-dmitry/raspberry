@@ -6,6 +6,7 @@ use Raspberry\Core\Values\Exceptions\InvalidValueException;
 use Raspberry\Weather\Application\ActualWeather\DTO\ActualWeatherRequest;
 use Raspberry\Weather\Application\ActualWeather\DTO\ActualWeatherResponse;
 use Raspberry\Weather\Domain\Weather\Exceptions\WeatherGatewayException;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 interface ActualWeatherInterface
 {
@@ -15,6 +16,7 @@ interface ActualWeatherInterface
      * @return ActualWeatherResponse
      * @throws InvalidValueException
      * @throws WeatherGatewayException
+     * @throws UnknownProperties
      */
     public function execute(ActualWeatherRequest $request): ActualWeatherResponse;
 }

@@ -4,32 +4,12 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Application\StylesUser\DTO;
 
-class ToggleStyleRequest
+use Spatie\DataTransferObject\DataTransferObject;
+
+class ToggleStyleRequest extends DataTransferObject
 {
 
-    /**
-     * @param int $userId
-     * @param int $styleId
-     */
-    public function __construct(
-        protected int $userId,
-        protected int $styleId
-    ) {
-    }
+    public int $userId;
 
-    /**
-     * @return int
-     */
-    public function getUserId(): int
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStyleId(): int
-    {
-        return $this->styleId;
-    }
+    public int $styleId;
 }

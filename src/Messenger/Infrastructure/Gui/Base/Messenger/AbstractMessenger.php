@@ -31,6 +31,7 @@ use Raspberry\Messenger\Domain\Handlers\HandlerInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerType;
 use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 use Raspberry\Messenger\Domain\Messenger\MessengerInterface;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Throwable;
 
 abstract class AbstractMessenger implements MessengerInterface
@@ -138,15 +139,16 @@ abstract class AbstractMessenger implements MessengerInterface
      * @return void
      * @throws InvalidValueException
      * @throws UserNotFoundException
+     * @throws UnknownProperties
      */
     protected function authorizeUser(int $messengerId): void
     {
-        $request = new MessengerAuthRequest($messengerId);
+        $request = new MessengerAuthRequest(messengerId: $messengerId);
         $response = $this->messengerAuthorization->execute($request);
 
         $this->context->getUser()->authorize(
-            new Id($response->getUserId()),
-            new Token($response->getApiToken())
+            new Id($response->userId),
+            new Token($response->apiToken)
         );
     }
 
@@ -155,15 +157,16 @@ abstract class AbstractMessenger implements MessengerInterface
      * @return void
      * @throws InvalidValueException
      * @throws FailedSaveUserException
+     * @throws UnknownProperties
      */
     protected function registerUser(int $messengerId): void
     {
-        $request = new MessengerRegisterRequest($messengerId);
+        $request = new MessengerRegisterRequest(messengerId: $messengerId);
         $response = $this->messengerRegister->execute($request);
 
         $this->context->getUser()->authorize(
-            new Id($response->getUserId()),
-            new Token($response->getApiToken())
+            new Id($response->userId),
+            new Token($response->apiToken)
         );
     }
 

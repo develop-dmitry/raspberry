@@ -21,10 +21,10 @@ class HowFitUseCase implements HowFitInterface
      */
     public function execute(HowFitRequest $request): HowFitResponse
     {
-        $look = $this->lookRepository->getById($request->getLookId());
-        $user = $this->userRepository->getById($request->getUserId());
+        $look = $this->lookRepository->getById($request->lookId);
+        $user = $this->userRepository->getById($request->userId);
         $percent = $look->howFit($user);
 
-        return new HowFitResponse($percent->getValue());
+        return new HowFitResponse(percent: $percent->getValue());
     }
 }

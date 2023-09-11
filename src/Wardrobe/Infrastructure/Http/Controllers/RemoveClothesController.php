@@ -19,7 +19,10 @@ class RemoveClothesController extends AbstractController
     public function __invoke(RemoveClothesPostRequest $request): JsonResponse
     {
         $clothesId = (int) $request->validated('clothes_id');
-        $removeClothesRequest = new RemoveClothesRequest(auth()->user()->id, $clothesId);
+        $removeClothesRequest = new RemoveClothesRequest(
+            userId: auth()->user()->id,
+            clothesId: $clothesId
+        );
 
         try {
             $this->removeClothes->execute($removeClothesRequest);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Raspberry\Look\Infrastructure\Http\Controllers;
+namespace Raspberry\Look\Infrastructure\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;

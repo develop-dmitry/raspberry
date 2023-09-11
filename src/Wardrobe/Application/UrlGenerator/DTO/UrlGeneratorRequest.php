@@ -2,22 +2,10 @@
 
 namespace Raspberry\Wardrobe\Application\UrlGenerator\DTO;
 
-class UrlGeneratorRequest
+use Spatie\DataTransferObject\DataTransferObject;
+
+class UrlGeneratorRequest extends DataTransferObject
 {
 
-    /**
-     * @param array $query
-     */
-    public function __construct(
-        protected array $query = []
-    ) {
-    }
-
-    /**
-     * @return array
-     */
-    public function getQuery(): array
-    {
-        return $this->query;
-    }
+    public array $query;
 }
