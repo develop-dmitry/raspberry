@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Infrastructure\Repositories;
 
-use Raspberry\Common\Base\AbstractRedisRepository;
+use Raspberry\Core\Repositories\AbstractRedisRepository;
 use Raspberry\Look\Domain\Look\Services\SelectionLook\Exceptions\FailedSavePropertyException;
 use Raspberry\Look\Domain\Look\Services\SelectionLook\SelectionLookRepositoryInterface;
 use RedisException;

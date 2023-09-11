@@ -2,8 +2,8 @@
 
 namespace Raspberry\Weather\Domain\Weather;
 
-use Raspberry\Common\Values\Geolocation\GeolocationInterface;
-use Raspberry\Common\Values\Temperature\TemperatureInterface;
+use Raspberry\Core\Values\Geolocation\GeolocationInterface;
+use Raspberry\Core\Values\Temperature\TemperatureInterface;
 use Raspberry\Weather\Domain\Weather\WeatherInterface;
 
 class Weather implements WeatherInterface

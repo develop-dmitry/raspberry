@@ -6,9 +6,9 @@ namespace Raspberry\Look\Infrastructure\Repositories;
 
 use App\Models\User as UserModel;
 use Illuminate\Support\Facades\DB;
-use Raspberry\Common\Exceptions\UserExceptions\UserNotFoundException;
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
-use Raspberry\Common\Values\Id\Id;
+use Raspberry\Core\Exceptions\UserExceptions\UserNotFoundException;
+use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Values\Id\Id;
 use Raspberry\Look\Domain\Style\StyleInterface;
 use Raspberry\Look\Domain\Style\StyleRepositoryInterface;
 use Raspberry\Look\Domain\User\User;

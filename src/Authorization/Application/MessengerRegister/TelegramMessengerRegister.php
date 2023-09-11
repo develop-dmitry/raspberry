@@ -9,9 +9,9 @@ use Raspberry\Authorization\Application\MessengerRegister\DTO\MessengerRegisterR
 use Raspberry\Authorization\Domain\User\User;
 use Raspberry\Authorization\Domain\User\UserInterface;
 use Raspberry\Authorization\Domain\User\UserRepositoryInterface;
-use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
-use Raspberry\Common\Values\Id\Id;
+use Raspberry\Core\Exceptions\UserExceptions\FailedSaveUserException;
+use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Values\Id\Id;
 
 class TelegramMessengerRegister implements MessengerRegisterInterface
 {

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Domain\Look;
 
-use Raspberry\Common\Values\Id\IdInterface;
-use Raspberry\Common\Values\Name\NameInterface;
-use Raspberry\Common\Values\Percent\Percent;
-use Raspberry\Common\Values\Percent\PercentInterface;
-use Raspberry\Common\Values\Photo\PhotoInterface;
-use Raspberry\Common\Values\Slug\SlugInterface;
-use Raspberry\Common\Values\Temperature\TemperatureInterface;
+use Raspberry\Core\Values\Id\IdInterface;
+use Raspberry\Core\Values\Name\NameInterface;
+use Raspberry\Core\Values\Percent\Percent;
+use Raspberry\Core\Values\Percent\PercentInterface;
+use Raspberry\Core\Values\Photo\PhotoInterface;
+use Raspberry\Core\Values\Slug\SlugInterface;
+use Raspberry\Core\Values\Temperature\TemperatureInterface;
 use Raspberry\Look\Domain\Clothes\ClothesInterface;
 use Raspberry\Look\Domain\Event\EventInterface;
 use Raspberry\Look\Domain\User\UserInterface;

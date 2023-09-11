@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Domain\User;
 
-use Raspberry\Common\Values\Id\IdInterface;
+use Raspberry\Core\Values\Id\IdInterface;
 use Raspberry\Look\Domain\Style\StyleInterface;
 
 interface UserInterface

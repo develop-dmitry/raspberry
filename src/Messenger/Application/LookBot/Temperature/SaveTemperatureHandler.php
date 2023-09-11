@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Application\LookBot\Temperature;
 
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
-use Raspberry\Common\Values\Temperature\Temperature;
+use Raspberry\Core\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Values\Temperature\Temperature;
 use Raspberry\Look\Domain\Look\Services\SelectionLook\Exceptions\FailedSavePropertyException;
 use Raspberry\Look\Domain\Look\Services\SelectionLook\SelectionLookRepositoryInterface;
 use Raspberry\Look\Infrastructure\Repositories\SelectionLookRepository;

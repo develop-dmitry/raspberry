@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Domain\Style;
 
-use Raspberry\Common\Base\Pagination\PaginationInterface;
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Pagination\PaginationInterface;
+use Raspberry\Core\Values\Exceptions\InvalidValueException;
 use Raspberry\Look\Domain\Style\Exceptions\StyleNotFoundException;
 
 interface StyleRepositoryInterface

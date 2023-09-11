@@ -2,8 +2,8 @@
 
 namespace Raspberry\Look\Application\HowFit;
 
-use Raspberry\Common\Exceptions\UserExceptions\UserNotFoundException;
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\UserExceptions\UserNotFoundException;
+use Raspberry\Core\Values\Exceptions\InvalidValueException;
 use Raspberry\Look\Application\HowFit\DTO\HowFitRequest;
 use Raspberry\Look\Application\HowFit\DTO\HowFitResponse;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Domain\Look\Services\LookUrlGenerator;
 
-use Raspberry\Common\Values\Url\UrlInterface;
+use Raspberry\Core\Values\Url\UrlInterface;
 use Raspberry\Look\Domain\Look\LookInterface;
 use Raspberry\Look\Domain\Look\Services\LookUrlGenerator\Exceptions\FailedUrlGenerateException;
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Domain\Style;
 
-use Raspberry\Common\Values\Id\IdInterface;
-use Raspberry\Common\Values\Name\NameInterface;
+use Raspberry\Core\Values\Id\IdInterface;
+use Raspberry\Core\Values\Name\NameInterface;
 use Raspberry\Look\Domain\Style\StyleInterface;
 
 class Style implements StyleInterface

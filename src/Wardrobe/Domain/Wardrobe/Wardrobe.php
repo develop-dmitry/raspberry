@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Wardrobe\Domain\Wardrobe;
 
-use Raspberry\Common\Values\Id\IdInterface;
+use Raspberry\Core\Values\Id\IdInterface;
 use Raspberry\Wardrobe\Domain\Clothes\ClothesInterface;
 use Raspberry\Wardrobe\Domain\Wardrobe\Exceptions\ClothesAlreadyExistsException;
 

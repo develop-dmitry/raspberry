@@ -6,8 +6,8 @@ namespace Raspberry\Authorization\Application\MessengerAuth;
 
 use Raspberry\Authorization\Application\MessengerAuth\DTO\MessengerAuthRequest;
 use Raspberry\Authorization\Application\MessengerAuth\DTO\MessengerAuthResponse;
-use Raspberry\Common\Exceptions\UserExceptions\UserNotFoundException;
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\UserExceptions\UserNotFoundException;
+use Raspberry\Core\Values\Exceptions\InvalidValueException;
 
 interface MessengerAuthInterface
 {

@@ -2,7 +2,7 @@
 
 namespace Raspberry\Weather\Application\ActualWeather;
 
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Values\Exceptions\InvalidValueException;
 use Raspberry\Weather\Application\ActualWeather\DTO\ActualWeatherRequest;
 use Raspberry\Weather\Application\ActualWeather\DTO\ActualWeatherResponse;
 use Raspberry\Weather\Domain\Weather\Exceptions\WeatherGatewayException;
