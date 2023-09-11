@@ -1,10 +1,10 @@
 <?php
 
-namespace Raspberry\Look\Application\HowFit\DTO;
+namespace Raspberry\Look\Application\PickerScore\DTO;
 
 use Spatie\DataTransferObject\DataTransferObject;
 
-class HowFitRequest extends DataTransferObject
+class PickerScoreRequest extends DataTransferObject
 {
 
     public int $userId;

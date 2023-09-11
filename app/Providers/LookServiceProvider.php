@@ -7,8 +7,8 @@ use Raspberry\Look\Application\DetailLook\DetailLookInterface;
 use Raspberry\Look\Application\DetailLook\DetailLookUseCase;
 use Raspberry\Look\Application\LookUrlGenerator\LookUrlGeneratorInterface;
 use Raspberry\Look\Application\LookUrlGenerator\LookUrlGeneratorUseCase;
-use Raspberry\Look\Application\HowFit\HowFitInterface;
-use Raspberry\Look\Application\HowFit\HowFitUseCase;
+use Raspberry\Look\Application\PickerScore\PickerScoreInterface;
+use Raspberry\Look\Application\PickerScore\PickerScoreUseCase;
 use Raspberry\Look\Application\Picker\PickerUseCase;
 use Raspberry\Look\Application\Picker\PickerInterface;
 use Raspberry\Look\Application\StylesUser\StylesUserInterface;
@@ -40,7 +40,7 @@ class LookServiceProvider extends ServiceProvider
         $this->app->bind(StyleRepositoryInterface::class, StyleRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(StylesUserInterface::class, StylesUserUseCase::class);
-        $this->app->bind(HowFitInterface::class, HowFitUseCase::class);
+        $this->app->bind(PickerScoreInterface::class, PickerScoreUseCase::class);
     }
 
     /**

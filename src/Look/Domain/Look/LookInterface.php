@@ -68,5 +68,5 @@ interface LookInterface
      * @return PercentInterface
      * @throws InvalidValueException
      */
-    public function howFit(UserInterface $user): PercentInterface;
+    public function pickerScore(UserInterface $user): PercentInterface;
 }

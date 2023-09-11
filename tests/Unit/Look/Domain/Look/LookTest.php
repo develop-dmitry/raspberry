@@ -47,7 +47,7 @@ class LookTest extends TestCase
         $user = $this->makeUser([$styleFirst, $styleSecond]);
         $look = $this->makeLook([]);
 
-        $this->assertEquals(100, $look->howFit($user)->getValue());
+        $this->assertEquals(100, $look->pickerScore($user)->getValue());
     }
 
     public function testHowFitForEmptyUserStyles(): void
@@ -59,7 +59,7 @@ class LookTest extends TestCase
         $user = $this->makeUser([]);
         $look = $this->makeLook([$clothesFirst, $clothesSecond]);
 
-        $this->assertEquals(100, $look->howFit($user)->getValue());
+        $this->assertEquals(100, $look->pickerScore($user)->getValue());
     }
 
     public function testHowFit(): void
@@ -71,7 +71,7 @@ class LookTest extends TestCase
         $user = $this->makeUser([$styleFirst]);
         $look = $this->makeLook([$clothesFirst, $clothesSecond]);
 
-        $this->assertEquals(50, $look->howFit($user)->getValue());
+        $this->assertEquals(50, $look->pickerScore($user)->getValue());
     }
 
     protected function makeUser(array $styles): UserInterface

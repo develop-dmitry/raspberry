@@ -13,6 +13,7 @@ use Raspberry\Core\Values\Slug\SlugInterface;
 use Raspberry\Core\Values\Temperature\TemperatureInterface;
 use Raspberry\Look\Domain\Clothes\ClothesInterface;
 use Raspberry\Look\Domain\Event\EventInterface;
+use Raspberry\Look\Domain\Style\StyleInterface;
 use Raspberry\Look\Domain\User\UserInterface;
 
 class Look implements LookInterface
@@ -108,7 +109,7 @@ class Look implements LookInterface
      */
     public function getStyles(): array
     {
-        $allStyles = array_map(fn(ClothesInterface $clothes) => $clothes->getStyles(), $this->clothes);
+        $allStyles = array_map(static fn (ClothesInterface $clothes) => $clothes->getStyles(), $this->clothes);
         $allStyles = array_reduce($allStyles, 'array_merge', []);
 
         $styles = [];
@@ -123,17 +124,17 @@ class Look implements LookInterface
     /**
      * @inheritDoc
      */
-    public function howFit(UserInterface $user): PercentInterface
+    public function pickerScore(UserInterface $user): PercentInterface
     {
-        $styles = $this->getStyles();
-        $userStyles = array_map(fn ($style) => $style->getId()->getValue(), $user->getStyles());
+        $lookStyles = array_map(static fn (StyleInterface $style) => $style->getId()->getValue(), $this->getStyles());
+        $userStyles = array_map(static fn (StyleInterface $style) => $style->getId()->getValue(), $user->getStyles());
 
-        if (empty($styles) || empty($userStyles)) {
+        if (empty($lookStyles) || empty($userStyles)) {
             return Percent::max();
         }
 
-        $fitStyles = array_filter($styles, fn ($style) => in_array($style->getId()->getValue(), $userStyles));
+        $intersect = array_intersect($lookStyles, $userStyles);
 
-        return Percent::fromDecimal(count($fitStyles) / count($styles));
+        return Percent::fromDecimal(count($intersect) / count($lookStyles));
     }
 }

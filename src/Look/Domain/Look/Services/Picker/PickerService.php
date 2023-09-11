@@ -49,8 +49,8 @@ class PickerService implements PickerServiceInterface
     protected function compareLooks(LookInterface $a, LookInterface $b): int
     {
         try {
-            $percentA = $a->howFit($this->user);
-            $percentB = $b->howFit($this->user);
+            $percentA = $a->pickerScore($this->user);
+            $percentB = $b->pickerScore($this->user);
 
             return $percentB->compare($percentA)->value;
         } catch (InvalidValueException) {
