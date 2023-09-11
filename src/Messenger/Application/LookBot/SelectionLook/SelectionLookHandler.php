@@ -8,8 +8,8 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Exceptions\UserNotFoundException;
-use Raspberry\Look\Application\LookUrlGenerator\LookUrlGeneratorInterface;
-use Raspberry\Look\Application\LookUrlGenerator\DTO\DetailLookUrlRequest;
+use Raspberry\Look\Application\LookUrl\LookUrlInterface;
+use Raspberry\Look\Application\LookUrl\DTO\DetailLookUrlRequest;
 use Raspberry\Look\Application\Picker\DTO\LookData;
 use Raspberry\Look\Application\Picker\DTO\PickerRequest;
 use Raspberry\Look\Application\Picker\PickerInterface;
@@ -31,15 +31,15 @@ class SelectionLookHandler extends AbstractHandler
 
     /**
      * @param PickerInterface $picker
-     * @param LookUrlGeneratorInterface $detailLookUrl
+     * @param LookUrlInterface $detailLookUrl
      * @param LoggerInterface $logger
      * @param GuiFactoryInterface $guiFactory
      */
     public function __construct(
-        protected PickerInterface           $picker,
-        protected LookUrlGeneratorInterface $detailLookUrl,
-        protected LoggerInterface           $logger,
-        GuiFactoryInterface                 $guiFactory
+        protected PickerInterface  $picker,
+        protected LookUrlInterface $detailLookUrl,
+        protected LoggerInterface  $logger,
+        GuiFactoryInterface        $guiFactory
     ) {
         parent::__construct($guiFactory);
     }
@@ -134,6 +134,6 @@ class SelectionLookHandler extends AbstractHandler
             query: ['api_token' => $this->contextUser->getApiToken()->getValue()]
         );
 
-        return $this->detailLookUrl->execute($request)->url;
+        return $this->detailLookUrl->generateDetailUrl($request)->url;
     }
 }

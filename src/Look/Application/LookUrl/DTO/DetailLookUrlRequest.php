@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Look\Application\LookUrlGenerator\DTO;
+namespace Raspberry\Look\Application\LookUrl\DTO;
 
 use Spatie\DataTransferObject\DataTransferObject;
 

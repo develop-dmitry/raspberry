@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Look\Application\LookUrlGenerator;
+namespace Raspberry\Look\Application\LookUrl;
 
-use Raspberry\Look\Application\LookUrlGenerator\DTO\DetailLookUrlRequest;
-use Raspberry\Look\Application\LookUrlGenerator\DTO\DetailLookUrlResponse;
+use Raspberry\Look\Application\LookUrl\DTO\DetailLookUrlRequest;
+use Raspberry\Look\Application\LookUrl\DTO\DetailLookUrlResponse;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;
 use Raspberry\Look\Domain\Look\Services\UrlGenerator\Exceptions\FailedUrlGenerateException;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
-interface LookUrlGeneratorInterface
+interface LookUrlInterface
 {
 
     /**
@@ -20,5 +20,5 @@ interface LookUrlGeneratorInterface
      * @throws FailedUrlGenerateException
      * @throws UnknownProperties
      */
-    public function execute(DetailLookUrlRequest $request): DetailLookUrlResponse;
+    public function generateDetailUrl(DetailLookUrlRequest $request): DetailLookUrlResponse;
 }

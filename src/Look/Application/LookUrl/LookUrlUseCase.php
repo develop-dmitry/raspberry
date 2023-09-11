@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Look\Application\LookUrlGenerator;
+namespace Raspberry\Look\Application\LookUrl;
 
-use Raspberry\Look\Application\LookUrlGenerator\LookUrlGeneratorInterface;
-use Raspberry\Look\Application\LookUrlGenerator\DTO\DetailLookUrlRequest;
-use Raspberry\Look\Application\LookUrlGenerator\DTO\DetailLookUrlResponse;
+use Raspberry\Look\Application\LookUrl\LookUrlInterface;
+use Raspberry\Look\Application\LookUrl\DTO\DetailLookUrlRequest;
+use Raspberry\Look\Application\LookUrl\DTO\DetailLookUrlResponse;
 use Raspberry\Look\Domain\Look\LookRepositoryInterface;
 use Raspberry\Look\Domain\Look\Services\UrlGenerator\UrlGeneratorService;
 
-class LookUrlGeneratorUseCase implements LookUrlGeneratorInterface
+class LookUrlUseCase implements LookUrlInterface
 {
 
     /**
@@ -26,7 +26,7 @@ class LookUrlGeneratorUseCase implements LookUrlGeneratorInterface
     /**
      * @inheritDoc
      */
-    public function execute(DetailLookUrlRequest $request): DetailLookUrlResponse
+    public function generateDetailUrl(DetailLookUrlRequest $request): DetailLookUrlResponse
     {
         $look = $this->lookRepository->getById($request->lookId);
         $url = $this->lookUrlGeneratorService->detailLookUrl($look, $request->query);
