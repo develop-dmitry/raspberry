@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Raspberry\Messenger\Infrastructure\Gui\Base\Messenger;
 
 use Psr\Log\LoggerInterface;
-use Raspberry\Authorization\Application\MessengerAuthorization\DTO\MessengerAuthorizationRequest;
-use Raspberry\Authorization\Application\MessengerAuthorization\MessengerAuthorizationInterface;
+use Raspberry\Authorization\Application\MessengerAuth\DTO\MessengerAuthRequest;
+use Raspberry\Authorization\Application\MessengerAuth\MessengerAuthInterface;
 use Raspberry\Authorization\Application\MessengerRegister\DTO\MessengerRegisterRequest;
 use Raspberry\Authorization\Application\MessengerRegister\MessengerRegisterInterface;
 use Raspberry\Common\Exceptions\RepositoryException;
@@ -44,14 +44,14 @@ abstract class AbstractMessenger implements MessengerInterface
      * @param UserRepositoryInterface $userRepository
      * @param LoggerInterface $logger
      * @param MessengerGatewayInterface $gateway
-     * @param MessengerAuthorizationInterface $messengerAuthorization
+     * @param MessengerAuthInterface $messengerAuthorization
      * @param MessengerRegisterInterface $messengerRegister
      */
     public function __construct(
-        protected UserRepositoryInterface $userRepository,
-        protected LoggerInterface $logger,
-        protected MessengerGatewayInterface $gateway,
-        protected MessengerAuthorizationInterface $messengerAuthorization,
+        protected UserRepositoryInterface    $userRepository,
+        protected LoggerInterface            $logger,
+        protected MessengerGatewayInterface  $gateway,
+        protected MessengerAuthInterface     $messengerAuthorization,
         protected MessengerRegisterInterface $messengerRegister
     ) {
     }
@@ -141,7 +141,7 @@ abstract class AbstractMessenger implements MessengerInterface
      */
     protected function authorizeUser(int $messengerId): void
     {
-        $request = new MessengerAuthorizationRequest($messengerId);
+        $request = new MessengerAuthRequest($messengerId);
         $response = $this->messengerAuthorization->execute($request);
 
         $this->context->getUser()->authorize(

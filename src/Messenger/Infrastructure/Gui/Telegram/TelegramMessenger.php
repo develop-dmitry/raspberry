@@ -8,8 +8,8 @@ use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
-use Raspberry\Authorization\Application\MessengerAuthorization\TelegramMessengerAuthorizationUseCase;
-use Raspberry\Authorization\Application\MessengerRegister\TelegramMessengerRegisterUseCase;
+use Raspberry\Authorization\Application\MessengerAuth\TelegramMessengerAuth;
+use Raspberry\Authorization\Application\MessengerRegister\TelegramMessengerRegister;
 use Raspberry\Common\Exceptions\RepositoryException;
 use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
 use Raspberry\Common\Exceptions\UserExceptions\UserNotFoundException;
@@ -39,16 +39,16 @@ class TelegramMessenger extends AbstractMessenger
     /**
      * @param Nutgram $bot
      * @param UserRepositoryInterface $userRepository
-     * @param TelegramMessengerAuthorizationUseCase $messengerAuthorization
-     * @param TelegramMessengerRegisterUseCase $messengerRegister
+     * @param TelegramMessengerAuth $messengerAuthorization
+     * @param TelegramMessengerRegister $messengerRegister
      * @param LoggerInterface $logger
      */
     public function __construct(
-        protected Nutgram $bot,
-        UserRepositoryInterface $userRepository,
-        TelegramMessengerAuthorizationUseCase $messengerAuthorization,
-        TelegramMessengerRegisterUseCase $messengerRegister,
-        LoggerInterface $logger,
+        protected Nutgram         $bot,
+        UserRepositoryInterface   $userRepository,
+        TelegramMessengerAuth     $messengerAuthorization,
+        TelegramMessengerRegister $messengerRegister,
+        LoggerInterface           $logger,
     ) {
         $gateway = new TelegramMessengerGateway($this->bot);
 

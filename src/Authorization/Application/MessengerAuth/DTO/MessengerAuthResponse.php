@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Authorization\Application\MessengerAuthorization\DTO;
+namespace Raspberry\Authorization\Application\MessengerAuth\DTO;
 
-class MessengerAuthorizationResponse
+class MessengerAuthResponse
 {
 
     /**

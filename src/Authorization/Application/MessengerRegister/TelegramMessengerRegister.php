@@ -13,7 +13,7 @@ use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
 use Raspberry\Common\Values\Exceptions\InvalidValueException;
 use Raspberry\Common\Values\Id\Id;
 
-class TelegramMessengerRegisterUseCase implements MessengerRegisterInterface
+class TelegramMessengerRegister implements MessengerRegisterInterface
 {
 
     /**
