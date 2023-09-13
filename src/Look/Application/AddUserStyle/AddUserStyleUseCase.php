@@ -2,60 +2,42 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Look\Application\StylesUser;
+namespace Raspberry\Look\Application\AddUserStyle;
 
 use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Exceptions\UserNotFoundException;
-use Raspberry\Look\Application\StylesUser\DTO\HasStyleRequest;
-use Raspberry\Look\Application\StylesUser\DTO\HasStyleResponse;
-use Raspberry\Look\Application\StylesUser\DTO\ToggleStyleRequest;
+use Raspberry\Look\Application\AddUserStyle\AddUserStyleInterface;
+use Raspberry\Look\Application\AddUserStyle\DTO\AddUserStyleRequest;
 use Raspberry\Look\Domain\Style\Exceptions\StyleNotFoundException;
 use Raspberry\Look\Domain\Style\StyleInterface;
 use Raspberry\Look\Domain\Style\StyleRepositoryInterface;
 use Raspberry\Look\Domain\User\UserInterface;
 use Raspberry\Look\Domain\User\UserRepositoryInterface;
 
-class StylesUserUseCase implements StylesUserInterface
+class AddUserStyleUseCase implements AddUserStyleInterface
 {
 
     /**
-     * @param StyleRepositoryInterface $styleRepository
      * @param UserRepositoryInterface $userRepository
+     * @param StyleRepositoryInterface $styleRepository
      */
     public function __construct(
-        protected StyleRepositoryInterface $styleRepository,
-        protected UserRepositoryInterface $userRepository
+        protected UserRepositoryInterface $userRepository,
+        protected StyleRepositoryInterface $styleRepository
     ) {
     }
 
     /**
      * @inheritDoc
      */
-    public function toggleStyle(ToggleStyleRequest $request): void
+    public function execute(AddUserStyleRequest $request): void
     {
-        $style = $this->getStyle($request->styleId);
         $user = $this->getUser($request->userId);
+        $style = $this->getStyle($request->styleId);
 
-        $isExists = $user->hasStyle($style);
-
-        if ($isExists) {
-            $user->removeStyle($style);
-        } else {
-            $user->addStyle($style);
-        }
+        $user->addStyle($style);
 
         $this->userRepository->save($user);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function hasStyle(HasStyleRequest $request): HasStyleResponse
-    {
-        $user = $this->getUser($request->userId);
-        $style = $this->getStyle($request->styleId);
-
-        return new HasStyleResponse(hasStyle: $user->hasStyle($style));
     }
 
     /**

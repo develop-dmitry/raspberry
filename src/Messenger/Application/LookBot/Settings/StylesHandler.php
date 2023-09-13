@@ -6,9 +6,16 @@ namespace Raspberry\Messenger\Application\LookBot\Settings;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use Raspberry\Look\Application\StylesUser\DTO\HasStyleRequest;
-use Raspberry\Look\Application\StylesUser\DTO\ToggleStyleRequest;
-use Raspberry\Look\Application\StylesUser\StylesUserInterface;
+use Raspberry\Core\Exceptions\FailedSaveUserException;
+use Raspberry\Core\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\UserNotFoundException;
+use Raspberry\Look\Application\AddUserStyle\AddUserStyleInterface;
+use Raspberry\Look\Application\AddUserStyle\DTO\AddUserStyleRequest;
+use Raspberry\Look\Application\RemoveUserStyle\DTO\RemoveUserStyleRequest;
+use Raspberry\Look\Application\RemoveUserStyle\RemoveUserStyleInterface;
+use Raspberry\Look\Application\UserStyles\DTO\UserStylesRequest;
+use Raspberry\Look\Application\UserStyles\UserStylesInterface;
+use Raspberry\Look\Domain\Style\Exceptions\StyleNotFoundException;
 use Raspberry\Look\Domain\Style\StyleInterface;
 use Raspberry\Look\Domain\Style\StyleRepositoryInterface;
 use Raspberry\Messenger\Application\AbstractPaginationHandler;
@@ -26,14 +33,23 @@ class StylesHandler extends AbstractPaginationHandler
 {
 
     /**
+     * @var int[]
+     */
+    protected array $styles;
+
+    /**
      * @param StyleRepositoryInterface $styleRepository
-     * @param StylesUserInterface $stylesUser
+     * @param UserStylesInterface $userStyles
+     * @param RemoveUserStyleInterface $removeUserStyle
+     * @param AddUserStyleInterface $addUserStyle
      * @param LoggerInterface $logger
      * @param GuiFactoryInterface $guiFactory
      */
     public function __construct(
         protected StyleRepositoryInterface $styleRepository,
-        protected StylesUserInterface $stylesUser,
+        protected UserStylesInterface $userStyles,
+        protected RemoveUserStyleInterface $removeUserStyle,
+        protected AddUserStyleInterface $addUserStyle,
         protected LoggerInterface $logger,
         GuiFactoryInterface $guiFactory
     ) {
@@ -56,8 +72,10 @@ class StylesHandler extends AbstractPaginationHandler
         parent::handle($context, $messenger);
 
         try {
-            if ($this->getCallbackData()->getAction() === Action::StylesChoose->value) {
-                $this->toggleStyle();
+            $this->styles = $this->getUserStyles();
+
+            if ($this->wasChosen()) {
+                $this->toggleStyle($this->getCallbackData()->get('id'));
             }
 
             $this->pagination = $this->styleRepository->paginate($this->page(), 10);
@@ -72,92 +90,128 @@ class StylesHandler extends AbstractPaginationHandler
             } else {
                 $messenger->sendMessage($message);
             }
-        } catch (UnknownProperties) {
+        } catch (Exception) {
             $messenger->sendMessage(Message::text('Произошла ошибка, попробуйте позднее'));
         }
+    }
+
+    protected function wasChosen(): bool
+    {
+        return $this->getCallbackData()->getAction() === Action::StylesChoose->value &&
+            $this->getCallbackData()->has('id');
     }
 
     /**
      * @param StyleInterface $item
      * @return InlineButtonInterface
-     * @throws UnknownProperties
      */
     protected function makeItemButton(mixed $item): InlineButtonInterface
     {
-        $styleId = $item->getId()->getValue();
-        $text = $item->getName()->getValue();
-
-        if ($this->hasStyle($styleId)) {
-            $text = "👉 $text";
-        }
-
-        $callbackData = new CallbackDataOption(
-            Action::StylesChoose->value,
-            [
-                'id' => $styleId,
-                'page' => $this->page()
-            ]
-        );
-
         return $this->inlineButtonFactory
-            ->setText($text)
-            ->setCallbackData($callbackData)
+            ->setText($this->getStyleText($item))
+            ->setCallbackData(
+                new CallbackDataOption(Action::StylesChoose->value, [
+                    'id' => $item->getId()->getValue(),
+                    'page' => $this->page()
+                ])
+            )
             ->make();
     }
 
     /**
-     * @inheritDoc
+     * @param StyleInterface $style
+     * @return string
      */
-    protected function action(): string
+    protected function getStyleText(StyleInterface $style): string
     {
-        return Action::StylesUser->value;
+        $text = '';
+
+        if ($this->isAlreadyHaving($style->getId()->getValue())) {
+            $text .= '👉 ';
+        }
+
+        $text .= $style->getName()->getValue();
+
+        return $text;
     }
 
     /**
      * @param int $styleId
      * @return bool
-     * @throws UnknownProperties
      */
-    protected function hasStyle(int $styleId): bool
+    protected function isAlreadyHaving(int $styleId): bool
     {
-        $hasStyleRequest = new HasStyleRequest(
-            userId: $this->contextUser->getId()->getValue(),
-            styleId: $styleId
-        );
+        return in_array($styleId, $this->styles);
+    }
 
-        try {
-            return $this->stylesUser->hasStyle($hasStyleRequest)->hasStyle;
-        } catch (Exception) {
-            return false;
+    /**
+     * @return array
+     * @throws UnknownProperties
+     * @throws InvalidValueException
+     * @throws UserNotFoundException
+     */
+    protected function getUserStyles(): array
+    {
+        $request = new UserStylesRequest(userId: $this->contextUser->getId()->getValue());
+
+        return $this->userStyles
+            ->execute($request)
+            ->styles;
+    }
+
+    /**
+     * @param int $styleId
+     * @return void
+     * @throws FailedSaveUserException
+     * @throws InvalidValueException
+     * @throws StyleNotFoundException
+     * @throws UnknownProperties
+     * @throws UserNotFoundException
+     */
+    protected function toggleStyle(int $styleId): void
+    {
+        if ($this->isAlreadyHaving($styleId)) {
+            $this->addUserStyle($styleId);
+        } else {
+            $this->removeUserStyle($styleId);
         }
     }
 
     /**
+     * @param int $styleId
      * @return void
+     * @throws InvalidValueException
      * @throws UnknownProperties
+     * @throws UserNotFoundException
+     * @throws FailedSaveUserException
+     * @throws StyleNotFoundException
      */
-    protected function toggleStyle(): void
+    protected function removeUserStyle(int $styleId): void
     {
-        $callbackData = $this->getCallbackData();
+        $request = new RemoveUserStyleRequest(userId: $this->contextUser->getId()->getValue(), styleId: $styleId);
+        $this->removeUserStyle->execute($request);
+    }
 
-        if (!$callbackData->has('id')) {
-            return;
-        }
+    /**
+     * @param int $styleId
+     * @return void
+     * @throws FailedSaveUserException
+     * @throws InvalidValueException
+     * @throws StyleNotFoundException
+     * @throws UnknownProperties
+     * @throws UserNotFoundException
+     */
+    protected function addUserStyle(int $styleId): void
+    {
+        $request = new AddUserStyleRequest(userId: $this->contextUser->getId()->getValue(), styleId: $styleId);
+        $this->addUserStyle->execute($request);
+    }
 
-        $styleId = $callbackData->get('id');
-        $toggleStyleRequest = new ToggleStyleRequest(
-            userId: $this->contextUser->getId()->getValue(),
-            styleId: $styleId
-        );
-
-        try {
-            $this->stylesUser->toggleStyle($toggleStyleRequest);
-        } catch (Exception $exception) {
-            $this->logger->error('Failed toggle styles user', [
-                'style_id' => $styleId,
-                'user_id' => $this->contextUser->getId()->getValue(),
-                'exception' => $exception->getMessage()
-            ]);
-        }
+      /**
+       * @inheritDoc
+       */
+    protected function action(): string
+    {
+        return Action::StylesUser->value;
     }
 }

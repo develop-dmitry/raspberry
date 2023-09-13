@@ -12,13 +12,30 @@ class User implements UserInterface
 {
 
     /**
+     * @var StyleInterface[]
+     */
+    protected array $styles = [];
+
+    /**
      * @param IdInterface $id
      * @param StyleInterface[] $styles
      */
     public function __construct(
         protected IdInterface $id,
-        protected array $styles
+        array $styles
     ) {
+        $this->setStyles($styles);
+    }
+
+    /**
+     * @param StyleInterface[] $styles
+     * @return void
+     */
+    protected function setStyles(array $styles): void
+    {
+        foreach ($styles as $style) {
+            $this->styles[$style->getId()->getValue()] = $style;
+        }
     }
 
     /**
@@ -42,8 +59,8 @@ class User implements UserInterface
      */
     public function addStyle(StyleInterface $style): void
     {
-        if (!$this->hasStyle($style)) {
-            $this->styles[] = $style;
+        if (!$this->isAlreadyHaving($style)) {
+            $this->styles[$style->getId()->getValue()] = $style;
         }
     }
 
@@ -52,24 +69,17 @@ class User implements UserInterface
      */
     public function removeStyle(StyleInterface $style): void
     {
-        if (!$this->hasStyle($style)) {
-            return;
+        if ($this->isAlreadyHaving($style)) {
+            unset($this->styles[$style->getId()->getValue()]);
         }
-
-        $this->styles = array_filter(
-            $this->styles,
-            static fn (StyleInterface $item) => $item->getId()->getValue() !== $style->getId()->getValue()
-        );
     }
 
-    public function hasStyle(StyleInterface $style): bool
+    /**
+     * @param StyleInterface $style
+     * @return bool
+     */
+    protected function isAlreadyHaving(StyleInterface $style): bool
     {
-        $isFind = false;
-
-        foreach ($this->styles as $item) {
-            $isFind = $isFind || $item->getId()->getValue() === $style->getId()->getValue();
-        }
-
-        return $isFind;
+        return isset($this->styles[$style->getId()->getValue()]);
     }
 }

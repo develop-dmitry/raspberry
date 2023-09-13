@@ -16,6 +16,10 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class DetailLookUseCase implements DetailLookInterface
 {
+
+    /**
+     * @param LookRepositoryInterface $lookRepository
+     */
     public function __construct(
         protected LookRepositoryInterface $lookRepository
     ) {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Look\Application\StylesUser\DTO;
+namespace Raspberry\Look\Application\RemoveUserStyle\DTO;
 
 use Spatie\DataTransferObject\DataTransferObject;
 
-class HasStyleRequest extends DataTransferObject
+class RemoveUserStyleRequest extends DataTransferObject
 {
 
     public int $userId;

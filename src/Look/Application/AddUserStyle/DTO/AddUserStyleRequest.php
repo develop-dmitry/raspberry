@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Look\Application\StylesUser\DTO;
+namespace Raspberry\Look\Application\AddUserStyle\DTO;
 
 use Spatie\DataTransferObject\DataTransferObject;
 
-class ToggleStyleRequest extends DataTransferObject
+class AddUserStyleRequest extends DataTransferObject
 {
 
     public int $userId;

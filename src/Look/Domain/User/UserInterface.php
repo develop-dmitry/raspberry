@@ -31,10 +31,4 @@ interface UserInterface
      * @return void
      */
     public function removeStyle(StyleInterface $style): void;
-
-    /**
-     * @param StyleInterface $style
-     * @return bool
-     */
-    public function hasStyle(StyleInterface $style): bool;
 }
