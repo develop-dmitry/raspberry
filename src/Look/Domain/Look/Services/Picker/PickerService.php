@@ -15,12 +15,12 @@ class PickerService implements PickerServiceInterface
 
     /**
      * @param LookRepositoryInterface $lookRepository
-     * @param PickerRepositoryInterface $selectionLookRepository
+     * @param PickerRepositoryInterface $pickerRepository
      * @param UserInterface $user
      */
     public function __construct(
         protected LookRepositoryInterface   $lookRepository,
-        protected PickerRepositoryInterface $selectionLookRepository,
+        protected PickerRepositoryInterface $pickerRepository,
         protected UserInterface             $user
     ) {
     }
@@ -33,7 +33,7 @@ class PickerService implements PickerServiceInterface
         $looks = $this->lookRepository->findForSelection(
             $this->minTemperature(),
             $this->maxTemperature(),
-            $this->selectionLookRepository->getEventId()
+            $this->pickerRepository->getEventId()
         );
 
         usort($looks, [$this, 'compareLooks']);
@@ -60,11 +60,11 @@ class PickerService implements PickerServiceInterface
 
     protected function minTemperature(): int
     {
-        return $this->selectionLookRepository->getTemperature() - 10;
+        return $this->pickerRepository->getTemperature() - 10;
     }
 
     protected function maxTemperature(): int
     {
-        return $this->selectionLookRepository->getTemperature() + 10;
+        return $this->pickerRepository->getTemperature() + 10;
     }
 }

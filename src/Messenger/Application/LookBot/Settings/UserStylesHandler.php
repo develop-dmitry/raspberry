@@ -29,7 +29,7 @@ use Raspberry\Messenger\Domain\Handlers\HandlerType;
 use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
-class StylesHandler extends AbstractPaginationHandler
+class UserStylesHandler extends AbstractPaginationHandler
 {
 
     /**

@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Raspberry\Messenger\Application\LookBot\Event;
 
 use Raspberry\Look\Domain\Event\EventRepositoryInterface;
+use Raspberry\Look\Domain\Event\Exceptions\EventNotFoundException;
 use Raspberry\Look\Domain\Look\Services\Picker\Exceptions\FailedSavePropertyException;
 use Raspberry\Look\Domain\Look\Services\Picker\PickerRepositoryInterface;
 use Raspberry\Look\Infrastructure\Repositories\PickerRepository;
 use Raspberry\Messenger\Application\AbstractHandler;
-use Raspberry\Messenger\Application\LookBot\SelectionLook\SelectionLookHandler;
+use Raspberry\Messenger\Application\LookBot\Picker\LookPickerHandler;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\GuiFactory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Message\Message;
@@ -17,19 +18,19 @@ use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 
 class EventChooseHandler extends AbstractHandler
 {
-    protected PickerRepositoryInterface $selectionLookRepository;
+    protected PickerRepositoryInterface $pickerRepository;
 
     /**
-     * @param SelectionLookHandler $next
+     * @param LookPickerHandler $next
      * @param EventListHandler $back
      * @param EventRepositoryInterface $eventRepository
      * @param GuiFactoryInterface $guiFactory
      */
     public function __construct(
-        protected SelectionLookHandler $next,
-        protected EventListHandler $back,
+        protected LookPickerHandler        $next,
+        protected EventListHandler         $back,
         protected EventRepositoryInterface $eventRepository,
-        GuiFactoryInterface $guiFactory
+        GuiFactoryInterface                $guiFactory
     ) {
         parent::__construct($guiFactory);
     }
@@ -46,35 +47,36 @@ class EventChooseHandler extends AbstractHandler
     {
         parent::handle($context, $messenger);
 
-        $this->selectionLookRepository = new PickerRepository($this->contextUser->getId()->getValue());
+        $this->pickerRepository = new PickerRepository($this->contextUser->getId()->getValue());
 
-        if (!$this->contextRequest->getCallbackData()->has('id')) {
-            $this->back->handle($context, $messenger);
-        } else if ($this->saveEventId()) {
-            $this->next->handle($context, $messenger);
+        if ($this->wasChosen()) {
+            try {
+                $this->saveEvent($this->getCallbackData()->get('id'));
+                $this->next->handle($context, $messenger);
+            } catch (FailedSavePropertyException | EventNotFoundException) {
+                $messenger->sendMessage(Message::text('Произошла ошибка, попробуйте еще раз'));
+            }
         } else {
-            $messenger->sendMessage(Message::text('Произошла ошибка, попробуйте еще раз'));
             $this->back->handle($context, $messenger);
         }
     }
 
-    /**
-     * @return bool
-     */
-    protected function saveEventId(): bool
+    protected function wasChosen(): bool
     {
-        $eventId = $this->contextRequest->getCallbackData()->get('id');
+        return $this->getCallbackData()->has('id');
+    }
 
+    /**
+     * @param int $eventId
+     * @throws FailedSavePropertyException
+     * @throws EventNotFoundException
+     */
+    protected function saveEvent(int $eventId): void
+    {
         if (!$this->eventRepository->isExists($eventId)) {
-            return false;
+            throw new EventNotFoundException();
         }
 
-        try {
-            $this->selectionLookRepository->setEventId($eventId);
-        } catch (FailedSavePropertyException) {
-            return false;
-        }
-
-        return true;
+        $this->pickerRepository->setEventId($eventId);
     }
 }

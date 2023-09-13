@@ -12,7 +12,7 @@ use Raspberry\Messenger\Application\LookBot\Event\EventChooseHandler;
 use Raspberry\Messenger\Application\LookBot\Event\EventListHandler;
 use Raspberry\Messenger\Application\LookBot\Settings\SettingsHandler;
 use Raspberry\Messenger\Application\LookBot\Settings\SettingsMenu;
-use Raspberry\Messenger\Application\LookBot\Settings\StylesHandler;
+use Raspberry\Messenger\Application\LookBot\Settings\UserStylesHandler;
 use Raspberry\Messenger\Application\LookBot\Temperature\InputTemperatureHandler;
 use Raspberry\Messenger\Application\LookBot\Temperature\SaveTemperatureHandler;
 use Raspberry\Messenger\Application\LookBot\Temperature\TemperatureHandler;
@@ -30,16 +30,16 @@ class LookBot
 
     public function __construct(
         protected MessengerInterface $messenger,
-        TemperatureHandler $temperatureHandler,
-        SaveTemperatureHandler $saveTemperatureHandler,
-        InputTemperatureHandler $inputTemperatureHandler,
-        WeatherGatewayHandler $temperatureGatewayHandler,
-        EventListHandler $eventListHandler,
-        EventChooseHandler $eventChooseHandler,
-        SettingsHandler $settingsHandler,
-        StylesHandler $stylesUserHandler,
-        StartHandler $startHandler,
-        WardrobeHandler $wardrobeHandler,
+        TemperatureHandler           $temperatureHandler,
+        SaveTemperatureHandler       $saveTemperatureHandler,
+        InputTemperatureHandler      $inputTemperatureHandler,
+        WeatherGatewayHandler        $temperatureGatewayHandler,
+        EventListHandler             $eventListHandler,
+        EventChooseHandler           $eventChooseHandler,
+        SettingsHandler              $settingsHandler,
+        UserStylesHandler            $stylesUserHandler,
+        StartHandler                 $startHandler,
+        WardrobeHandler              $wardrobeHandler,
     ) {
         $handlers = (new HandlerContainer())
             ->addHandler('start', HandlerType::Command, $startHandler)

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Application\LookBot\SelectionLook;
+namespace Raspberry\Messenger\Application\LookBot\Picker;
 
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -26,7 +26,7 @@ use Raspberry\Messenger\Domain\Handlers\HandlerType;
 use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
-class SelectionLookHandler extends AbstractHandler
+class LookPickerHandler extends AbstractHandler
 {
 
     /**
@@ -60,16 +60,14 @@ class SelectionLookHandler extends AbstractHandler
         parent::handle($context, $messenger);
 
         try {
-            $request = new PickerRequest(userId: $this->contextUser->getId()->getValue());
+            $looks = $this->pick();
 
-            $response = $this->picker->execute($request);
-
-            if (empty($response->looks)) {
+            if (empty($looks)) {
                 $message = Message::text('К сожалению, мы не смогли подобрать для вас образ :(');
             } else {
                 $message = Message::withInlineKeyboard(
                     'Для вас подобраны следующие образы',
-                    $this->makeKeyboard($response->looks)
+                    $this->makeKeyboard($looks)
                 );
             }
 
@@ -81,6 +79,19 @@ class SelectionLookHandler extends AbstractHandler
         } catch (UserNotFoundException | InvalidValueException | UnknownProperties) {
             $messenger->sendMessage(Message::text('Произошла ошибка, попробуйте позднее'));
         }
+    }
+
+    /**
+     * @return LookData[]
+     * @throws UnknownProperties
+     * @throws UserNotFoundException
+     * @throws InvalidValueException
+     */
+    protected function pick(): array
+    {
+        $request = new PickerRequest(userId: $this->contextUser->getId()->getValue());
+
+        return $this->picker->execute($request)->looks;
     }
 
     /**

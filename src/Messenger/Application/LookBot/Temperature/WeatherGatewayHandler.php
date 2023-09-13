@@ -7,8 +7,11 @@ use Psr\Log\LoggerInterface;
 use Raspberry\Core\Exceptions\InvalidValueException;
 use Raspberry\Core\Values\Geolocation\GeolocationInterface;
 use Raspberry\Core\Values\Temperature\Temperature;
+use Raspberry\Core\Values\Temperature\TemperatureInterface;
+use Raspberry\Look\Domain\Look\Services\Picker\Exceptions\FailedSavePropertyException;
 use Raspberry\Look\Infrastructure\Repositories\PickerRepository;
 use Raspberry\Messenger\Application\AbstractHandler;
+use Raspberry\Messenger\Application\LookBot\Enums\TextAction;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Factory\GuiFactory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboardInterface;
@@ -58,9 +61,8 @@ class WeatherGatewayHandler extends AbstractHandler
 
         if ($geolocation = $this->contextUser->getGeolocation()) {
             try {
-                $temperature = new Temperature($this->getTemperature($geolocation));
-                (new PickerRepository($this->contextUser->getId()->getValue()))
-                    ->setTemperature($temperature->getValue());
+                $temperature = $this->getTemperature($geolocation);
+                $this->saveTemperature($temperature);
 
                 $text = "Ваше местоположение {$geolocation->getDecimal()}\nТемпература {$temperature->getCelsius()}";
                 $message = Message::withReplyKeyboard($text, $this->makeTemperatureMenu());
@@ -69,6 +71,7 @@ class WeatherGatewayHandler extends AbstractHandler
                     'exception' => $exception->getMessage()
                 ]);
 
+                $this->contextUser->setMessageHandler(TextAction::SaveTemperature->value);
                 $message = Message::text('Не удалось получить текущую температуру, введите температуру вручную');
             }
         } else {
@@ -80,12 +83,12 @@ class WeatherGatewayHandler extends AbstractHandler
 
     /**
      * @param GeolocationInterface $geolocation
-     * @return int
+     * @return TemperatureInterface
      * @throws InvalidValueException
-     * @throws WeatherGatewayException
      * @throws UnknownProperties
+     * @throws WeatherGatewayException
      */
-    protected function getTemperature(GeolocationInterface $geolocation): int
+    protected function getTemperature(GeolocationInterface $geolocation): TemperatureInterface
     {
         $request = new ActualWeatherRequest(
             lat: $geolocation->getLat(),
@@ -93,7 +96,18 @@ class WeatherGatewayHandler extends AbstractHandler
         );
         $response = $this->actualWeather->execute($request);
 
-        return $response->temperature;
+        return new Temperature($response->temperature);
+    }
+
+    /**
+     * @param TemperatureInterface $temperature
+     * @return void
+     * @throws FailedSavePropertyException
+     */
+    protected function saveTemperature(TemperatureInterface $temperature): void
+    {
+        $pickerRepository = new PickerRepository($this->contextUser->getId()->getValue());
+        $pickerRepository->setTemperature($temperature->getValue());
     }
 
     /**

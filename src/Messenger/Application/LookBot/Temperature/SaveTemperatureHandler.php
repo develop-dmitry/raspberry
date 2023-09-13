@@ -20,7 +20,7 @@ use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 class SaveTemperatureHandler extends AbstractHandler
 {
 
-    protected PickerRepositoryInterface $selectionLookRepository;
+    protected PickerRepositoryInterface $pickerRepository;
 
     /**
      * @param EventListHandler $next
@@ -45,18 +45,28 @@ class SaveTemperatureHandler extends AbstractHandler
     {
         parent::handle($context, $messenger);
 
-        $this->selectionLookRepository = new PickerRepository($this->contextUser->getId()->getValue());
+        $this->pickerRepository = new PickerRepository($this->contextUser->getId()->getValue());
 
         try {
-            $temperature = new Temperature($this->contextRequest->getMessage());
-            $this->selectionLookRepository->setTemperature($temperature->getValue());
-
+            $this->saveTemperature($this->contextRequest->getMessage());
             $this->next->handle($context, $messenger);
         } catch (InvalidValueException) {
-            $messenger->sendMessage(Message::text('Введена некорректная температура, попробуйте еще раз'));
             $this->contextUser->setMessageHandler(TextAction::SaveTemperature->value);
+            $messenger->sendMessage(Message::text('Введена некорректная температура, попробуйте еще раз'));
         } catch (FailedSavePropertyException) {
-            $messenger->sendMessage(Message::text('Произошла ошбика, попробуйте позднее'));
+            $messenger->sendMessage(Message::text('Произошла ошибка, попробуйте позднее'));
         }
+    }
+
+    /**
+     * @param string $temperature
+     * @return void
+     * @throws FailedSavePropertyException
+     * @throws InvalidValueException
+     */
+    protected function saveTemperature(string $temperature): void
+    {
+        $temperature = new Temperature($temperature);
+        $this->pickerRepository->setTemperature($temperature->getValue());
     }
 }
