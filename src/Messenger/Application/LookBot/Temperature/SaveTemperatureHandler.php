@@ -13,7 +13,7 @@ use Raspberry\Messenger\Application\AbstractHandler;
 use Raspberry\Messenger\Application\LookBot\Enums\TextAction;
 use Raspberry\Messenger\Application\LookBot\Event\EventListHandler;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
-use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\GuiFactory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Message\Message;
 use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 

@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Infrastructure\Gui\Base\Factory;
+namespace Raspberry\Messenger\Domain\Gui\Factory\ReplyButtonFactory;
 
 use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButton;
 use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButtonInterface;
-use Raspberry\Messenger\Domain\Gui\Factory\ReplyButtonFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Options\NullOption;
 use Raspberry\Messenger\Domain\Gui\Options\OptionInterface;
 

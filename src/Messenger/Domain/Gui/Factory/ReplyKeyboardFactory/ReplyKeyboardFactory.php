@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Infrastructure\Gui\Base\Factory;
+namespace Raspberry\Messenger\Domain\Gui\Factory\ReplyKeyboardFactory;
 
-use Raspberry\Messenger\Domain\Gui\Factory\ReplyKeyboardFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboard;
 use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboardInterface;
 use Raspberry\Messenger\Domain\Gui\Options\NullOption;

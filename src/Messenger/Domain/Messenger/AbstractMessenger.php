@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Infrastructure\Gui\Base\Messenger;
+namespace Raspberry\Messenger\Domain\Messenger;
 
 use Psr\Log\LoggerInterface;
 use Raspberry\Authorization\Application\MessengerAuth\DTO\MessengerAuthRequest;

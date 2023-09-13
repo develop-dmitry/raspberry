@@ -5,7 +5,7 @@ namespace Raspberry\Messenger\Application\LookBot\Wardrobe;
 use Raspberry\Messenger\Application\AbstractHandler;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButtonInterface;
-use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\GuiFactory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboardInterface;
 use Raspberry\Messenger\Domain\Gui\Message\Message;
 use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\WebAppOption;

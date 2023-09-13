@@ -10,7 +10,7 @@ use Raspberry\Core\Values\Temperature\Temperature;
 use Raspberry\Look\Infrastructure\Repositories\PickerRepository;
 use Raspberry\Messenger\Application\AbstractHandler;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
-use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\GuiFactory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboardInterface;
 use Raspberry\Messenger\Domain\Gui\Message\Message;
 use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\ReplyButton\SendLocationOption;

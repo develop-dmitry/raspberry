@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Infrastructure\Gui\Telegram;
+namespace Raspberry\Messenger\Infrastructure\Messenger\Telegram;
 
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
@@ -29,7 +29,7 @@ use Raspberry\Messenger\Domain\Handlers\HandlerType;
 use Raspberry\Messenger\Domain\Messenger\Exceptions\MessengerException;
 use Raspberry\Messenger\Domain\Messenger\RunningMode;
 use Raspberry\Messenger\Infrastructure\Gateway\TelegramMessengerGateway;
-use Raspberry\Messenger\Infrastructure\Gui\Base\Messenger\AbstractMessenger;
+use Raspberry\Messenger\Domain\Messenger\AbstractMessenger;
 use SergiX44\Nutgram\Nutgram;
 use SergiX44\Nutgram\RunningMode\Webhook;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Raspberry\Messenger\Domain\Gui\Factory;
+namespace Raspberry\Messenger\Domain\Gui\Factory\InlineButtonFactory;
 
 use Raspberry\Messenger\Domain\Gui\Buttons\InlineButton\InlineButtonInterface;
 use Raspberry\Messenger\Domain\Gui\Options\OptionInterface;

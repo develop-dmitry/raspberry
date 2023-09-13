@@ -11,7 +11,7 @@ use Raspberry\Look\Infrastructure\Repositories\PickerRepository;
 use Raspberry\Messenger\Application\AbstractHandler;
 use Raspberry\Messenger\Application\LookBot\SelectionLook\SelectionLookHandler;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
-use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\GuiFactory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Message\Message;
 use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 
