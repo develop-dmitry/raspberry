@@ -23,12 +23,10 @@ class ActualWeatherUseCase implements ActualWeatherInterface
      */
     public function execute(ActualWeatherRequest $request): ActualWeatherResponse
     {
-        $weather = $this->weatherGateway->getWeather($request->getLat(), $request->getLon());
+        $weather = $this->weatherGateway->getWeather($request->lat, $request->lon);
 
         return new ActualWeatherResponse(
-            $weather->getTemperature()->getValue(),
-            $weather->getMinTemperature()->getValue(),
-            $weather->getMaxTemperature()->getValue()
+            temperature: $weather->getTemperature()->getValue(),
         );
     }
 }

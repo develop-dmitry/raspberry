@@ -4,19 +4,25 @@ declare(strict_types=1);
 
 namespace Raspberry\Wardrobe\Application\WardrobeOffers;
 
-use Raspberry\Wardrobe\Application\WardrobeOffers\DTO\WardrobeOffer;
+use Raspberry\Core\Pagination\PaginationInterface;
+use Raspberry\Wardrobe\Application\WardrobeOffers\DTO\ClothesData;
 use Raspberry\Wardrobe\Application\WardrobeOffers\DTO\WardrobeOffersRequest;
 use Raspberry\Wardrobe\Application\WardrobeOffers\DTO\WardrobeOffersResponse;
 use Raspberry\Wardrobe\Domain\Clothes\ClothesInterface;
-use Raspberry\Wardrobe\Domain\Wardrobe\Services\WardrobeOffers\WardrobeOffersContainer\WardrobeOffersContainerInterface;
-use Raspberry\Wardrobe\Domain\Wardrobe\Services\WardrobeOffers\WardrobeOffersServiceInterface;
+use Raspberry\Wardrobe\Domain\Wardrobe\Exceptions\UserDoesNotExistsException;
+use Raspberry\Wardrobe\Domain\Wardrobe\Services\Offers\OffersServiceInterface;
 use Raspberry\Wardrobe\Domain\Wardrobe\WardrobeRepositoryInterface;
 
 class WardrobeOffersUseCase implements WardrobeOffersInterface
 {
+
+    /**
+     * @param WardrobeRepositoryInterface $wardrobeRepository
+     * @param OffersServiceInterface $offersService
+     */
     public function __construct(
         protected WardrobeRepositoryInterface $wardrobeRepository,
-        protected WardrobeOffersServiceInterface $wardrobeOffersService
+        protected OffersServiceInterface $offersService
     ) {
     }
 
@@ -25,47 +31,30 @@ class WardrobeOffersUseCase implements WardrobeOffersInterface
      */
     public function execute(WardrobeOffersRequest $request): WardrobeOffersResponse
     {
-        $wardrobe = $this->wardrobeRepository->getWardrobe($request->getUserId());
-        $offersContainer = $this->wardrobeOffersService->getOffers(
-            $wardrobe,
-            $request->getPage(),
-            $request->getCount()
-        );
+        $offersPagination = $this->getWardrobeOffers($request->userId, $request->page, $request->count);
+
+        $items = $offersPagination->getItems();
+        $items = array_map(static fn (ClothesInterface $clothes) => ClothesData::fromDomain($clothes), $items);
 
         return new WardrobeOffersResponse(
-            $this->getOffers($offersContainer),
-            $offersContainer->getPage(),
-            $offersContainer->getTotal(),
-            $offersContainer->getCount()
+            items: $items,
+            page: $offersPagination->getPage(),
+            total: $offersPagination->getTotal(),
+            count: $offersPagination->getPerPage()
         );
     }
 
     /**
-     * @param WardrobeOffersContainerInterface $container
-     * @return WardrobeOffer[]
+     * @param int $userId
+     * @param int $page
+     * @param int $count
+     * @return PaginationInterface
+     * @throws UserDoesNotExistsException
      */
-    protected function getOffers(WardrobeOffersContainerInterface $container): array
+    public function getWardrobeOffers(int $userId, int $page, int $count): PaginationInterface
     {
-        $offers = [];
+        $wardrobe = $this->wardrobeRepository->getWardrobe($userId);
 
-        foreach ($container->getClothes() as $clothes) {
-            $offers[] = $this->convertClothes($clothes);
-        }
-
-        return $offers;
-    }
-
-    /**
-     * @param ClothesInterface $clothes
-     * @return WardrobeOffer
-     */
-    protected function convertClothes(ClothesInterface $clothes): WardrobeOffer
-    {
-        return new WardrobeOffer(
-            $clothes->getId()->getValue(),
-            $clothes->getName()->getValue(),
-            $clothes->getSlug()->getValue(),
-            $clothes->getPhoto()->getValue()
-        );
+        return $this->offersService->getOffers($wardrobe, $page, $count);
     }
 }

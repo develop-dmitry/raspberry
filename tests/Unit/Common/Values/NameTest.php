@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Common\Values;
 
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
-use Raspberry\Common\Values\Name\Name;
+use Raspberry\Core\Exceptions\InvalidValueException;
+use Raspberry\Core\Values\Name\Name;
 use Tests\TestCase;
 
 class NameTest extends TestCase

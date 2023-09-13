@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Domain\Event;
 
-use Raspberry\Common\Values\Id\IdInterface;
-use Raspberry\Common\Values\Name\NameInterface;
-use Raspberry\Common\Values\Slug\SlugInterface;
+use Raspberry\Core\Values\Id\IdInterface;
+use Raspberry\Core\Values\Name\NameInterface;
+use Raspberry\Core\Values\Slug\SlugInterface;
 
 class Event implements EventInterface
 {

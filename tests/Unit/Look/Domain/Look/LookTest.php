@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Look\Domain\Look;
 
-use Raspberry\Common\Values\Id\Id;
-use Raspberry\Common\Values\Name\Name;
-use Raspberry\Common\Values\Photo\Photo;
-use Raspberry\Common\Values\Slug\Slug;
-use Raspberry\Common\Values\Temperature\Temperature;
+use Raspberry\Core\Values\Id\Id;
+use Raspberry\Core\Values\Name\Name;
+use Raspberry\Core\Values\Photo\Photo;
+use Raspberry\Core\Values\Slug\Slug;
+use Raspberry\Core\Values\Temperature\Temperature;
 use Raspberry\Look\Domain\Clothes\Clothes;
 use Raspberry\Look\Domain\Clothes\ClothesInterface;
 use Raspberry\Look\Domain\Look\Look;
@@ -47,7 +47,7 @@ class LookTest extends TestCase
         $user = $this->makeUser([$styleFirst, $styleSecond]);
         $look = $this->makeLook([]);
 
-        $this->assertEquals(100, $look->howFit($user)->getValue());
+        $this->assertEquals(100, $look->pickerScore($user)->getValue());
     }
 
     public function testHowFitForEmptyUserStyles(): void
@@ -59,7 +59,7 @@ class LookTest extends TestCase
         $user = $this->makeUser([]);
         $look = $this->makeLook([$clothesFirst, $clothesSecond]);
 
-        $this->assertEquals(100, $look->howFit($user)->getValue());
+        $this->assertEquals(100, $look->pickerScore($user)->getValue());
     }
 
     public function testHowFit(): void
@@ -71,7 +71,7 @@ class LookTest extends TestCase
         $user = $this->makeUser([$styleFirst]);
         $look = $this->makeLook([$clothesFirst, $clothesSecond]);
 
-        $this->assertEquals(50, $look->howFit($user)->getValue());
+        $this->assertEquals(50, $look->pickerScore($user)->getValue());
     }
 
     protected function makeUser(array $styles): UserInterface

@@ -19,7 +19,11 @@ class WardrobeOffersTest extends TestCase
         $user = User::factory(1)->create()->first();
 
         $wardrobeOffers = app()->make(WardrobeOffersUseCase::class);
-        $request = new WardrobeOffersRequest($user->id, 1, 10);
+        $request = new WardrobeOffersRequest(
+            userId: $user->id,
+            page: 1,
+            count: 10
+        );
 
         $this->expectNotToPerformAssertions();
         $wardrobeOffers->execute($request);
@@ -30,10 +34,14 @@ class WardrobeOffersTest extends TestCase
         $user = User::factory(1)->create()->first();
 
         $wardrobeOffers = app()->make(WardrobeOffersUseCase::class);
-        $request = new WardrobeOffersRequest($user->id, 1, 10);
+        $request = new WardrobeOffersRequest(
+            userId: $user->id,
+            page: 1,
+            count: 10
+        );
 
         $response = $wardrobeOffers->execute($request);
 
-        $this->assertNotEmpty($response->getOffers());
+        $this->assertNotEmpty($response->items);
     }
 }

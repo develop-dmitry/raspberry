@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Common\Values;
 
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
-use Raspberry\Common\Values\Id\Id;
+use Raspberry\Core\Exceptions\InvalidValueException;
+use Raspberry\Core\Values\Id\Id;
 use Tests\TestCase;
 
 class IdTest extends TestCase

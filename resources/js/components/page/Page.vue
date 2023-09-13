@@ -1,6 +1,5 @@
 <template lang="pug">
 .page
-    page-header
     .page__content
         .container
             slot
@@ -8,14 +7,9 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import PageHeader from "./page-header/PageHeader.vue";
 
 export default defineComponent({
-    name: 'Page',
-
-    components: {
-        PageHeader
-    }
+    name: 'Page'
 });
 </script>
 

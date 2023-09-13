@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Raspberry\Wardrobe\Domain\Clothes;
 
-use Raspberry\Common\Values\Id\IdInterface;
-use Raspberry\Common\Values\Name\NameInterface;
-use Raspberry\Common\Values\Photo\PhotoInterface;
-use Raspberry\Common\Values\Slug\SlugInterface;
+use Raspberry\Core\Values\Id\IdInterface;
+use Raspberry\Core\Values\Name\NameInterface;
+use Raspberry\Core\Values\Photo\PhotoInterface;
+use Raspberry\Core\Values\Slug\SlugInterface;
 
 interface ClothesInterface
 {

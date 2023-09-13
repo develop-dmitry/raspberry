@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Look\Domain\Look\Services;
 
-use Raspberry\Common\Values\Id\Id;
-use Raspberry\Common\Values\Name\Name;
-use Raspberry\Common\Values\Photo\Photo;
-use Raspberry\Common\Values\Slug\Slug;
-use Raspberry\Common\Values\Temperature\Temperature;
+use Raspberry\Core\Values\Id\Id;
+use Raspberry\Core\Values\Name\Name;
+use Raspberry\Core\Values\Photo\Photo;
+use Raspberry\Core\Values\Slug\Slug;
+use Raspberry\Core\Values\Temperature\Temperature;
 use Raspberry\Look\Domain\Look\Look;
-use Raspberry\Look\Domain\Look\Services\LookUrlGenerator\LookUrlGeneratorService;
+use Raspberry\Look\Domain\Look\Services\UrlGenerator\UrlGeneratorService;
 use Tests\TestCase;
 
 class LookUrlGeneratorServiceTest extends TestCase
@@ -28,9 +28,9 @@ class LookUrlGeneratorServiceTest extends TestCase
             new Temperature(10),
             []
         );
-        $urlGenerator = $this->app->make(LookUrlGeneratorService::class);
+        $urlGenerator = $this->app->make(UrlGeneratorService::class);
 
-        $url = $urlGenerator->makeDetailLookUrl($look);
+        $url = $urlGenerator->detailLookUrl($look);
 
         $this->assertEquals(
             $this->getDomain() . '/look/1',
@@ -50,9 +50,9 @@ class LookUrlGeneratorServiceTest extends TestCase
             new Temperature(10),
             []
         );
-        $urlGenerator = $this->app->make(LookUrlGeneratorService::class);
+        $urlGenerator = $this->app->make(UrlGeneratorService::class);
 
-        $url = $urlGenerator->makeDetailLookUrl($look, ['param1' => 'value1', 'param2' => 'value2']);
+        $url = $urlGenerator->detailLookUrl($look, ['param1' => 'value1', 'param2' => 'value2']);
 
         $this->assertEquals(
             $this->getDomain() . '/look/1?param1=value1&param2=value2',

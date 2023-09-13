@@ -4,21 +4,10 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Application\DetailLook\DTO;
 
-class DetailLookRequest
-{
-    /**
-     * @param int $id
-     */
-    public function __construct(
-        protected int $id
-    ) {
-    }
+use Spatie\DataTransferObject\DataTransferObject;
 
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
+class DetailLookRequest extends DataTransferObject
+{
+
+    public int $id;
 }

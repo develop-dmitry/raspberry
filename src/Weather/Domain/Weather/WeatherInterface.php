@@ -2,8 +2,8 @@
 
 namespace Raspberry\Weather\Domain\Weather;
 
-use Raspberry\Common\Values\Geolocation\GeolocationInterface;
-use Raspberry\Common\Values\Temperature\TemperatureInterface;
+use Raspberry\Core\Values\Geolocation\GeolocationInterface;
+use Raspberry\Core\Values\Temperature\TemperatureInterface;
 
 interface WeatherInterface
 {
@@ -12,16 +12,6 @@ interface WeatherInterface
      * @return TemperatureInterface
      */
     public function getTemperature(): TemperatureInterface;
-
-    /**
-     * @return TemperatureInterface
-     */
-    public function getMinTemperature(): TemperatureInterface;
-
-    /**
-     * @return TemperatureInterface
-     */
-    public function getMaxTemperature(): TemperatureInterface;
 
     /**
      * @return GeolocationInterface

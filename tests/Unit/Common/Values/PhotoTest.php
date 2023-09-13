@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Common\Values;
 
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
-use Raspberry\Common\Values\Photo\Photo;
+use Raspberry\Core\Exceptions\InvalidValueException;
+use Raspberry\Core\Values\Photo\Photo;
 use Tests\TestCase;
 
 class PhotoTest extends TestCase

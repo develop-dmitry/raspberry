@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Domain\Context\User;
 
-use Raspberry\Common\Values\Geolocation\GeolocationInterface;
-use Raspberry\Common\Values\Id\IdInterface;
-use Raspberry\Common\Values\Token\TokenInterface;
+use Raspberry\Core\Values\Geolocation\GeolocationInterface;
+use Raspberry\Core\Values\Id\IdInterface;
+use Raspberry\Core\Values\Token\TokenInterface;
 
 class User implements UserInterface
 {

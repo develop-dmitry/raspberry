@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Messenger\Domain\Context\Request;
 
-use Raspberry\Common\Values\Geolocation\GeolocationInterface;
+use Raspberry\Core\Values\Geolocation\GeolocationInterface;
 use Raspberry\Messenger\Domain\Context\Request\CallbackData\CallbackDataInterface;
 use Raspberry\Messenger\Domain\Handlers\HandlerType;
 

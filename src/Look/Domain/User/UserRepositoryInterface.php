@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Domain\User;
 
-use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
-use Raspberry\Common\Exceptions\UserExceptions\UserNotFoundException;
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\FailedSaveUserException;
+use Raspberry\Core\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\UserNotFoundException;
 
 interface UserRepositoryInterface
 {

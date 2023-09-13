@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Raspberry\Authorization\Domain\User;
 
 use Illuminate\Support\Str;
-use Raspberry\Common\Values\Id\IdInterface;
-use Raspberry\Common\Values\Token\Token;
-use Raspberry\Common\Values\Token\TokenInterface;
+use Raspberry\Core\Values\Id\IdInterface;
+use Raspberry\Core\Values\Token\Token;
+use Raspberry\Core\Values\Token\TokenInterface;
 
 class User implements UserInterface
 {

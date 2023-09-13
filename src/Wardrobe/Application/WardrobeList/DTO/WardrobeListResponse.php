@@ -4,18 +4,13 @@ declare(strict_types=1);
 
 namespace Raspberry\Wardrobe\Application\WardrobeList\DTO;
 
-class WardrobeListResponse
-{
-    /**
-     * @param WardrobeItem[] $items
-     */
-    public function __construct(
-        protected array $items
-    ) {
-    }
+use Spatie\DataTransferObject\DataTransferObject;
 
-    public function getItems(): array
-    {
-        return $this->items;
-    }
+class WardrobeListResponse extends DataTransferObject
+{
+
+    /**
+     * @var ClothesData[]
+     */
+    public array $items;
 }

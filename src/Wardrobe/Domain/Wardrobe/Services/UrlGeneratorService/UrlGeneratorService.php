@@ -2,7 +2,7 @@
 
 namespace Raspberry\Wardrobe\Domain\Wardrobe\Services\UrlGeneratorService;
 
-use Raspberry\Common\Base\UrlGenerator\AbstractUrlGenerator;
+use Raspberry\Core\UrlGenerator\AbstractUrlGenerator;
 
 class UrlGeneratorService extends AbstractUrlGenerator implements UrlGeneratorServiceInterface
 {

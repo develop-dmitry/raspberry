@@ -5,7 +5,7 @@ namespace Raspberry\Messenger\Application\LookBot\Wardrobe;
 use Raspberry\Messenger\Application\AbstractHandler;
 use Raspberry\Messenger\Domain\Context\ContextInterface;
 use Raspberry\Messenger\Domain\Gui\Buttons\ReplyButton\ReplyButtonInterface;
-use Raspberry\Messenger\Domain\Gui\Factory\GuiFactoryInterface;
+use Raspberry\Messenger\Domain\Gui\Factory\GuiFactory\GuiFactoryInterface;
 use Raspberry\Messenger\Domain\Gui\Keyboards\ReplyKeyboard\ReplyKeyboardInterface;
 use Raspberry\Messenger\Domain\Gui\Message\Message;
 use Raspberry\Messenger\Domain\Gui\Options\ButtonOptions\WebAppOption;
@@ -13,6 +13,7 @@ use Raspberry\Messenger\Domain\Gui\Options\ReplyKeyboard\ResizeOption;
 use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
 use Raspberry\Wardrobe\Application\UrlGenerator\DTO\UrlGeneratorRequest;
 use Raspberry\Wardrobe\Application\UrlGenerator\UrlGeneratorInterface;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class WardrobeHandler extends AbstractHandler
 {
@@ -45,6 +46,7 @@ class WardrobeHandler extends AbstractHandler
 
     /**
      * @return ReplyKeyboardInterface
+     * @throws UnknownProperties
      */
     protected function makeKeyboard(): ReplyKeyboardInterface
     {
@@ -82,21 +84,23 @@ class WardrobeHandler extends AbstractHandler
 
     /**
      * @return string
+     * @throws UnknownProperties
      */
     protected function getWardrobeUrl(): string
     {
-        $request = new UrlGeneratorRequest(['api_token' => $this->contextUser->getApiToken()->getValue()]);
+        $request = new UrlGeneratorRequest(query: ['api_token' => $this->contextUser->getApiToken()->getValue()]);
 
-        return $this->urlGenerator->getWardrobeUrl($request)->getUrl();
+        return $this->urlGenerator->getWardrobeUrl($request)->url;
     }
 
     /**
      * @return string
+     * @throws UnknownProperties
      */
     protected function getWardrobeOffersUrl(): string
     {
-        $request = new UrlGeneratorRequest(['api_token' => $this->contextUser->getApiToken()->getValue()]);
+        $request = new UrlGeneratorRequest(query: ['api_token' => $this->contextUser->getApiToken()->getValue()]);
 
-        return $this->urlGenerator->getWardrobeOffersUrl($request)->getUrl();
+        return $this->urlGenerator->getWardrobeOffersUrl($request)->url;
     }
 }

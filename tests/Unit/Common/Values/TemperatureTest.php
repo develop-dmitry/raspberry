@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Common\Values;
 
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
-use Raspberry\Common\Values\Temperature\Temperature;
+use Raspberry\Core\Exceptions\InvalidValueException;
+use Raspberry\Core\Values\Temperature\Temperature;
 use Tests\TestCase;
 
 class TemperatureTest extends TestCase

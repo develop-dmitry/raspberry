@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Psr\Log\LoggerInterface;
 use Raspberry\Messenger\Application\LookBot\LookBot;
 use Raspberry\Messenger\Domain\Messenger\RunningMode;
-use Raspberry\Messenger\Infrastructure\Gui\Telegram\TelegramMessenger;
+use Raspberry\Messenger\Infrastructure\Messenger\Telegram\TelegramMessenger;
 
 class TelegramLookBotController extends Controller
 {

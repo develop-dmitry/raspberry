@@ -3,19 +3,19 @@
 namespace Tests\Unit\Look\Domain\Look\Services;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Raspberry\Common\Values\Id\Id;
-use Raspberry\Common\Values\Name\Name;
-use Raspberry\Common\Values\Photo\Photo;
-use Raspberry\Common\Values\Slug\Slug;
-use Raspberry\Common\Values\Temperature\Temperature;
+use Raspberry\Core\Values\Id\Id;
+use Raspberry\Core\Values\Name\Name;
+use Raspberry\Core\Values\Photo\Photo;
+use Raspberry\Core\Values\Slug\Slug;
+use Raspberry\Core\Values\Temperature\Temperature;
 use Raspberry\Look\Domain\Clothes\Clothes;
 use Raspberry\Look\Domain\Clothes\ClothesInterface;
 use Raspberry\Look\Domain\Event\Event;
 use Raspberry\Look\Domain\Look\Look;
 use Raspberry\Look\Domain\Look\LookInterface;
 use Raspberry\Look\Domain\Look\LookRepositoryInterface;
-use Raspberry\Look\Domain\Look\Services\SelectionLook\SelectionLookRepositoryInterface;
-use Raspberry\Look\Domain\Look\Services\SelectionLook\SelectionLookService;
+use Raspberry\Look\Domain\Look\Services\Picker\PickerRepositoryInterface;
+use Raspberry\Look\Domain\Look\Services\Picker\PickerService;
 use Raspberry\Look\Domain\Style\Style;
 use Raspberry\Look\Domain\Style\StyleInterface;
 use Raspberry\Look\Domain\User\User;
@@ -45,13 +45,13 @@ class SelectionLookServiceTest extends TestCase
             $this->makeLook(3, [$clothes[0], $clothes[2]], [$event]),
         ];
 
-        $selectionLookService = new SelectionLookService(
+        $selectionLookService = new PickerService(
             $this->makeLookRepository($looks),
             $this->makeSelectionLookRepository(1, -2),
             $user
         );
 
-        $selectionLooks = $selectionLookService->selection();
+        $selectionLooks = $selectionLookService->pick();
 
         $this->assertEquals(3, $selectionLooks[0]->getId()->getValue());
         $this->assertEquals(1, $selectionLooks[1]->getId()->getValue());
@@ -90,9 +90,9 @@ class SelectionLookServiceTest extends TestCase
         return $lookRepository;
     }
 
-    protected function makeSelectionLookRepository(int $eventId, int $temperature): SelectionLookRepositoryInterface
+    protected function makeSelectionLookRepository(int $eventId, int $temperature): PickerRepositoryInterface
     {
-        $selectionLookRepository = $this->createMock(SelectionLookRepositoryInterface::class);
+        $selectionLookRepository = $this->createMock(PickerRepositoryInterface::class);
         $selectionLookRepository->method('getEventId')->willReturn($eventId);
         $selectionLookRepository->method('getTemperature')->willReturn($temperature);
 

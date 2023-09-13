@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\Unit\Look\Domain\User;
 
 use Illuminate\Support\Str;
-use Raspberry\Common\Values\Id\Id;
-use Raspberry\Common\Values\Name\Name;
+use Raspberry\Core\Values\Id\Id;
+use Raspberry\Core\Values\Name\Name;
 use Raspberry\Look\Domain\Style\Style;
 use Raspberry\Look\Domain\Style\StyleInterface;
 use Raspberry\Look\Domain\User\User;
@@ -60,22 +60,6 @@ class UserTest extends TestCase
         $user->removeStyle($this->makeStyle(2));
 
         $this->assertCount(1, $user->getStyles());
-    }
-
-    public function testHasStyle(): void
-    {
-        $style = $this->makeStyle(1);
-        $user = new User(new Id(1), [$style]);
-
-        $this->assertTrue($user->hasStyle($style));
-    }
-
-    public function testHasNotStyle(): void
-    {
-        $style = $this->makeStyle(1);
-        $user = new User(new Id(1), [$style]);
-
-        $this->assertFalse($user->hasStyle($this->makeStyle(2)));
     }
 
     protected function makeStyle(int $id): StyleInterface

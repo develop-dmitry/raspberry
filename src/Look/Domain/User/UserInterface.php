@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Domain\User;
 
-use Raspberry\Common\Values\Id\IdInterface;
+use Raspberry\Core\Values\Id\IdInterface;
 use Raspberry\Look\Domain\Style\StyleInterface;
 
 interface UserInterface
@@ -31,10 +31,4 @@ interface UserInterface
      * @return void
      */
     public function removeStyle(StyleInterface $style): void;
-
-    /**
-     * @param StyleInterface $style
-     * @return bool
-     */
-    public function hasStyle(StyleInterface $style): bool;
 }

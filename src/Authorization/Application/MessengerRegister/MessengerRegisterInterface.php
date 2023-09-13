@@ -6,8 +6,9 @@ namespace Raspberry\Authorization\Application\MessengerRegister;
 
 use Raspberry\Authorization\Application\MessengerRegister\DTO\MessengerRegisterRequest;
 use Raspberry\Authorization\Application\MessengerRegister\DTO\MessengerRegisterResponse;
-use Raspberry\Common\Exceptions\UserExceptions\FailedSaveUserException;
-use Raspberry\Common\Values\Exceptions\InvalidValueException;
+use Raspberry\Core\Exceptions\FailedSaveUserException;
+use Raspberry\Core\Exceptions\InvalidValueException;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 interface MessengerRegisterInterface
 {
@@ -17,6 +18,7 @@ interface MessengerRegisterInterface
      * @return MessengerRegisterResponse
      * @throws FailedSaveUserException
      * @throws InvalidValueException
+     * @throws UnknownProperties
      */
     public function execute(MessengerRegisterRequest $request): MessengerRegisterResponse;
 }

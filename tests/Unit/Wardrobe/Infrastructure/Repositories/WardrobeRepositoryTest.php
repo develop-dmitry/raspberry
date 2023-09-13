@@ -7,10 +7,10 @@ namespace Tests\Unit\Wardrobe\Infrastructure\Repositories;
 use App\Models\Clothes as ClothesModel;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Raspberry\Common\Values\Id\Id;
-use Raspberry\Common\Values\Name\Name;
-use Raspberry\Common\Values\Photo\Photo;
-use Raspberry\Common\Values\Slug\Slug;
+use Raspberry\Core\Values\Id\Id;
+use Raspberry\Core\Values\Name\Name;
+use Raspberry\Core\Values\Photo\Photo;
+use Raspberry\Core\Values\Slug\Slug;
 use Raspberry\Wardrobe\Domain\Clothes\Clothes;
 use Raspberry\Wardrobe\Domain\Wardrobe\Exceptions\UserDoesNotExistsException;
 use Raspberry\Wardrobe\Infrastructure\Repositories\WardrobeRepository;
@@ -112,17 +112,5 @@ class WardrobeRepositoryTest extends TestCase
         $wardrobeRepository->saveWardrobe($wardrobe);
 
         $this->assertCount($this->userWithClothes->clothes()->count(), $wardrobe->getClothes());
-    }
-
-    public function testWardrobeOffers(): void
-    {
-        $wardrobeRepository = app()->make(WardrobeRepository::class);
-        $wardrobe = $wardrobeRepository->getWardrobe($this->userWithClothes->id);
-
-        $wardrobeOffers = $wardrobeRepository->getWardrobeOffers($wardrobe, 1, 10);
-
-        $this->assertNotEmpty($wardrobeOffers->getClothes());
-        $this->assertEquals(1, $wardrobeOffers->getPage());
-        $this->assertEquals(10, $wardrobeOffers->getCount());
     }
 }

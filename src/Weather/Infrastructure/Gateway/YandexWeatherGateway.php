@@ -5,9 +5,9 @@ namespace Raspberry\Weather\Infrastructure\Gateway;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Support\Facades\Http;
 use Psr\Log\LoggerInterface;
-use Raspberry\Common\Values\Geolocation\Geolocation;
-use Raspberry\Common\Values\Geolocation\GeolocationInterface;
-use Raspberry\Common\Values\Temperature\Temperature;
+use Raspberry\Core\Values\Geolocation\Geolocation;
+use Raspberry\Core\Values\Geolocation\GeolocationInterface;
+use Raspberry\Core\Values\Temperature\Temperature;
 use Raspberry\Weather\Domain\Weather\Exceptions\WeatherGatewayException;
 use Raspberry\Weather\Domain\Weather\Weather;
 use Raspberry\Weather\Domain\Weather\WeatherGatewayInterface;
@@ -35,14 +35,9 @@ class YandexWeatherGateway implements WeatherGatewayInterface
     {
         $geolocation = new Geolocation($lat, $lon);
 
-        [$temperature, $minTemperature, $maxTemperature] = $this->parseResponse($this->executeRequest($geolocation));
+        [$temperature] = $this->parseResponse($this->executeRequest($geolocation));
 
-        return new Weather(
-            new Temperature($temperature),
-            new Temperature($minTemperature),
-            new Temperature($maxTemperature),
-            $geolocation
-        );
+        return new Weather(new Temperature($temperature), $geolocation);
     }
 
     /**
@@ -80,6 +75,6 @@ class YandexWeatherGateway implements WeatherGatewayInterface
 
         $part = $response['forecast']['parts'][0];
 
-        return [$part['temp_avg'], $part['temp_min'], $part['temp_max']];
+        return [$part['temp_avg']];
     }
 }

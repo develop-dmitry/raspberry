@@ -2,32 +2,12 @@
 
 namespace Raspberry\Weather\Application\ActualWeather\DTO;
 
-class ActualWeatherRequest
+use Spatie\DataTransferObject\DataTransferObject;
+
+class ActualWeatherRequest extends DataTransferObject
 {
 
-    /**
-     * @param float $lat
-     * @param float $lon
-     */
-    public function __construct(
-        protected float $lat,
-        protected float $lon
-    ) {
-    }
+    public float $lat;
 
-    /**
-     * @return float
-     */
-    public function getLat(): float
-    {
-        return $this->lat;
-    }
-
-    /**
-     * @return float
-     */
-    public function getLon(): float
-    {
-        return $this->lon;
-    }
+    public float $lon;
 }

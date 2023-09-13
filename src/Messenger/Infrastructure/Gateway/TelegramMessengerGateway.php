@@ -6,7 +6,7 @@ namespace Raspberry\Messenger\Infrastructure\Gateway;
 
 use Raspberry\Messenger\Domain\Gui\Message\MessageInterface;
 use Raspberry\Messenger\Domain\Messenger\MessengerGatewayInterface;
-use Raspberry\Messenger\Infrastructure\Gui\Telegram\TelegramAdapter;
+use Raspberry\Messenger\Infrastructure\Messenger\Telegram\TelegramAdapter;
 use SergiX44\Nutgram\Nutgram;
 
 class TelegramMessengerGateway implements MessengerGatewayInterface

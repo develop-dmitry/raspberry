@@ -4,51 +4,19 @@ declare(strict_types=1);
 
 namespace Raspberry\Wardrobe\Application\WardrobeOffers\DTO;
 
-class WardrobeOffersResponse
+use Spatie\DataTransferObject\DataTransferObject;
+
+class WardrobeOffersResponse extends DataTransferObject
 {
-    /**
-     * @param WardrobeOffer[] $offers
-     * @param int $page
-     * @param int $total
-     * @param int $count
-     */
-    public function __construct(
-        protected array $offers,
-        protected int $page,
-        protected int $total,
-        protected int $count
-    ) {
-    }
 
     /**
-     * @return WardrobeOffer[]
+     * @var ClothesData[]
      */
-    public function getOffers(): array
-    {
-        return $this->offers;
-    }
+    public array $items;
 
-    /**
-     * @return int
-     */
-    public function getPage(): int
-    {
-        return $this->page;
-    }
+    public int $page;
 
-    /**
-     * @return int
-     */
-    public function getTotal(): int
-    {
-        return $this->total;
-    }
+    public int $total;
 
-    /**
-     * @return int
-     */
-    public function getCount(): int
-    {
-        return $this->count;
-    }
+    public int $count;
 }

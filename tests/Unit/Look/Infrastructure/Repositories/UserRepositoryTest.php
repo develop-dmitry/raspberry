@@ -6,8 +6,8 @@ namespace Tests\Unit\Look\Infrastructure\Repositories;
 
 use App\Models\Style as StyleModel;
 use App\Models\User as UserModel;
-use Raspberry\Common\Values\Id\Id;
-use Raspberry\Common\Values\Name\Name;
+use Raspberry\Core\Values\Id\Id;
+use Raspberry\Core\Values\Name\Name;
 use Raspberry\Look\Domain\Style\Style;
 use Raspberry\Look\Domain\Style\StyleRepositoryInterface;
 use Raspberry\Look\Infrastructure\Repositories\UserRepository;

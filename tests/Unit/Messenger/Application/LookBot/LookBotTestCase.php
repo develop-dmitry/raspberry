@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Messenger\Application\LookBot;
 
 use Raspberry\Messenger\Application\LookBot\LookBot;
-use Raspberry\Messenger\Infrastructure\Gui\Telegram\TelegramMessenger;
+use Raspberry\Messenger\Infrastructure\Messenger\Telegram\TelegramMessenger;
 use SergiX44\Nutgram\Nutgram;
 use SergiX44\Nutgram\Testing\FakeNutgram;
 use Tests\TestCase;
