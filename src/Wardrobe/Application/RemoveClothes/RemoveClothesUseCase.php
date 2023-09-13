@@ -22,7 +22,7 @@ class RemoveClothesUseCase implements RemoveClothesInterface
     public function execute(RemoveClothesRequest $request): void
     {
         $wardrobe = $this->wardrobeRepository->getWardrobe($request->userId);
-        $clothes = $this->clothesRepository->getClothesById($request->clothesId);
+        $clothes = $this->clothesRepository->getById($request->clothesId);
 
         $wardrobe->removeClothes($clothes);
         $this->wardrobeRepository->saveWardrobe($wardrobe);

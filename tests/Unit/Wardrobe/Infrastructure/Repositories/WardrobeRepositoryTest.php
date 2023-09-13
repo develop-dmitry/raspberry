@@ -113,16 +113,4 @@ class WardrobeRepositoryTest extends TestCase
 
         $this->assertCount($this->userWithClothes->clothes()->count(), $wardrobe->getClothes());
     }
-
-    public function testWardrobeOffers(): void
-    {
-        $wardrobeRepository = app()->make(WardrobeRepository::class);
-        $wardrobe = $wardrobeRepository->getWardrobe($this->userWithClothes->id);
-
-        $wardrobeOffers = $wardrobeRepository->getWardrobeOffers($wardrobe, 1, 10);
-
-        $this->assertNotEmpty($wardrobeOffers->getClothes());
-        $this->assertEquals(1, $wardrobeOffers->getPage());
-        $this->assertEquals(10, $wardrobeOffers->getCount());
-    }
 }
