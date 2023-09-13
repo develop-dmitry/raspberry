@@ -14,16 +14,6 @@ interface WeatherInterface
     public function getTemperature(): TemperatureInterface;
 
     /**
-     * @return TemperatureInterface
-     */
-    public function getMinTemperature(): TemperatureInterface;
-
-    /**
-     * @return TemperatureInterface
-     */
-    public function getMaxTemperature(): TemperatureInterface;
-
-    /**
      * @return GeolocationInterface
      */
     public function getGeolocation(): GeolocationInterface;

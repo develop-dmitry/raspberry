@@ -35,14 +35,9 @@ class YandexWeatherGateway implements WeatherGatewayInterface
     {
         $geolocation = new Geolocation($lat, $lon);
 
-        [$temperature, $minTemperature, $maxTemperature] = $this->parseResponse($this->executeRequest($geolocation));
+        [$temperature] = $this->parseResponse($this->executeRequest($geolocation));
 
-        return new Weather(
-            new Temperature($temperature),
-            new Temperature($minTemperature),
-            new Temperature($maxTemperature),
-            $geolocation
-        );
+        return new Weather(new Temperature($temperature), $geolocation);
     }
 
     /**
@@ -80,6 +75,6 @@ class YandexWeatherGateway implements WeatherGatewayInterface
 
         $part = $response['forecast']['parts'][0];
 
-        return [$part['temp_avg'], $part['temp_min'], $part['temp_max']];
+        return [$part['temp_avg']];
     }
 }
