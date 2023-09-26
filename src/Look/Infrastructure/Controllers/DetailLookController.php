@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Raspberry\Look\Infrastructure\Controllers;
 
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 use Raspberry\Look\Application\DetailLook\DetailLookInterface;
 use Raspberry\Look\Application\DetailLook\DTO\DetailLookRequest;
 use Raspberry\Look\Domain\Look\Exceptions\LookNotFoundException;
-use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class DetailLookController extends AbstractController
 {
@@ -17,20 +18,18 @@ class DetailLookController extends AbstractController
     ) {
     }
 
-    public function __invoke(int $lookId): JsonResponse
+    public function __invoke(int $lookId, Request $request)
     {
         try {
             $detailRequest = new DetailLookRequest(id: $lookId);
             $detailResponse = $this->detailLook->execute($detailRequest);
 
-            return response()->json([
-                'success' => true,
-                'look' => $detailResponse->toArray()
-            ]);
+            return Inertia::render('LookDetailPage', ['look' => $detailResponse->toArray()])
+                ->toResponse($request);
         } catch (LookNotFoundException) {
-            return $this->lookNotFound();
-        } catch (UnknownProperties) {
-            return $this->unexpectedError();
+            return Inertia::render('NotFoundPage')
+                ->toResponse($request)
+                ->setStatusCode(404);
         }
     }
 }

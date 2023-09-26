@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Raspberry\Messenger\Application\LookBot\LookBot;
-use Raspberry\Messenger\Infrastructure\Gui\Telegram\TelegramMessenger;
+use Raspberry\Look\Infrastructure\Controllers\DetailLookController;
+use Raspberry\Wardrobe\Infrastructure\Http\Controllers\WardrobeController;
+use Raspberry\Wardrobe\Infrastructure\Http\Controllers\WardrobeOffersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +16,14 @@ use Raspberry\Messenger\Infrastructure\Gui\Telegram\TelegramMessenger;
 |
 */
 
-Route::get('/test', function () {
-    app(LookBot::class, ['messenger' => app(TelegramMessenger::class)]);
+Route::get('/look/{id}', DetailLookController::class);
+
+Route::middleware('auth:api')->prefix('/wardrobe')->group(function () {
+    Route::get('/', WardrobeController::class);
+    Route::get('/offers', WardrobeOffersController::class);
 });
 
-Route::get('/{any}', function () {
+
+/*Route::get('/{any}', function () {
     return view('app');
-})->where('any', '.*');
+})->where('any', '.*');*/

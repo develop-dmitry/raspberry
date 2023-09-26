@@ -16,6 +16,12 @@ window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+const url: URL = new URL(window.location.href);
+
+if (url.searchParams.has('api_token')) {
+    window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + url.searchParams.get('api_token');
+}
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

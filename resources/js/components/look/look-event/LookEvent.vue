@@ -1,17 +1,15 @@
 <script lang="ts">
-import {defineComponent, PropType} from 'vue'
-import {Event} from '../../../stores/look/types/enitites.ts';
+import {defineComponent} from "vue";
+import type Event from "#models/Event.ts";
 
 export default defineComponent({
-    name: 'LookEvent',
-
     props: {
         event: {
-            type: Object as PropType<Event>,
+            type: Event,
             required: true
-        },
+        }
     }
-})
+});
 </script>
 
 <template lang="pug">
@@ -19,9 +17,6 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
-@import "../../../../css/global/vars";
-@import "../../../../css/global/mixins";
-
 .look-event {
     border-radius: .5em;
     display: inline-flex;

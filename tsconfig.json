@@ -16,9 +16,20 @@
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+
+    "baseUrl": ".",
+    "types": ["vite/client"],
+
+    "paths": {
+      "#components/*": ["resources/js/components/*"],
+      "#pages/*": ["resources/js/pages/*"],
+      "#stores/*": ["resources/js/stores/*"],
+      "#ui/*": ["resources/js/ui/*"],
+      "#models/*": ["resources/js/models/*"]
+    }
   },
   "include": ["resources/js/**/*.ts", "resources/js/**/*.d.ts", "resources/js/**/*.tsx", "resources/js/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
