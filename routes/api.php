@@ -7,7 +7,7 @@ use Raspberry\Look\Infrastructure\Controllers\PickerScoreController;
 use Raspberry\Messenger\Infrastructure\Controllers\TelegramLookBotController;
 use Raspberry\Wardrobe\Infrastructure\Http\Controllers\AddClothesController;
 use Raspberry\Wardrobe\Infrastructure\Http\Controllers\RemoveClothesController;
-use Raspberry\Wardrobe\Infrastructure\Http\Controllers\WardrobeListController;
+use Raspberry\Wardrobe\Infrastructure\Http\Controllers\WardrobeController;
 use Raspberry\Wardrobe\Infrastructure\Http\Controllers\WardrobeOffersController;
 
 /*
@@ -27,10 +27,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
     Route::middleware('auth:api')->prefix('wardrobe')->group(function () {
+        Route::post('/', [WardrobeController::class, 'userWardrobe']);
         Route::post('add', AddClothesController::class);
         Route::post('remove', RemoveClothesController::class);
-        Route::post('offers', WardrobeOffersController::class);
-        Route::post('/', WardrobeListController::class);
+        Route::post('offers', [WardrobeOffersController::class, 'userOffers']);
     });
 
     Route::middleware('auth:api')->prefix('look')->group(function () {
